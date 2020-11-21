@@ -1,7 +1,7 @@
 a.out
 *.dSYM
 *.txt
-
+main.c
 
 
 
