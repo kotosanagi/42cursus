@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/15 21:12:18 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/21 19:02:32 by skotoyor         ###   ########.fr       */
+/*   Created: 2020/11/21 22:44:35 by skotoyor          #+#    #+#             */
+/*   Updated: 2020/11/21 22:44:52 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	find_newline(int fd, char **line, char **st_arr, char *buf)
 {
