@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 22:10:08 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/30 22:16:48 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/01 07:44:43 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,18 @@ int		process_percent(va_list *ap, char *str, int *printed_len)
 		i++;
 	}
 
-	// if (content.conv == E_NOT_CONV)
-	// 	put_notconv_count(str, i, printed_len);//////len_put_somethingは、strをi文字分出力かな。。。
-	// else
-	// {
-	// 	put_string_or_nbr(ap, &content, printed_len);////contentを元に、va_argを吐き出すって感じかな。。。
-	// // *printed_len += len_put_something();//content->conv見て,数えるの判断かな。。。
-	// }
-printf("\n====content debug===\n");
-	printf("flag[E_MINUS] : %2d\n", content.flag[E_MINUS]);
-	printf("flag[E_ZERO]  : %2d\n", content.flag[E_ZERO]);
-	printf("width         : %2d\n", content.width);
-	printf("prec          : %2d\n", content.prec);
-	printf("conv          : %2d\n", content.conv);
-printf("i:%d\n",i);
-printf("====================\n");
+	if (content.conv == E_NOT_CONV)
+		put_notconv_count(str, i, printed_len);//////convが指定されなかった時、そのまま出力する。printed_lenに出力した文字数を足す
+	else
+		put_string_or_nbr(ap, &content, printed_len);////contentを元に、va_argを吐き出す。printed_lenに出力した文字数を足す
+// printf("\n====content debug===\n");
+// 	printf("flag[E_MINUS] : %2d\n", content.flag[E_MINUS]);
+// 	printf("flag[E_ZERO]  : %2d\n", content.flag[E_ZERO]);
+// 	printf("width         : %2d\n", content.width);
+// 	printf("prec          : %2d\n", content.prec);
+// 	printf("conv          : %2d\n", content.conv);
+// printf("i:%d\n",i);
+// printf("====================\n");
 	return (i);
 }
 
@@ -122,9 +119,54 @@ int main () {///
 	// y = printf("%.0d", 0);
 	// printf("\n\nft_printf's ret : %d\n\n", y);
 
-	x = ft_printf("%.0d", 0);
+	// x = ft_printf("[%20d]", 40);
+	// printf("\n\nft_printf's ret : %d\n\n\n\n", x);
+	// y = printf("[%20d]", 40);
+	// printf("\n\nft_printf's ret : %d\n\n", y);
+
+	// x = ft_printf("[%p]", "koto");
+	// printf("\n\nft_printf's ret : %d\n\n\n\n", x);
+	// y = printf("[%p]", "koto");
+	// printf("\n\nft_printf's ret : %d\n\n", y);
+
+	// x = ft_printf("[%03%]");
+	// printf("\n\nft_printf's ret : %d\n\n\n\n", x);
+	// y = printf("[%03s]","ko");
+	// printf("\n\nft_printf's ret : %d\n\n", y);
+
+	// x = ft_printf("[%03.2%]");
+	// printf("\n\nft_printf's ret : %d\n\n\n\n", x);
+	// y = printf("[%-3%]");
+	// printf("\n\nft_printf's ret : %d\n\n", y);
+
+	// x = ft_printf("[%0000010.2]");
+	// printf("\n\nft_printf's ret : %d\n\n\n\n", x);
+	// y = printf("[%0000010.2%]");
+	// printf("\n\nft_printf's ret : %d\n\n", y);
+
+	// x = ft_printf("[%-4%]");
+	// printf("\n\nft_printf's ret : %d\n\n\n\n", x);
+	// y = printf("[%-4%]");
+	// printf("\n\nft_printf's ret : %d\n\n", y);
+
+	// x = ft_printf("[%-4%]");
+	// printf("\n\nft_printf's ret : %d\n\n\n\n", x);
+	// y = printf("[%-4%]");
+	// printf("\n\nft_printf's ret : %d\n\n", y);
+
+	// x = ft_printf("[%---0004.2%]");
+	// printf("\n\nft_printf's ret : %d\n\n\n\n", x);
+	// y = printf("[%---0004.2%]");
+	// printf("\n\nft_printf's ret : %d\n\n", y);
+
+	// x = ft_printf("[%-4c]", 'x');
+	// printf("\n\nft_printf's ret : %d\n\n\n\n", x);
+	// y = printf("[%-4c]", 'x');
+	// printf("\n\nft_printf's ret : %d\n\n", y);
+
+	x = ft_printf("[%4c]", 'x');
 	printf("\n\nft_printf's ret : %d\n\n\n\n", x);
-	y = printf("%.0d", 0);
+	y = printf("[%4c]", 'x');
 	printf("\n\nft_printf's ret : %d\n\n", y);
 
 }

@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 19:08:07 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/30 15:45:55 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/01 07:44:11 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,22 +114,77 @@ void	init_content(t_content *content)
 	content->conv = E_NOT_CONV;
 }
 
-// void	put_string_or_nbr(va_list *ap, t_content *content, int *printed_len)
-// {
-// 	// if (content->conv == E_CHAR)
+void	put_conv_percent(t_content *content, int *printed_len)
+{
+	int i;
 
-// 	// if (content->conv == E_STRING)
+	i = 1;
+	if (content->flag[E_MINUS])//左寄せ空白埋め
+	{
+		write(1, "%%", 1);
+		while (i++ < content->width)
+			write(1, " ", 1);
+	}
+	else if (content->flag[E_ZERO])//右寄せゼロ埋め
+	{
+		while (i++ < content->width)
+			write(1, "0", 1);
+		write(1, "%%", 1);
+	}
+	else//右寄せ空白埋め
+	{
+		while (i++ < content->width)
+			write(1, " ", 1);
+		write(1, "%%", 1);
+	}
+	if (content->width <= 1)
+		*printed_len += 1;
+	else
+		*printed_len += content->width;
+}
 
-// 	// if (content->conv == E_POINTER)
+void	put_conv_c(va_list *ap, t_content *content, int *printed_len)
+{
+	int i;
+	char c;
 
-// 	// if ((content->conv == E_DECIMAL) || (content->conv == E_INTEGER))
+	i = 1;
+	c = (char)va_arg(*ap, int);
+	if (content->flag[E_MINUS])//左寄せ空白埋め
+	{
+		write(1, &c, 1);
+		while (i++ < content->width)
+			write(1, " ", 1);
+	}
+	else//右寄せ空白埋め
+	{
+		while (i++ < content->width)
+			write(1, " ", 1);
+		write(1, &c, 1);
+	}
+	
+	if (content->width <= 1)
+		*printed_len += 1;
+	else
+		*printed_len += content->width;
+}
 
-// 	// if (content->conv == E_UNSIGNED)
+void	put_string_or_nbr(va_list *ap, t_content *content, int *printed_len)
+{
+	if (content->conv == E_CHAR)
+		put_conv_c(ap, content, printed_len);
+	// if (content->conv == E_STRING)
 
-// 	// if (content->conv == E_XDECIMAL_SMALL)
+	// if (content->conv == E_POINTER)
 
-// 	// if (content->conv == E_XDECIMAL_LARGE)
+	// if ((content->conv == E_DECIMAL) || (content->conv == E_INTEGER))
 
-// 	// if (content->conv == E_PERCENT)
-// 	// 	put_conv_
-// }
+	// if (content->conv == E_UNSIGNED)
+
+	// if (content->conv == E_XDECIMAL_SMALL)
+
+	// if (content->conv == E_XDECIMAL_LARGE)
+
+	if (content->conv == E_PERCENT)
+		put_conv_percent(content, printed_len);
+}
