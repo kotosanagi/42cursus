@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 22:10:08 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/30 15:46:37 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/11/30 22:16:48 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int ft_printf(const char *format, ...)
 }
 
 int main () {///
+
 	int x, y;
 	// x = printf("koto%-23mocomoco", 52);
 	// printf("\n\nft_printf's ret : %d\n\n", x);
@@ -97,23 +98,34 @@ int main () {///
 	
 	
 	// x = ft_printf("koto%-10.*dmocomoco", 5, 42);
-	// printf("\n\nft_printf's ret : %d\n\n", x);
+	// printf("\n\nft_printf's ret : %d\n\n\n\n", x);
 	// y = printf("koto%-10.*dmocomoco", 5, 42);
 	// printf("\n\nft_printf's ret : %d\n\n", y);
 	
 	// x = ft_printf("koto%*.*dmocomoco",-4, 10, 42);
-	// printf("\n\nft_printf's ret : %d\n\n", x);
+	// printf("\n\nft_printf's ret : %d\n\n\n\n", x);
 	// y = printf("koto%*.*dmocomoco",-4, 10, 42);
 	// printf("\n\nft_printf's ret : %d\n\n", y);
 
-	// x = printf("koto%-23%mocomoco");
-	// printf("\n\nft_printf's ret : %d\n\n", x);
-	// y = ft_printf("koto%-23%mocomoco");
+	// x = ft_printf("koto%-23%mocomoco");
+	// printf("\n\nft_printf's ret : %d\n\n\n\n", x);
+	// y = printf("koto%-23%mocomoco");
 	// printf("\n\nft_printf's ret : %d\n\n", y);
 
-	x = printf("koto%5.*dmocomoco", -78, 52);
-	printf("\n\nft_printf's ret : %d\n\n", x);
-	y = ft_printf("koto%5.*dmocomoco",-78, 52);
+	// x = ft_printf("koto%5.*dmocomoco", -78, 52);
+	// printf("\n\nft_printf's ret : %d\n\n\n\n", x);
+	// y = printf("koto%5.*dmocomoco",-78, 52);
+	// printf("\n\nft_printf's ret : %d\n\n", y);
+
+	// x = ft_printf("%.0d", 0);
+	// printf("\n\nft_printf's ret : %d\n\n\n\n", x);
+	// y = printf("%.0d", 0);
+	// printf("\n\nft_printf's ret : %d\n\n", y);
+
+	x = ft_printf("%.0d", 0);
+	printf("\n\nft_printf's ret : %d\n\n\n\n", x);
+	y = printf("%.0d", 0);
 	printf("\n\nft_printf's ret : %d\n\n", y);
+
 }
 
