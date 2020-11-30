@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 11:09:06 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/29 23:06:10 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/11/30 08:19:08 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	put_string_or_nbr(va_list *ap, t_content *content, int *printed_len);
 
 int		is_flag(char c, t_content *content);
 int		is_conversion(char c, t_content *content);
-int		is_width(char c, t_content *content);
+int		is_width(char c, t_content *content, va_list *ap);
 int		is_prec(char c, t_content *content);
 
 void	ft_putnbr(int nb);

@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 19:08:07 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/30 07:28:39 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/11/30 08:28:33 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,25 @@ int		is_flag(char c, t_content *content)
 	return (0);
 }
 
-int		is_width(char c, t_content *content)
+int		is_width(char c, t_content *content, va_list *ap)
 {
 	int ret;
+	int tmp;
 
-	ret = 0;
-	if (content->width < 0 && (content->prec < 0) && ('1' <= c && c <= '9'))//widthがまだデフォかつ、precがデフォかつ、0以外の数字
+	ret = 1;
+	if (c == '*')//'*'がきたら対応したつもり
 	{
+		tmp = va_arg(*ap, int);
+		content->width = (tmp < 0) ? -tmp : tmp;
+		if (tmp < 0)
+			content->flag[E_MINUS] = true;
+	}
+	else if (content->width < 0 && (content->prec < 0) && ('1' <= c && c <= '9'))//widthがまだデフォかつ、precがデフォかつ、0以外の数字
 		content->width = c - '0';
-		ret = 1;
-	}
 	else if ((content->prec < 0) && ('0' <= c && c <= '9'))//precがデフォかつ、数字
-	{
 		content->width = ((content->width * 10) + (c - '0'));
-		ret = 1;
-	}
+	else
+		ret = 0;
 	return (ret);
 }
 
@@ -108,22 +112,22 @@ void	init_content(t_content *content)
 	content->conv = E_NOT_CONV;
 }
 
-void	put_string_or_nbr(va_list *ap, t_content *content, int *printed_len)
-{
-	// if (content->conv == E_CHAR)
+// void	put_string_or_nbr(va_list *ap, t_content *content, int *printed_len)
+// {
+// 	// if (content->conv == E_CHAR)
 
-	// if (content->conv == E_STRING)
+// 	// if (content->conv == E_STRING)
 
-	// if (content->conv == E_POINTER)
+// 	// if (content->conv == E_POINTER)
 
-	// if ((content->conv == E_DECIMAL) || (content->conv == E_INTEGER))
+// 	// if ((content->conv == E_DECIMAL) || (content->conv == E_INTEGER))
 
-	// if (content->conv == E_UNSIGNED)
+// 	// if (content->conv == E_UNSIGNED)
 
-	// if (content->conv == E_XDECIMAL_SMALL)
+// 	// if (content->conv == E_XDECIMAL_SMALL)
 
-	// if (content->conv == E_XDECIMAL_LARGE)
+// 	// if (content->conv == E_XDECIMAL_LARGE)
 
-	if (content->conv == E_PERCENT)
-		
-}
+// 	// if (content->conv == E_PERCENT)
+// 	// 	put_conv_
+// }
