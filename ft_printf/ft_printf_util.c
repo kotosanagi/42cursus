@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 19:08:07 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/30 08:28:33 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/11/30 15:45:55 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		is_width(char c, t_content *content, va_list *ap)
 	int tmp;
 
 	ret = 1;
-	if (c == '*')//'*'がきたら対応したつもり
+	if (content->prec < 0 && c == '*')//'*'がきたら対応したつもり
 	{
 		tmp = va_arg(*ap, int);
 		content->width = (tmp < 0) ? -tmp : tmp;
@@ -61,22 +61,24 @@ int		is_width(char c, t_content *content, va_list *ap)
 	return (ret);
 }
 
-int		is_prec(char c, t_content *content)
+int		is_prec(char c, t_content *content, va_list *ap)
 {
 	int ret;
+	int tmp;
 
-	ret = 0;
+	ret = 1;
 	//とりあえず.がきたら、precは0にして良い。-とかはあとで考える。
 	if (content->prec < 0 && c == '.')
-	{
 		content->prec = 0;
-		ret = 1;
+	else if (content->prec == 0 && c == '*')
+	{
+		tmp = va_arg(*ap, int);
+		content->prec = (tmp < 0) ? -1 : tmp;// tmpが負なら-1のまま
 	}
 	else if (content->prec >= 0 && '0' <= c && c <= '9')
-	{
 		content->prec = (content->prec * 10) + (c - '0');
-		ret = 1;
-	}
+	else
+		ret = 0;
 	return (ret);
 }
 

@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 22:10:08 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/30 08:29:04 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/11/30 15:46:37 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int		process_percent(va_list *ap, char *str, int *printed_len)
 			;
 		else if (is_width(str[i], &content, ap))
 			;
-		else if (is_prec(str[i], &content))//精度が0かつ「0」を出力の場合は、空文字列が出力される。
+		else if (is_prec(str[i], &content, ap))//精度が0かつ「0」を出力の場合は、空文字列が出力される。
 			;//????
 		else if (is_conversion(str[i], &content))
 		{
@@ -90,19 +90,30 @@ int main () {///
 	// y = ft_printf("koto%-23mocomoco", 52);
 	// printf("\n\nft_printf's ret : %d\n\n", y);
 
-	x = ft_printf("koto%*%mocomoco", 4, 52);
-	printf("\n\nft_printf's ret : %d\n\n", x);
-	y = printf("koto%*dmocomoco", 4, 52);
-	printf("\n\nft_printf's ret : %d\n\n", y);
+	// x = ft_printf("koto%*%mocomoco", 4, 52);
+	// printf("\n\nft_printf's ret : %d\n\n", x);
+	// y = printf("koto%*dmocomoco", 4, 52);
+	// printf("\n\nft_printf's ret : %d\n\n", y);
+	
+	
+	// x = ft_printf("koto%-10.*dmocomoco", 5, 42);
+	// printf("\n\nft_printf's ret : %d\n\n", x);
+	// y = printf("koto%-10.*dmocomoco", 5, 42);
+	// printf("\n\nft_printf's ret : %d\n\n", y);
+	
+	// x = ft_printf("koto%*.*dmocomoco",-4, 10, 42);
+	// printf("\n\nft_printf's ret : %d\n\n", x);
+	// y = printf("koto%*.*dmocomoco",-4, 10, 42);
+	// printf("\n\nft_printf's ret : %d\n\n", y);
 
 	// x = printf("koto%-23%mocomoco");
 	// printf("\n\nft_printf's ret : %d\n\n", x);
 	// y = ft_printf("koto%-23%mocomoco");
 	// printf("\n\nft_printf's ret : %d\n\n", y);
 
-	// x = printf("koto%23.78dmocomoco", 52);
-	// printf("\n\nft_printf's ret : %d\n\n", x);
-	// y = ft_printf("koto%23.78dmocomoco", 52);
-	// printf("\n\nft_printf's ret : %d\n\n", y);
+	x = printf("koto%5.*dmocomoco", -78, 52);
+	printf("\n\nft_printf's ret : %d\n\n", x);
+	y = ft_printf("koto%5.*dmocomoco",-78, 52);
+	printf("\n\nft_printf's ret : %d\n\n", y);
 }
 
