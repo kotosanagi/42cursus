@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 11:09:06 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/30 15:35:16 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/01 23:08:46 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,7 @@ int		is_width(char c, t_content *content, va_list *ap);
 int		is_prec(char c, t_content *content, va_list *ap);
 
 void	ft_putnbr(int nb);
+// 
+size_t	ft_strlen(const char *s);
 
 #endif

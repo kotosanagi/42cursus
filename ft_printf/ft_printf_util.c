@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 19:08:07 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/01 07:44:11 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/01 23:06:04 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,12 +169,64 @@ void	put_conv_c(va_list *ap, t_content *content, int *printed_len)
 		*printed_len += content->width;
 }
 
+char *ft_strndup(char *str, int n)
+{
+	int i;
+	char *ret;
+
+	i = 0;
+	if (!(ret = (char *)malloc(n + 1)))
+		return (NULL);
+	while (i < n)
+	{
+		ret[i] = str[i];
+		i++;
+	}
+	ret[i] = '\0';
+	return (ret);
+}
+
+void	put_conv_s(va_list *ap, t_content *content, int *printed_len)
+{
+	int s_len;
+	char *str;
+	int i;
+
+	if (content->prec >= 0)
+		str = ft_strndup(va_arg(*ap, char*), content->prec);
+	else
+		str = va_arg(*ap, char*);
+	s_len = (int)ft_strlen(str);
+	if (s_len >= content->width)
+	{
+		write(1, str, s_len);
+		*printed_len += s_len;
+	}
+	else
+	{
+		i = 0;
+		if (content->flag[E_MINUS])
+		{
+			write(1, str, s_len);
+			while (i++ < content->width - s_len)
+				write(1, " ", 1);
+		}
+		else
+		{
+			while (i++ < content->width - s_len)
+				write(1, " ", 1);
+			write(1, str, s_len);
+		}
+		*printed_len += content->width;
+	}
+}
+
 void	put_string_or_nbr(va_list *ap, t_content *content, int *printed_len)
 {
 	if (content->conv == E_CHAR)
 		put_conv_c(ap, content, printed_len);
-	// if (content->conv == E_STRING)
-
+	else if (content->conv == E_STRING)
+		put_conv_s(ap, content, printed_len);
 	// if (content->conv == E_POINTER)
 
 	// if ((content->conv == E_DECIMAL) || (content->conv == E_INTEGER))
@@ -185,6 +237,6 @@ void	put_string_or_nbr(va_list *ap, t_content *content, int *printed_len)
 
 	// if (content->conv == E_XDECIMAL_LARGE)
 
-	if (content->conv == E_PERCENT)
+	else if (content->conv == E_PERCENT)
 		put_conv_percent(content, printed_len);
 }

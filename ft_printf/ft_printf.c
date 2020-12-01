@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 22:10:08 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/01 07:44:43 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/01 23:09:30 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,10 +164,25 @@ int main () {///
 	// y = printf("[%-4c]", 'x');
 	// printf("\n\nft_printf's ret : %d\n\n", y);
 
-	x = ft_printf("[%4c]", 'x');
+	// x = ft_printf("[%-6.s]", "kotoyori shota");
+	// printf("\n\nft_printf's ret : %d\n\n\n\n", x);
+	// y = printf("[%-6.s]", "kotoyori shota");
+	// printf("\n\nft_printf's ret : %d\n\n", y);
+	
+	// x = ft_printf("[%-6.3s]", "kotoyori shota");
+	// printf("\n\nft_printf's ret : %d\n\n\n\n", x);
+	// y = printf("[%-6.3s]", "kotoyori shota");
+	// printf("\n\nft_printf's ret : %d\n\n", y);
+	
+	x = ft_printf("[%4.49s]", "kotoyori shota");
 	printf("\n\nft_printf's ret : %d\n\n\n\n", x);
-	y = printf("[%4c]", 'x');
+	y = printf("[%4.49s]", "kotoyori shota");
 	printf("\n\nft_printf's ret : %d\n\n", y);
 
 }
 
+
+// char str[] = "kotoyori";
+// printf("10.5s : [%10.5s]\n",str);//[     kotoy]
+// printf("8.5s  : [%8.5s]\n",str); //[   kotoy]
+// printf("3.5s  : [%3.5s]\n",str); //[kotoy]
