@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 22:41:42 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/04 01:25:13 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/04 01:40:02 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <dirent.h>
 # include <sys/stat.h>
 # include <unistd.h>
+# include <stdio.h>
 
 typedef struct	s_filelist
 {

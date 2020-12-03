@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 22:36:56 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/04 01:24:48 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/04 01:49:57 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void		ft_putstr(char *str)
 	}
 }
 
-void	swap_filelist(t_filelist **lst, int *i)
+void		swap_filelist(t_filelist **lst, int *i)
 {
 	t_filelist	*tmp;
 
@@ -62,7 +62,7 @@ void	swap_filelist(t_filelist **lst, int *i)
 	*i = 0;
 }
 
-int		put_error(int i)
+int			put_error(int i)
 {
 	if (i == E_ARG)
 		write(2, "don't execute with commandline arguments\n", 41);
