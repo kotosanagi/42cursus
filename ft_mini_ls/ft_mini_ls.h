@@ -6,14 +6,13 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/03 22:41:42 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/03 22:48:28 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/04 01:25:13 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_MINI_LS_H
 # define FT_MINI_LS_H
 
-# include <stdio.h>///////////
 # include <stdlib.h>
 # include <dirent.h>
 # include <sys/stat.h>
@@ -21,16 +20,24 @@
 
 typedef struct	s_filelist
 {
-	char	*filename;
-	long	modified_time;
+	char			*filename;
+	long			modified_time;
 }				t_filelist;
 
-t_filelist		**allocate_lst(DIR *dp, t_filelist **lst, int *len);
-t_filelist		**get_fileinfo(DIR *dp2, t_filelist **lst);
+typedef enum	e_error
+{
+	E_ARG,
+	E_MALLOC
+}				t_error;
+
+t_filelist		**allocate_lst(t_filelist **lst, int *len);
+t_filelist		**get_fileinfo(t_filelist **lst);
 void			sort_filelist(int len, t_filelist **lst);
 void			write_filename(t_filelist **lst, int len);
-long			get_modified_time(char *filename, char *path);
-t_filelist		*make_filelist(struct dirent *dir2, char *path);
+long			get_modified_time(char *filename);
+t_filelist		*make_filelist(struct dirent *dir2);
 void			ft_putstr(char *str);
+int				put_error(int i);
+void			swap_filelist(t_filelist **lst, int *i);
 
 #endif
