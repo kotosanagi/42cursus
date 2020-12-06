@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/15 21:12:18 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/21 19:02:32 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/06 22:53:44 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,11 @@ int	read_fd(int fd, char **line, char **st_arr)
 
 int	get_next_line(int fd, char **line)
 {
-	static char	*st_arr[MAX_FD];
+	static char	*st_arr[FOPEN_MAX];
 	int			ret;
 
 	ret = 0;
-	if (fd < 0 || MAX_FD <= fd || !line)
+	if (fd < 0 || FOPEN_MAX <= fd || !line)
 		return (-1);
 	if (!(*line = (char *)malloc(1)))
 		return (-1);

@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 22:45:11 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/21 22:45:30 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/06 22:52:44 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
-# define MAX_FD	 30
+# include <stdio.h>
 
 int		get_next_line(int fd, char **line);
 int		read_fd(int fd, char **line, char **st_arr);
