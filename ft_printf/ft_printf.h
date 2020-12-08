@@ -46,7 +46,9 @@ typedef	struct	s_content
 	int	width;
 	int	prec;
 	int	conv;
-	int tmp_int;
+	int num_int;	//なぜ追加したのか、、、(もしかしたら出力の処理が25行に納らないから？)関数の引数も足りないから？
+	int num_digits;
+	int num_base;	//なぜ追加したのか、、、(もしかしたら出力の処理が25行に納らないから？)
 }				t_content;
 
 // void	is_char(t_content *content);

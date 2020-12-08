@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 19:08:07 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/01 23:06:04 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/08 07:34:22 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,9 @@ void	init_content(t_content *content)
 	content->width = -1;
 	content->prec = -1;
 	content->conv = E_NOT_CONV;
+	content->num_int = 0;
+	content->num_digits = 0;
+	content->num_base = 0;
 }
 
 void	put_conv_percent(t_content *content, int *printed_len)
@@ -221,6 +224,54 @@ void	put_conv_s(va_list *ap, t_content *content, int *printed_len)
 	}
 }
 
+char	*get_base_info(char *base_num_ptn, t_content *content)//桁数
+{
+	int tmp_base;
+
+	tmp_base = 0;
+	while (base_num_ptn[tmp_base])
+		tmp_base++;
+	content->num_base = tmp_base;
+	return (base_num_ptn);
+}
+
+
+// void	put_num_cnt(char *num_arr, t_content *content, int *printed_len)
+// {
+	
+// }
+
+int		get_digits(t_content *content)//数字部分だけ考慮する
+{
+	int digits;
+	long tmp_num;
+
+	tmp_num = (long)content->num_int;
+	tmp_num = (tmp_num < 0) ? -tmp_num : tmp_num;
+	digits = 0;
+	while (tmp_num > content->num_base)
+	{
+		digits++;
+		tmp_num /= content->num_base;
+	}
+	digits++;
+	return (digits);
+}
+
+void	put_conv_di(va_list *ap, t_content *content, int *printed_len)
+{//構造体の情報を基に10進数に変換して、出力した文字数をprinted_lenに足す
+//
+//
+	char *num_arr;
+
+	num_arr = get_base_info("0123456789", content);
+	content->num_int = va_arg(*ap, int);
+	content->num_digits = get_digits(content);
+
+	// put_num_cnt(num_arr, content, printed_len);
+	(void)printed_len;
+}
+
 void	put_string_or_nbr(va_list *ap, t_content *content, int *printed_len)
 {
 	if (content->conv == E_CHAR)
@@ -229,8 +280,8 @@ void	put_string_or_nbr(va_list *ap, t_content *content, int *printed_len)
 		put_conv_s(ap, content, printed_len);
 	// if (content->conv == E_POINTER)
 
-	// if ((content->conv == E_DECIMAL) || (content->conv == E_INTEGER))
-
+	// else if ((content->conv == E_DECIMAL) || (content->conv == E_INTEGER))
+	// 	put_conv_di(ap, content, printed_len);
 	// if (content->conv == E_UNSIGNED)
 
 	// if (content->conv == E_XDECIMAL_SMALL)
@@ -239,4 +290,22 @@ void	put_string_or_nbr(va_list *ap, t_content *content, int *printed_len)
 
 	else if (content->conv == E_PERCENT)
 		put_conv_percent(content, printed_len);
+}
+
+
+
+
+int main(){
+	char *str;
+	t_content content;
+
+	init_content(&content);
+
+	str = get_base_info("0123456789", &content);
+	printf("%s\n",str);
+	printf("%d\n", content.num_base);
+
+	content.num_int = 0;
+	int digits = get_digits(&content);
+	printf("%d\n", digits);
 }
