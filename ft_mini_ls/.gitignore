@@ -2,6 +2,9 @@ main.c
 a.out
 *test*
 *dir*
+*.o
+sametime*
+ft_mini_ls
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos
