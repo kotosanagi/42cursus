@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 11:09:06 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/09 22:36:23 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/10 14:17:36 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,12 @@ int		ft_printf(const char *format, ...);
 // void	is_x_large(t_content *content);
 // void	is_percent(t_content *content);
 void	init_content(t_content *content);
-void	put_char_count(char c, int *printed_len);
-void	put_notconv_count(char *str, int i, int *printed_len);
-void	put_string_or_nbr(va_list *ap, t_content *content, int *printed_len);
+// void	put_char_count(char c, int *printed_len);
+int		put_char_count(char c);
+int		put_notconv_count(char *str, int put_str_len);
+// void	put_notconv_count(char *str, int put_str_len, int *printed_len);
+int		put_string_or_nbr(va_list *ap, t_content *content);
+// void	put_string_or_nbr(va_list *ap, t_content *content, int *printed_len);
 
 int		is_flag(char c, t_content *content);
 int		is_conversion(char c, t_content *content);
