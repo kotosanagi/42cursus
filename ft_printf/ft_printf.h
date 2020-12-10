@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 11:09:06 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/01 23:08:46 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/09 22:36:23 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,12 @@ typedef	struct	s_content
 	int	width;
 	int	prec;
 	int	conv;
-	int num_int;	//なぜ追加したのか、、、(もしかしたら出力の処理が25行に納らないから？)関数の引数も足りないから？
+	int num_int;
 	int num_digits;
-	int num_base;	//なぜ追加したのか、、、(もしかしたら出力の処理が25行に納らないから？)
+	int num_base;
 }				t_content;
 
+int		ft_printf(const char *format, ...);
 // void	is_char(t_content *content);
 // void	is_string(t_content *content);
 // void	is_pointer(t_content *content);
@@ -69,8 +70,7 @@ int		is_flag(char c, t_content *content);
 int		is_conversion(char c, t_content *content);
 int		is_width(char c, t_content *content, va_list *ap);
 int		is_prec(char c, t_content *content, va_list *ap);
-
-void	ft_putnbr(int nb);
+void	ft_putnbr_fd(int n, int fd);
 // 
 size_t	ft_strlen(const char *s);
 

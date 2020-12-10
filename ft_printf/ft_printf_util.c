@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 19:08:07 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/08 07:34:22 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/10 11:27:26 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,11 +235,47 @@ char	*get_base_info(char *base_num_ptn, t_content *content)//桁数
 	return (base_num_ptn);
 }
 
+void	putnbr_numarr(int num, char *num_arr, t_content *content)
+{
+	if (num / content->num_base == 0)
+	{
+		write(1, &num_arr[num], 1);
+		return ;
+	}
+	putnbr_numarr(num / content->num_base, num_arr, content);
+	write(1, &num_arr[num % content->num_base], 1);
+}
 
-// void	put_num_cnt(char *num_arr, t_content *content, int *printed_len)
-// {
-	
-// }
+// int		putnumber_prec(t_content *content)//precを考慮した、いい感じのputnumber(とりま10進数で)
+int		putnumber_prec(t_content *content, char *num_arr)//precを考慮した、いい感じのputnumber
+{//必要な要素 num_int, prec, 
+	int tmp_num;
+	int abs_num_len;
+	int ret_printed;
+
+	ret_printed = content->num_digits;
+	// abs_num_len = (content->num_int < 0) ? content->num_digits - 1 : content->num_digits;
+	if (content->num_int < 0)
+	{
+		write(1, "-", 1);
+		abs_num_len = content->num_digits - 1;
+		tmp_num = -content->num_int;
+	}
+	else
+	{
+		abs_num_len = content->num_digits;
+		tmp_num = content->num_int;
+	}
+	while (content->prec > abs_num_len)//0ume 
+	{
+		write(1, "0", 1);
+		ret_printed++;
+		abs_num_len++;
+	}
+	putnbr_numarr(tmp_num, num_arr, content);
+	return (ret_printed);
+}
+
 
 int		get_digits(t_content *content)//数字部分だけ考慮する
 {
@@ -255,21 +291,71 @@ int		get_digits(t_content *content)//数字部分だけ考慮する
 		tmp_num /= content->num_base;
 	}
 	digits++;
+	if (content->num_int < 0)
+		digits++;
 	return (digits);
+}
+
+int		put_space(t_content *content)
+{
+	int num_space;
+	int i;
+
+	if (content->prec > content->num_digits)
+	{
+		num_space = content->width - content->prec;
+		if (content->num_int < 0)
+			num_space--;
+	}
+	else if (content->prec == 0)///3.0d  0対応
+		num_space = content->width;///
+	else
+		num_space = content->width - content->num_digits;
+	i = 0;
+	// if (content->prec < 0)//precが指定されていないのであれば0埋め//4d 12対応。ダメならこれに戻す
+	// if (content->prec < 0 && content->width <= content->num_digits)//precが指定されていないのであれば0埋め
+	if (content->prec < 0 && ((content->width <= content->num_digits) || (content->flag[E_ZERO])))//precが指定されていないのであれば0埋め
+	{//                                                                   ^ここ 08d 42対応//ダメなら消す
+		while (i++ < num_space)
+			write(1, "0", 1);
+	}
+	// else if (content->prec < 0 && content->flag[E_ZERO])//08d 42対応//ダメなら消す
+	// {
+	// 	while (i++ < num_space)
+	// 		write(1, "0", 1);
+	// }
+	else//precが指定されているのであれば空白埋め
+	{
+		while (i++ < num_space)
+			write(1, " ", 1);
+	}
+	return (num_space);
 }
 
 void	put_conv_di(va_list *ap, t_content *content, int *printed_len)
 {//構造体の情報を基に10進数に変換して、出力した文字数をprinted_lenに足す
-//
-//
 	char *num_arr;
+	int tmp_printed_len;
 
 	num_arr = get_base_info("0123456789", content);
 	content->num_int = va_arg(*ap, int);
 	content->num_digits = get_digits(content);
-
-	// put_num_cnt(num_arr, content, printed_len);
-	(void)printed_len;
+	tmp_printed_len = 0;
+	if (content->prec == 0 && content->num_int == 0)
+		put_space(content);		// return ;
+	else if (content->width <= content->num_digits)
+		tmp_printed_len += putnumber_prec(content, "0123456789");//put_nbr()を、prec的な表現で表す感じ
+	else if (content->flag[E_MINUS])//widthの方が大きくて左寄せ
+	{
+		tmp_printed_len += putnumber_prec(content, "0123456789");//put_nbr()を、prec的な表現で表す感じ
+		tmp_printed_len += put_space(content);
+	}
+	else
+	{
+		tmp_printed_len += put_space(content);
+		tmp_printed_len += putnumber_prec(content, "0123456789");//put_nbr()を、prec的な表現で表す感じ
+	}
+	*printed_len += tmp_printed_len;
 }
 
 void	put_string_or_nbr(va_list *ap, t_content *content, int *printed_len)
@@ -280,8 +366,8 @@ void	put_string_or_nbr(va_list *ap, t_content *content, int *printed_len)
 		put_conv_s(ap, content, printed_len);
 	// if (content->conv == E_POINTER)
 
-	// else if ((content->conv == E_DECIMAL) || (content->conv == E_INTEGER))
-	// 	put_conv_di(ap, content, printed_len);
+	else if ((content->conv == E_DECIMAL) || (content->conv == E_INTEGER))
+		put_conv_di(ap, content, printed_len);
 	// if (content->conv == E_UNSIGNED)
 
 	// if (content->conv == E_XDECIMAL_SMALL)
@@ -295,17 +381,27 @@ void	put_string_or_nbr(va_list *ap, t_content *content, int *printed_len)
 
 
 
-int main(){
-	char *str;
-	t_content content;
+// int main(){
+// 	// char *str;
+// 	t_content content;
 
-	init_content(&content);
+// 	init_content(&content);
 
-	str = get_base_info("0123456789", &content);
-	printf("%s\n",str);
-	printf("%d\n", content.num_base);
+// 	// str = get_base_info("0123456789", &content);
+// 	// printf("%s\n",str);
+// 	// printf("%d\n", content.num_base);
 
-	content.num_int = 0;
-	int digits = get_digits(&content);
-	printf("%d\n", digits);
-}
+// 	// content.num_int = 0;
+// 	// int digits = get_digits(&content);
+// 	// printf("%d\n", digits);
+
+
+
+// 	ft_printf("[%08d]\n", 52);
+// 	printf("[%08d]\n", 52);
+
+// 	ft_printf("[%08.5d]\n", 52);
+// 	printf("[%08.5d]\n", 52);
+// 	// printf("\n\n\n");
+// 	// putnumber_prec(&content);
+// }
