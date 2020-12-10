@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/15 21:12:18 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/06 22:53:44 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/10 18:19:11 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	read_fd(int fd, char **line, char **st_arr)
 	char	*buf;
 	int		ret;
 
-	if (!(buf = (char *)malloc(BUFFER_SIZE + 1)))
+	if (!(buf = (char *)malloc((size_t)BUFFER_SIZE + 1)))
 		return (-1);
 	ret = 0;
 	while (ret == 0 && (read_len = read(fd, buf, BUFFER_SIZE)) > 0)
