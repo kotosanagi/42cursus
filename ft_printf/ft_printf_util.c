@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 19:08:07 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/12 08:28:44 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/12 08:44:38 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -429,60 +429,29 @@ int		put_conv_di(va_list *ap, t_content *content)
 	// *printed_len += tmp_printed_len;
 }
 
-/* backup
-int		put_conv_u(va_list *ap, t_content *content)
+int		put_conv_u_sx_lx(va_list *ap, t_content *content, char *base_str)
 {//構造体の情報を基に10進数に変換して、出力した文字数をprinted_lenに足す
 	char *num_arr;
 	// int tmp_printed_len;
 	int put_len;
 
-	num_arr = get_base_info("0123456789", content);
+	num_arr = get_base_info(base_str, content);
 	content->num_uint = va_arg(*ap, unsigned int);//////////////////////////////////////////
 	content->num_digits = get_digits(content);
 	put_len = 0;
 	if (content->prec == 0 && content->num_uint == 0)
 		put_len += put_space(content);		// return ;
 	else if (content->width <= content->num_digits)
-		put_len += putnumber_prec_u(content, "0123456789");//put_nbr()を、prec的な表現で表す感じ
+		put_len += putnumber_prec_u(content, base_str);//put_nbr()を、prec的な表現で表す感じ
 	else if (content->flag[E_MINUS])//widthの方が大きくて左寄せ
 	{
-		put_len += putnumber_prec_u(content, "0123456789");//put_nbr()を、prec的な表現で表す感じ
+		put_len += putnumber_prec_u(content, base_str);//put_nbr()を、prec的な表現で表す感じ
 		put_len += put_space(content);
 	}
 	else
 	{
 		put_len += put_space(content);
-		put_len += putnumber_prec_u(content, "0123456789");//put_nbr()を、prec的な表現で表す感じ
-	}
-	return (put_len);
-	// *printed_len += tmp_printed_len;
-}
-*/
-
-
-int		put_conv_u(va_list *ap, t_content *content, char *str)
-{//構造体の情報を基に10進数に変換して、出力した文字数をprinted_lenに足す
-	char *num_arr;
-	// int tmp_printed_len;
-	int put_len;
-
-	num_arr = get_base_info(str, content);
-	content->num_uint = va_arg(*ap, unsigned int);//////////////////////////////////////////
-	content->num_digits = get_digits(content);
-	put_len = 0;
-	if (content->prec == 0 && content->num_uint == 0)
-		put_len += put_space(content);		// return ;
-	else if (content->width <= content->num_digits)
-		put_len += putnumber_prec_u(content, str);//put_nbr()を、prec的な表現で表す感じ
-	else if (content->flag[E_MINUS])//widthの方が大きくて左寄せ
-	{
-		put_len += putnumber_prec_u(content, str);//put_nbr()を、prec的な表現で表す感じ
-		put_len += put_space(content);
-	}
-	else
-	{
-		put_len += put_space(content);
-		put_len += putnumber_prec_u(content, str);//put_nbr()を、prec的な表現で表す感じ
+		put_len += putnumber_prec_u(content, base_str);//put_nbr()を、prec的な表現で表す感じ
 	}
 	return (put_len);
 	// *printed_len += tmp_printed_len;
@@ -505,10 +474,11 @@ int		put_string_or_nbr(va_list *ap, t_content *content)
 	else if ((content->conv == E_DECIMAL) || (content->conv == E_INTEGER))
 		put_len += put_conv_di(ap, content);// put_conv_di(ap, content, printed_len);
 	else if (content->conv == E_UNSIGNED)
-		put_len += put_conv_u(ap, content, "0123456789");
-	// else if (content->conv == E_XDECIMAL_SMALL)
-
-	// else if (content->conv == E_XDECIMAL_LARGE)
+		put_len += put_conv_u_sx_lx(ap, content, "0123456789");
+	else if (content->conv == E_XDECIMAL_SMALL)
+		put_len += put_conv_u_sx_lx(ap, content, "0123456789abcdef");
+	else if (content->conv == E_XDECIMAL_LARGE)
+		put_len += put_conv_u_sx_lx(ap, content, "0123456789ABCDEF");
 
 	else if (content->conv == E_PERCENT)
 		put_len += put_conv_percent(content);//put_conv_percent(content, printed_len);
