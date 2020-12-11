@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 11:09:06 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/10 14:17:36 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/12 06:59:36 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef	struct	s_content
 	int	prec;
 	int	conv;
 	int num_int;
+	unsigned int num_uint;////////
 	int num_digits;
 	int num_base;
 }				t_content;
