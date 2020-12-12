@@ -6,11 +6,11 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 19:08:07 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/12 17:05:31 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/12 19:32:26 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../includes/ft_printf.h"
 
 // int		put_char_count(char c, int *printed_len)
 int		put_char_count(char c)

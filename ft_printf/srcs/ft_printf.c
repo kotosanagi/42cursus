@@ -6,44 +6,39 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 22:10:08 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/12 17:08:42 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/12 19:39:51 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "../includes/ft_printf.h"
 
 int		process_percent(va_list *ap, char *str, int *printed_len)
 {
-	// (void)ap;
-	// (void)printed_len;
-	int i;
+	int			str_i;
 	t_content	content;
 
 	init_content(&content);
-	i = 1;
-	while (str[i])
+	str_i = 1;
+	while (str[str_i])
 	{
-		if (is_flag(str[i], &content))//-があったら0は無視する
+		if (is_flag(str[str_i], &content))//-があったら0は無視する
 			;
-		else if (is_width(str[i], &content, ap))
+		else if (is_width(str[str_i], &content, ap))
 			;
-		else if (is_prec(str[i], &content, ap))//精度が0かつ「0」を出力の場合は、空文字列が出力される。
-			;//????
-		else if (is_conversion(str[i], &content))
-		{
-			i++;
-			break ;//????
-		}
+		else if (is_prec(str[str_i], &content, ap))//精度が0かつ「0」を出力の場合は、空文字列が出力される。
+			;
+		else if (is_conversion(str[str_i++], &content))
+			break ;
 		else
-			break ;////?????
-		i++;
+			break ;
+		str_i++;
 	}
-
 	if (content.conv == E_NOT_CONV)// put_notconv_count(str, i, printed_len);//////convが指定されなかった時、そのまま出力する。printed_lenに出力した文字数を足す
-		*printed_len += put_notconv_count(str, i);//////convが指定されなかった時、そのまま出力する。printed_lenに出力した文字数を足す
+		*printed_len += put_notconv_count(str, str_i);//////convが指定されなかった時、そのまま出力する。printed_lenに出力した文字数を足す
 	else
 		*printed_len += put_string_or_nbr(ap, &content);////contentを元に、va_argを吐き出す。printed_lenに出力した文字数を足す
-		// put_string_or_nbr(ap, &content, printed_len);////contentを元に、va_argを吐き出す。printed_lenに出力した文字数を足す
+	return (str_i);
+}
 // printf("\n====content debug===\n");
 // 	printf("flag[E_MINUS] : %2d\n", content.flag[E_MINUS]);
 // 	printf("flag[E_ZERO]  : %2d\n", content.flag[E_ZERO]);
@@ -57,8 +52,6 @@ int		process_percent(va_list *ap, char *str, int *printed_len)
 // 	printf("num_base      : %2d\n", content.num_base);
 // printf("i:%d\n",i);
 // printf("====================\n");
-	return (i);
-}
 
 int ft_printf(const char *format, ...)
 {
@@ -73,12 +66,10 @@ int ft_printf(const char *format, ...)
 	i = 0;
 	while (format[i])
 	{
-		// if (format[i] != '%' && format[i] != '\0')//このコメントアウト、覚えてない。。。。
 		if (format[i] == '%')
 			i += process_percent(&ap, tmp_format + i, &printed_len);//処理が終わった時にiを足す作業必要
 		else
 		{
-			// put_char_count(format[i], &printed_len);
 			printed_len += put_char_count(format[i]);
 			i++;
 		}
@@ -87,8 +78,7 @@ int ft_printf(const char *format, ...)
 	return (printed_len);
 }
 
-
-
+/*
 
 int main () {///
 
@@ -140,24 +130,24 @@ int main () {///
 
 // printf("========  not_conv  =======\n\n");
 
-
-//  x = ft_printf("ft:[koto%*dmocomoco]", 4, 52);
-//  printf("\n");
-//  y = printf("og:[koto%*dmocomoco]", 4, 52);
-//  printf("\nft ret : %d\n", x-5);
-//  printf("og ret : %d\n\n", y-5);
+    printf("===not conv===\n");
+ x = ft_printf("ft:[koto%*dmocomoco]", 4, 52);
+ printf("\n");
+ y = printf("og:[koto%*dmocomoco]", 4, 52);
+ printf("\nft ret : %d\n", x-5);
+ printf("og ret : %d\n\n", y-5);
     
-//  x = ft_printf("ft:[koto%-10.*dmocomoco]", 5, 42);
-//  printf("\n");
-//  y = printf("og:[koto%-10.*dmocomoco]", 5, 42);
-//  printf("\nft ret : %d\n", x-5);
-//  printf("og ret : %d\n\n", y-5);
+ x = ft_printf("ft:[koto%-10.*dmocomoco]", 5, 42);
+ printf("\n");
+ y = printf("og:[koto%-10.*dmocomoco]", 5, 42);
+ printf("\nft ret : %d\n", x-5);
+ printf("og ret : %d\n\n", y-5);
     
-//  x = ft_printf("ft:[koto%*.*dmocomoco]",-4, 10, 42);
-//  printf("\n");
-//  y = printf("og:[koto%*.*dmocomoco]",-4, 10, 42);
-//  printf("\nft ret : %d\n", x-5);
-//  printf("og ret : %d\n\n", y-5);
+ x = ft_printf("ft:[koto%*.*dmocomoco]",-4, 10, 42);
+ printf("\n");
+ y = printf("og:[koto%*.*dmocomoco]",-4, 10, 42);
+ printf("\nft ret : %d\n", x-5);
+ printf("og ret : %d\n\n", y-5);
 
 
     // x = printf("koto%-23mocomoco", 52);//そもそもやっちゃダメっぽい
@@ -1939,3 +1929,4 @@ printf("=========  p  ========\n");
 
 
 
+*/
