@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 11:09:06 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/12 08:40:34 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/12 16:46:41 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdbool.h>
+# include <stdint.h>//////////////
 
 typedef	enum	e_conversion
 {
@@ -47,7 +48,8 @@ typedef	struct	s_content
 	int	prec;
 	int	conv;
 	int num_int;
-	unsigned int num_uint;////////
+	unsigned long long num_uint;
+	unsigned long long num_ptr;/////////////////
 	int num_digits;
 	int num_base;
 }				t_content;

@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 19:08:07 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/12 08:44:38 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/12 17:05:31 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,8 @@ void	init_content(t_content *content)
 	content->prec = -1;
 	content->conv = E_NOT_CONV;
 	content->num_int = 0;
-	content->num_uint = 0;////////////////////////////////////////////////
+	content->num_uint = 0;
+	content->num_ptr = 0;///////////////
 	content->num_digits = 0;
 	content->num_base = 0;
 }
@@ -276,14 +277,15 @@ void	putnbr_numarr_di(int num, char *num_arr, t_content *content)
 	write(1, &num_arr[num % content->num_base], 1);
 }
 
-void	putnbr_numarr_u(unsigned int num, char *num_arr, t_content *content)
+void	putnbr_numarr_uxxp(unsigned long long num, char *num_arr, t_content *content)
 {
 	if (num / content->num_base == 0)
 	{
 		write(1, &num_arr[num], 1);
 		return ;
 	}
-	putnbr_numarr_u(num / content->num_base, num_arr, content);
+	putnbr_numarr_uxxp(num / content->num_base, num_arr, content);
+// printf("\nnum : %llu\n",num);
 	write(1, &num_arr[num % content->num_base], 1);
 }
 
@@ -317,9 +319,9 @@ int		putnumber_prec_di(t_content *content, char *num_arr)//precを考慮した�
 	return (ret_printed);
 }
 
-int		putnumber_prec_u(t_content *content, char *num_arr)//precを考慮した、いい感じのputnumber
+int		putnumber_prec_u_sx_lx(t_content *content, char *num_arr)//precを考慮した、いい感じのputnumber
 {//必要な要素 num_int, prec, 
-	unsigned int tmp_num;
+	unsigned long long tmp_num;
 	int abs_num_len;
 	int ret_printed;
 
@@ -332,7 +334,33 @@ int		putnumber_prec_u(t_content *content, char *num_arr)//precを考慮した、
 		ret_printed++;
 		abs_num_len++;
 	}
-	putnbr_numarr_u(tmp_num, num_arr, content);
+	putnbr_numarr_uxxp(tmp_num, num_arr, content);
+	return (ret_printed);
+}
+
+int		putnumber_prec_p(t_content *content, char *num_arr)//precを考慮した、いい感じのputnumber
+{//必要な要素 num_int, prec, 
+	unsigned long long tmp_num;
+	int abs_num_len;
+	int ret_printed;
+
+	ret_printed = content->num_digits;
+	abs_num_len = content->num_digits;
+	tmp_num = content->num_ptr;
+	while (content->prec > abs_num_len)//0ume 
+	{
+		write(1, "0", 1);
+		ret_printed++;
+		abs_num_len++;
+	}
+	write(1, "0x", 2);
+	ret_printed += 2;
+// if (content->num_ptr != 0)//////超強引な戦法。絶対に違うと思う。
+// {
+// 	write(1, "10", 2);
+// 	ret_printed += 1;//////超強引な戦法。絶対に違うと思う。
+// }
+	putnbr_numarr_uxxp(tmp_num, num_arr, content);
 	return (ret_printed);
 }
 
@@ -340,20 +368,26 @@ int		putnumber_prec_u(t_content *content, char *num_arr)//precを考慮した、
 int		get_digits(t_content *content)//数字部分だけ考慮する
 {
 	int digits;
-	long tmp_num;
+	// long long tmp_num;
+	long long tmp_num;
 
 	if (content->conv == E_INTEGER || content->conv == E_DECIMAL)
-		tmp_num = (long)content->num_int;
+		tmp_num = (long long)content->num_int;
+	else if (content->conv == E_POINTER)///////pointer対応
+		tmp_num = content->num_ptr;
 	else
-		tmp_num = (long)content->num_uint;
-	tmp_num = (tmp_num < 0) ? -tmp_num : tmp_num;
+		tmp_num = (long long)content->num_uint;
+	if (content->conv == E_INTEGER || content->conv == E_DECIMAL)
+		tmp_num = (tmp_num < 0) ? -tmp_num : tmp_num;
 	digits = 0;
-	while (tmp_num > (long)content->num_base)
+	while (tmp_num >= (long long)content->num_base)
 	{
 		digits++;
+// printf("\ntmp_num : %lld, digits : %d\n", tmp_num, digits);
 		tmp_num /= content->num_base;
 	}
 	digits++;
+// printf("tmp_num : %lld, digits : %d\n", tmp_num, digits);
 	if (content->num_int < 0)
 		digits++;
 	return (digits);
@@ -436,22 +470,50 @@ int		put_conv_u_sx_lx(va_list *ap, t_content *content, char *base_str)
 	int put_len;
 
 	num_arr = get_base_info(base_str, content);
-	content->num_uint = va_arg(*ap, unsigned int);//////////////////////////////////////////
+	content->num_uint = va_arg(*ap, unsigned long long);//////////////////////////////////////////
 	content->num_digits = get_digits(content);
 	put_len = 0;
 	if (content->prec == 0 && content->num_uint == 0)
 		put_len += put_space(content);		// return ;
 	else if (content->width <= content->num_digits)
-		put_len += putnumber_prec_u(content, base_str);//put_nbr()を、prec的な表現で表す感じ
+		put_len += putnumber_prec_u_sx_lx(content, base_str);//put_nbr()を、prec的な表現で表す感じ
 	else if (content->flag[E_MINUS])//widthの方が大きくて左寄せ
 	{
-		put_len += putnumber_prec_u(content, base_str);//put_nbr()を、prec的な表現で表す感じ
+		put_len += putnumber_prec_u_sx_lx(content, base_str);//put_nbr()を、prec的な表現で表す感じ
 		put_len += put_space(content);
 	}
 	else
 	{
 		put_len += put_space(content);
-		put_len += putnumber_prec_u(content, base_str);//put_nbr()を、prec的な表現で表す感じ
+		put_len += putnumber_prec_u_sx_lx(content, base_str);//put_nbr()を、prec的な表現で表す感じ
+	}
+	return (put_len);
+	// *printed_len += tmp_printed_len;
+}
+
+int		put_conv_p(va_list *ap, t_content *content, char *base_str)
+{//構造体の情報を基に10進数に変換して、出力した文字数をprinted_lenに足す
+	char *num_arr;
+	// int tmp_printed_len;
+	int put_len;
+
+	num_arr = get_base_info(base_str, content);
+	content->num_ptr = (unsigned long long)(va_arg(*ap, void *));//////////////////////////////////////////
+	content->num_digits = get_digits(content);
+	put_len = 0;
+	if (content->prec == 0 && content->num_ptr == 0)
+		put_len += put_space(content);
+	else if (content->width <= content->num_digits)
+		put_len += putnumber_prec_p(content, base_str);//put_nbr()を、prec的な表現で表す感じ
+	else if (content->flag[E_MINUS])//widthの方が大きくて左寄せ
+	{
+		put_len += putnumber_prec_p(content, base_str);//put_nbr()を、prec的な表現で表す感じ
+		put_len += put_space(content);
+	}
+	else
+	{
+		put_len += put_space(content);
+		put_len += putnumber_prec_p(content, base_str);//put_nbr()を、prec的な表現で表す感じ
 	}
 	return (put_len);
 	// *printed_len += tmp_printed_len;
@@ -469,8 +531,8 @@ int		put_string_or_nbr(va_list *ap, t_content *content)
 		put_len += put_conv_c(ap, content);// put_len += put_conv_c(ap, content, printed_len);
 	else if (content->conv == E_STRING)
 		put_len += put_conv_s(ap, content);//put_conv_s(ap, content, printed_len);
-	// if (content->conv == E_POINTER)
-
+	else if (content->conv == E_POINTER)
+		put_len += put_conv_p(ap, content, "0123456789abcdef");
 	else if ((content->conv == E_DECIMAL) || (content->conv == E_INTEGER))
 		put_len += put_conv_di(ap, content);// put_conv_di(ap, content, printed_len);
 	else if (content->conv == E_UNSIGNED)
@@ -479,7 +541,6 @@ int		put_string_or_nbr(va_list *ap, t_content *content)
 		put_len += put_conv_u_sx_lx(ap, content, "0123456789abcdef");
 	else if (content->conv == E_XDECIMAL_LARGE)
 		put_len += put_conv_u_sx_lx(ap, content, "0123456789ABCDEF");
-
 	else if (content->conv == E_PERCENT)
 		put_len += put_conv_percent(content);//put_conv_percent(content, printed_len);
 	return (put_len);
