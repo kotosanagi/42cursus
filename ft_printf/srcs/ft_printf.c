@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 22:10:08 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/12 19:39:51 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/15 06:50:05 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ int		process_percent(va_list *ap, char *str, int *printed_len)
 		*printed_len += put_notconv_count(str, str_i);//////convが指定されなかった時、そのまま出力する。printed_lenに出力した文字数を足す
 	else
 		*printed_len += put_string_or_nbr(ap, &content);////contentを元に、va_argを吐き出す。printed_lenに出力した文字数を足す
-	return (str_i);
-}
 // printf("\n====content debug===\n");
 // 	printf("flag[E_MINUS] : %2d\n", content.flag[E_MINUS]);
 // 	printf("flag[E_ZERO]  : %2d\n", content.flag[E_ZERO]);
@@ -50,8 +48,10 @@ int		process_percent(va_list *ap, char *str, int *printed_len)
 // 	printf("num_ptr       : %2llu\n", content.num_ptr);
 // 	printf("num_digits    : %2d\n", content.num_digits);
 // 	printf("num_base      : %2d\n", content.num_base);
-// printf("i:%d\n",i);
+// printf("i:%d\n",str_i);
 // printf("====================\n");
+	return (str_i);
+}
 
 int ft_printf(const char *format, ...)
 {
@@ -78,7 +78,7 @@ int ft_printf(const char *format, ...)
 	return (printed_len);
 }
 
-/*
+#ifdef TEST
 
 int main () {///
 
@@ -130,24 +130,24 @@ int main () {///
 
 // printf("========  not_conv  =======\n\n");
 
-    printf("===not conv===\n");
- x = ft_printf("ft:[koto%*dmocomoco]", 4, 52);
- printf("\n");
- y = printf("og:[koto%*dmocomoco]", 4, 52);
- printf("\nft ret : %d\n", x-5);
- printf("og ret : %d\n\n", y-5);
+//     printf("===not conv===\n");
+//  x = ft_printf("ft:[koto%*dmocomoco]", 4, 52);
+//  printf("\n");
+//  y = printf("og:[koto%*dmocomoco]", 4, 52);
+//  printf("\nft ret : %d\n", x-5);
+//  printf("og ret : %d\n\n", y-5);
     
- x = ft_printf("ft:[koto%-10.*dmocomoco]", 5, 42);
- printf("\n");
- y = printf("og:[koto%-10.*dmocomoco]", 5, 42);
- printf("\nft ret : %d\n", x-5);
- printf("og ret : %d\n\n", y-5);
+//  x = ft_printf("ft:[koto%-10.*dmocomoco]", 5, 42);
+//  printf("\n");
+//  y = printf("og:[koto%-10.*dmocomoco]", 5, 42);
+//  printf("\nft ret : %d\n", x-5);
+//  printf("og ret : %d\n\n", y-5);
     
- x = ft_printf("ft:[koto%*.*dmocomoco]",-4, 10, 42);
- printf("\n");
- y = printf("og:[koto%*.*dmocomoco]",-4, 10, 42);
- printf("\nft ret : %d\n", x-5);
- printf("og ret : %d\n\n", y-5);
+//  x = ft_printf("ft:[koto%*.*dmocomoco]",-4, 10, 42);
+//  printf("\n");
+//  y = printf("og:[koto%*.*dmocomoco]",-4, 10, 42);
+//  printf("\nft ret : %d\n", x-5);
+//  printf("og ret : %d\n\n", y-5);
 
 
     // x = printf("koto%-23mocomoco", 52);//そもそもやっちゃダメっぽい
@@ -159,11 +159,35 @@ int main () {///
 
 // printf("========  percent?  =======\n\n");
 
-//  x = ft_printf("ft:[koto%-23%mocomoco]");
+//     printf("koto%%1%%mocomoco\n");
+//  x = ft_printf("ft:[koto%1%mocomoco]");
 //  printf("\n");
-//  y = printf("og:[koto%-23%mocomoco]");
+//  y = printf("og:[koto%1%mocomoco]");
 //  printf("\nft ret : %d\n", x-5);
 //  printf("og ret : %d\n\n", y-5);
+
+//     printf("koto%%3%%mocomoco\n");
+//  x = ft_printf("ft:[koto%3%mocomoco]");
+//  printf("\n");
+//  y = printf("og:[koto%3%mocomoco]");
+//  printf("\nft ret : %d\n", x-5);
+//  printf("og ret : %d\n\n", y-5);
+
+//     printf("koto%%-3%%mocomoco\n");
+//  x = ft_printf("ft:[koto%-3%mocomoco]");
+//  printf("\n");
+//  y = printf("og:[koto%-3%mocomoco]");
+//  printf("\nft ret : %d\n", x-5);
+//  printf("og ret : %d\n\n", y-5);
+
+//     printf("%%%%\n");
+//  x = ft_printf("ft:[%%]");
+//  printf("\n");
+//  y = printf("og:[%%]");
+//  printf("\nft ret : %d\n", x-5);
+//  printf("og ret : %d\n\n", y-5);
+
+
 
 
 // printf("========  ???  =======\n\n");
@@ -257,38 +281,155 @@ int main () {///
     // printf("\nft ret : %d\n", x-5);
     // printf("og ret : %d\n\n", y-5);
 
-
-
-    // printf("======di=======\n");
-
-
-    // printf("*d  3 40\n");
-    // x = ft_printf("ft:[%*d]",3, 40);
+    
+    
+    // printf("s  koto\n");
+    // x = ft_printf("ft:[%s]", "koto");
     // printf("\n");
-    // y = printf("og:[%*d]",3, 40);
+    // y = printf("og:[%s]", "koto");
+    // printf("\nft ret : %d\n", x-5);
+    // printf("og ret : %d\n\n", y-5);
+    
+    // printf("s  NULL\n");
+    // x = ft_printf("ft:[%s]", NULL);
+    // printf("\n");
+    // y = printf("og:[%s]", NULL);
+    // printf("\nft ret : %d\n", x-5);
+    // printf("og ret : %d\n\n", y-5);
+    
+    // printf("s  NULL\n");
+    // x = ft_printf("ft:[%s]", NULL);
+    // printf("\n");
+    // y = printf("og:[%s]", NULL);
     // printf("\nft ret : %d\n", x-5);
     // printf("og ret : %d\n\n", y-5);
 
-    // printf(".*d  3 40\n");
-    // x = ft_printf("ft:[%.*d]",3, 40);
+    // printf("3s  NULL\n");
+    // x = ft_printf("ft:[%3s]", NULL);
     // printf("\n");
-    // y = printf("og:[%.*d]",3, 40);
+    // y = printf("og:[%3s]", NULL);
     // printf("\nft ret : %d\n", x-5);
     // printf("og ret : %d\n\n", y-5);
 
-    // printf("*.*d 4 3 40\n");
-    // x = ft_printf("ft:[%*.*d]", 4, 3, 40);
+    // printf("7s  NULL\n");
+    // x = ft_printf("ft:[%7s]", NULL);
     // printf("\n");
-    // y = printf("og:[%*.*d]", 4, 3, 40);
+    // y = printf("og:[%7s]", NULL);
     // printf("\nft ret : %d\n", x-5);
     // printf("og ret : %d\n\n", y-5);
 
-    // printf("d 12345678\n");
-    // x = ft_printf("ft:[%d]", 12345678);
+    // printf("7.0s  NULL\n");
+    // x = ft_printf("ft:[%7.0s]", NULL);
     // printf("\n");
-    // y = printf("og:[%d]", 12345678);
+    // y = printf("og:[%7.0s]", NULL);
     // printf("\nft ret : %d\n", x-5);
     // printf("og ret : %d\n\n", y-5);
+
+    // printf(".0s  NULL\n");
+    // x = ft_printf("ft:[%.0s]", NULL);
+    // printf("\n");
+    // y = printf("og:[%.0s]", NULL);
+    // printf("\nft ret : %d\n", x-5);
+    // printf("og ret : %d\n\n", y-5);
+
+    // printf(".0s  NULL\n");
+    // x = ft_printf("ft:[%.0s]", NULL);
+    // printf("\n");
+    // y = printf("og:[%.0s]", NULL);
+    // printf("\nft ret : %d\n", x-5);
+    // printf("og ret : %d\n\n", y-5);
+
+    // printf(".4s  NULL\n");
+    // x = ft_printf("ft:[%.4s]", NULL);
+    // printf("\n");
+    // y = printf("og:[%.4s]", NULL);
+    // printf("\nft ret : %d\n", x-5);
+    // printf("og ret : %d\n\n", y-5);
+
+    // // printf("s  hi low\0don't print me lol\0\n");
+    // x = ft_printf("ft:[%09s]", "hi low\0don't print me lol\0");
+    // printf("\n");
+    // // y = printf("og:[%09s]", "hi low\0don't print me lol\0");
+    // printf("\nft ret : %d\n", x-5);
+    // printf("og ret : %d\n\n", y-5);
+
+
+
+
+    printf("======di=======\n");
+
+
+    printf("03i  -54\n");
+    x = ft_printf("ft:[%03i]",-54);
+    printf("\n");
+    y = printf("og:[%03i]",-54);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
+
+    printf("03d  -54\n");
+    x = ft_printf("ft:[%03d]",-54);
+    printf("\n");
+    y = printf("og:[%03d]",-54);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
+
+    printf("04i  -54\n");
+    x = ft_printf("ft:[%04i]",-54);
+    printf("\n");
+    y = printf("og:[%04i]",-54);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
+
+    printf("04d  -54\n");
+    x = ft_printf("ft:[%04d]",-54);
+    printf("\n");
+    y = printf("og:[%04d]",-54);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
+
+    printf("07i  -54\n");
+    x = ft_printf("ft:[%07i]",-54);
+    printf("\n");
+    y = printf("og:[%07i]",-54);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
+
+    printf("07d  -54\n");
+    x = ft_printf("ft:[%07d]",-54);
+    printf("\n");
+    y = printf("og:[%07d]",-54);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
+
+
+
+    printf("*d  3 40\n");
+    x = ft_printf("ft:[%*d]",3, 40);
+    printf("\n");
+    y = printf("og:[%*d]",3, 40);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
+
+    printf(".*d  3 40\n");
+    x = ft_printf("ft:[%.*d]",3, 40);
+    printf("\n");
+    y = printf("og:[%.*d]",3, 40);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
+
+    printf("*.*d 4 3 40\n");
+    x = ft_printf("ft:[%*.*d]", 4, 3, 40);
+    printf("\n");
+    y = printf("og:[%*.*d]", 4, 3, 40);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
+
+    printf("d 12345678\n");
+    x = ft_printf("ft:[%d]", 12345678);
+    printf("\n");
+    y = printf("og:[%d]", 12345678);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
 
     // printf("4d 12345678\n");
     // x = ft_printf("ft:[%4d]", 12345678);
@@ -446,33 +587,33 @@ int main () {///
     // printf("\nft ret : %d\n", x-5);
     // printf("og ret : %d\n\n", y-5);
     
-    // printf("15.13d 2147483647\n");
-    // x = ft_printf("ft:[%15.13d]", 2147483647);
-    // printf("\n");
-    // y = printf("og:[%15.13d]", 2147483647);
-    // printf("\nft ret : %d\n", x-5);
-    // printf("og ret : %d\n\n", y-5);
+    printf("15.13d 2147483647\n");
+    x = ft_printf("ft:[%15.13d]", 2147483647);
+    printf("\n");
+    y = printf("og:[%15.13d]", 2147483647);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
 
-    // printf("15.13d -2147483647\n");
-    // x = ft_printf("ft:[%15.13d]", -2147483647);
-    // printf("\n");
-    // y = printf("og:[%15.13d]", -2147483647);
-    // printf("\nft ret : %d\n", x-5);
-    // printf("og ret : %d\n\n", y-5);
+    printf("15.13d -2147483647\n");
+    x = ft_printf("ft:[%15.13d]", -2147483647);
+    printf("\n");
+    y = printf("og:[%15.13d]", -2147483647);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
     
-    // printf("15.15d 2147483647\n");
-    // x = ft_printf("ft:[%15.15d]", 2147483647);
-    // printf("\n");
-    // y = printf("og:[%15.15d]", 2147483647);
-    // printf("\nft ret : %d\n", x-5);
-    // printf("og ret : %d\n\n", y-5);
+    printf("15.15d 2147483647\n");
+    x = ft_printf("ft:[%15.15d]", 2147483647);
+    printf("\n");
+    y = printf("og:[%15.15d]", 2147483647);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
 
-    // printf("15.15d -2147483647\n");
-    // x = ft_printf("ft:[%15.15d]", -2147483647);
-    // printf("\n");
-    // y = printf("og:[%15.15d]", -2147483647);
-    // printf("\nft ret : %d\n", x-5);
-    // printf("og ret : %d\n\n", y-5);
+    printf("15.15d -2147483647\n");
+    x = ft_printf("ft:[%15.15d]", -2147483647);
+    printf("\n");
+    y = printf("og:[%15.15d]", -2147483647);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
     
     // printf("15.14d 2147483647\n");
     // x = ft_printf("ft:[%15.14d]", 2147483647);
@@ -488,6 +629,34 @@ int main () {///
     // printf("\nft ret : %d\n", x-5);
     // printf("og ret : %d\n\n", y-5);
 
+    printf("025d 2147483647\n");
+    x = ft_printf("ft:[%025d]", 2147483647);
+    printf("\n");
+    y = printf("og:[%025d]", 2147483647);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
+
+    printf("025d -2147483647\n");
+    x = ft_printf("ft:[%025d]", -2147483647);
+    printf("\n");
+    y = printf("og:[%025d]", -2147483647);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
+    
+    printf("25.15d 2147483647\n");
+    x = ft_printf("ft:[%25.15d]", 2147483647);
+    printf("\n");
+    y = printf("og:[%25.15d]", 2147483647);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
+
+    printf("25.15d -2147483647\n");
+    x = ft_printf("ft:[%25.15d]", -2147483647);
+    printf("\n");
+    y = printf("og:[%25.15d]", -2147483647);
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
+    
 
 
 
@@ -1875,41 +2044,41 @@ int main () {///
 //     printf("\nft ret : %d\n", x-5);
 //     printf("og ret : %d\n\n", y-5);
     
-    printf("5.5X  4501446475\n");
-    x = ft_printf("ft:[%X]", 4501446475);
-    printf("\n");
-    y = printf("og:[%lX]", 4501446475);
-    printf("\nft ret : %d\n", x-5);
-    printf("og ret : %d\n\n", y-5);
+//     printf("5.5X  4501446475\n");
+//     x = ft_printf("ft:[%X]", 4501446475);
+//     printf("\n");
+//     y = printf("og:[%lX]", 4501446475);
+//     printf("\nft ret : %d\n", x-5);
+//     printf("og ret : %d\n\n", y-5);
 
     
-    printf("5.5X  0\n");
-    x = ft_printf("ft:[%X]", 0);
-    printf("\n");
-    y = printf("og:[%X]", 0);
-    printf("\nft ret : %d\n", x-5);
-    printf("og ret : %d\n\n", y-5);
+//     printf("5.5X  0\n");
+//     x = ft_printf("ft:[%X]", 0);
+//     printf("\n");
+//     y = printf("og:[%X]", 0);
+//     printf("\nft ret : %d\n", x-5);
+//     printf("og ret : %d\n\n", y-5);
 
 
 
 
-printf("=========  p  ========\n");
+// printf("=========  p  ========\n");
 
 
-    printf("p  \"koto\"\n");
-    x = ft_printf("ft:[%p]", "koto");
-    printf("\n");
-    y = printf("og:[%p]", "koto");
-    printf("\nft ret : %d\n", x-5);
-    printf("og ret : %d\n\n", y-5);
+//     printf("p  \"koto\"\n");
+//     x = ft_printf("ft:[%p]", "koto");
+//     printf("\n");
+//     y = printf("og:[%p]", "koto");
+//     printf("\nft ret : %d\n", x-5);
+//     printf("og ret : %d\n\n", y-5);
 
 
-    printf("p  NULL\n");
-    x = ft_printf("ft:[%p]", NULL);
-    printf("\n");
-    y = printf("og:[%p]", NULL);
-    printf("\nft ret : %d\n", x-5);
-    printf("og ret : %d\n\n", y-5);
+//     printf("p  NULL\n");
+//     x = ft_printf("ft:[%p]", NULL);
+//     printf("\n");
+//     y = printf("og:[%p]", NULL);
+//     printf("\nft ret : %d\n", x-5);
+//     printf("og ret : %d\n\n", y-5);
 
 
 
@@ -1929,4 +2098,4 @@ printf("=========  p  ========\n");
 
 
 
-*/
+#endif

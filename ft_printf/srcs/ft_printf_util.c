@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 19:08:07 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/12 19:32:26 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/15 06:51:29 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,8 +153,8 @@ int		put_conv_percent(t_content *content)
 		put_len += put_char_count('%');
 		// write(1, "%%", 1);
 	}
-	if (content->width <= 1)
-		put_len++;
+	// if (content->width <= 1)
+	// 	put_len++;
 		// *printed_len += 1;
 	// else
 	// 	*printed_len += content->width;
@@ -219,13 +219,28 @@ int		put_conv_s(va_list *ap, t_content *content)
 	char *str;
 	int i;
 	int put_len;
+	char *tmp_str;
 
+	tmp_str = va_arg(*ap, char*);
 	put_len = 0;
-	if (content->prec >= 0)
-		str = ft_strndup(va_arg(*ap, char*), content->prec);
+// printf("tmp_str : %s\n",tmp_str);
+	if (tmp_str == NULL)
+	{
+		if (content->prec >= 0)
+			str = ft_strndup("(null)", content->prec);
+		else
+			str = ft_strndup("(null)", 6);
+	}
 	else
-		str = va_arg(*ap, char*);
+	{
+		if (content->prec >= 0)
+			str = ft_strndup(tmp_str, content->prec);
+		else
+			str = tmp_str;
+	}
+// printf("str : %s\n", str);
 	s_len = (int)ft_strlen(str);
+// printf("seg fault test~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nseg fault test~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nseg fault test~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 	if (s_len >= content->width)
 	{
 		write(1, str, s_len);
@@ -266,17 +281,25 @@ char	*get_base_info(char *base_num_ptn, t_content *content)//桁数
 	return (base_num_ptn);
 }
 
-void	putnbr_numarr_di(int num, char *num_arr, t_content *content)
+// void	putnbr_numarr_di(int num, char *num_arr, t_content *content)
+int		putnbr_numarr_di(int num, char *num_arr, t_content *content)
 {
+	int ret;
+
+	ret = 0;
 	if (num / content->num_base == 0)
 	{
-		write(1, &num_arr[num], 1);
-		return ;
+		// write(1, &num_arr[num], 1);
+		ret += put_char_count(num_arr[num]);
+		return (ret);
 	}
-	putnbr_numarr_di(num / content->num_base, num_arr, content);
-	write(1, &num_arr[num % content->num_base], 1);
+	ret += putnbr_numarr_di(num / content->num_base, num_arr, content);
+	// write(1, &num_arr[num % content->num_base], 1);
+	ret += put_char_count(num_arr[num % content->num_base]);
+	return (ret);
 }
 
+//↓↓　IT MUST BE MODIFIED
 void	putnbr_numarr_uxxp(unsigned long long num, char *num_arr, t_content *content)
 {
 	if (num / content->num_base == 0)
@@ -296,11 +319,17 @@ int		putnumber_prec_di(t_content *content, char *num_arr)//precを考慮した�
 	int abs_num_len;
 	int ret_printed;
 
-	ret_printed = content->num_digits;
+	ret_printed = 0;
 	// abs_num_len = (content->num_int < 0) ? content->num_digits - 1 : content->num_digits;
 	if (content->num_int < 0)
 	{
-		write(1, "-", 1);
+		// write(1, "-", 1);
+		// put_char_count('k');
+		// put_char_count('k');
+		// put_char_count('k');
+		// put_char_count('k');
+		// put_char_count('k');
+		ret_printed += put_char_count('-');
 		abs_num_len = content->num_digits - 1;
 		tmp_num = -content->num_int;
 	}
@@ -311,11 +340,16 @@ int		putnumber_prec_di(t_content *content, char *num_arr)//precを考慮した�
 	}
 	while (content->prec > abs_num_len)//0ume 
 	{
-		write(1, "0", 1);
-		ret_printed++;
+		// put_char_count('m');
+		// put_char_count('m');
+		// put_char_count('m');
+		// put_char_count('m');
+		// write(1, "0", 1);
+		ret_printed += put_char_count('0');
+		// ret_printed++;
 		abs_num_len++;
 	}
-	putnbr_numarr_di(tmp_num, num_arr, content);
+	ret_printed += putnbr_numarr_di(tmp_num, num_arr, content);
 	return (ret_printed);
 }
 
