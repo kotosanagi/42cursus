@@ -1,7 +1,9 @@
 main.c
 a.out
 libft.a
-
+libftprintf.a
+*.o
+*pft_2019*
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos
@@ -36,3 +38,4 @@ Temporary Items
 .apdisk
 
 # End of https://www.toptal.com/developers/gitignore/api/macos
+pft_2019/
