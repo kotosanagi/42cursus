@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 19:08:07 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/16 23:05:16 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/17 06:42:09 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -420,13 +420,7 @@ int		putnumber_prec_p(t_content *content, char *num_arr)//precを考慮した、
 		ret_printed++;
 		abs_num_len++;
 	}
-	write(1, "0x", 2);
-	ret_printed += 2;
-// if (content->num_ptr != 0)//////超強引な戦法。絶対に違うと思う。
-// {
-// 	write(1, "10", 2);
-// 	ret_printed += 1;//////超強引な戦法。絶対に違うと思う。
-// }
+	// ret_printed += write(1, "0x", 2);
 	putnbr_numarr_uxxp(tmp_num, num_arr, content);
 	return (ret_printed);
 }
@@ -504,7 +498,7 @@ int		put_space_zero(t_content *content)
 }
 */
 
-int put_space(t_content *content)
+int put_space(t_content *content, int offset)
 {
 	int i;
 	int ret;
@@ -516,24 +510,24 @@ int put_space(t_content *content)
 		return (ret);
 	if (content->prec == 0 && content->num_int == 0)
 	{
-		while (i++ < content->width)
+		while (i++ < content->width - offset)
 			ret += put_char_count(' ');
 	}
 	else if (content->prec < content->num_digits)
 	{
-		while (i++ < content->width - content->num_digits)
+		while (i++ < content->width - content->num_digits - offset)
 			ret += put_char_count(' ');
 	}
 	else
 	{
 		if (content->num_int < 0)
 		{
-			while (i++ < content->width - content->prec - 1)
+			while (i++ < content->width - content->prec - 1 - offset)
 				ret += put_char_count(' ');
 		}
 		else
 		{
-			while (i++ < content->width - content->prec)
+			while (i++ < content->width - content->prec - offset)
 				ret += put_char_count(' ');
 		}
 	}
@@ -571,17 +565,17 @@ int		put_conv_di(va_list *ap, t_content *content)
 	content->num_digits = get_digits(content);
 	put_len = 0;
 	if (content->prec == 0 && content->num_int == 0)
-		put_len += put_space(content);		// return ;
+		put_len += put_space(content, 0);		// return ;
 	else if (content->width <= content->num_digits)
 		put_len += putnbr_di_minus_zero(content, "0123456789");//put_nbr()を、prec的な表現で表す感じ
 	else if (content->flag[E_MINUS])//widthの方が大きくて左寄せ
 	{
 		put_len += putnbr_di_minus_zero(content, "0123456789");//put_nbr()を、prec的な表現で表す感じ
-		put_len += put_space(content);
+		put_len += put_space(content, 0);
 	}
 	else
 	{
-		put_len += put_space(content);
+		put_len += put_space(content, 0);
 		put_len += putnbr_di_minus_zero(content, "0123456789");//put_nbr()を、prec的な表現で表す感じ
 	}
 	return (put_len);
@@ -599,17 +593,17 @@ int		put_conv_u_sx_lx(va_list *ap, t_content *content, char *base_str)
 	content->num_digits = get_digits(content);
 	put_len = 0;
 	if (content->prec == 0 && content->num_uint == 0)
-		put_len += put_space(content);		// return ;
+		put_len += put_space(content, 0);		// return ;
 	else if (content->width <= content->num_digits)
 		put_len += putnumber_prec_u_sx_lx(content, base_str);//put_nbr()を、prec的な表現で表す感じ
 	else if (content->flag[E_MINUS])//widthの方が大きくて左寄せ
 	{
 		put_len += putnumber_prec_u_sx_lx(content, base_str);//put_nbr()を、prec的な表現で表す感じ
-		put_len += put_space(content);
+		put_len += put_space(content, 0);
 	}
 	else
 	{
-		put_len += put_space(content);
+		put_len += put_space(content, 0);
 		put_len += putnumber_prec_u_sx_lx(content, base_str);//put_nbr()を、prec的な表現で表す感じ
 	}
 	return (put_len);
@@ -627,17 +621,25 @@ int		put_conv_p(va_list *ap, t_content *content, char *base_str)
 	content->num_digits = get_digits(content);
 	put_len = 0;
 	if (content->prec == 0 && content->num_ptr == 0)
-		put_len += put_space(content);
+	{
+		put_len += put_space(content, 2);
+		put_len += write(1, "0x", 2);//12170632お試し
+	}
 	else if (content->width <= content->num_digits)
+	{
+		put_len += write(1, "0x", 2);//12170632お試し
 		put_len += putnumber_prec_p(content, base_str);//put_nbr()を、prec的な表現で表す感じ
+	}
 	else if (content->flag[E_MINUS])//widthの方が大きくて左寄せ
 	{
+		put_len += write(1, "0x", 2);//12170632お試し
 		put_len += putnumber_prec_p(content, base_str);//put_nbr()を、prec的な表現で表す感じ
-		put_len += put_space(content);
+		put_len += put_space(content, 2);
 	}
 	else
 	{
-		put_len += put_space(content);
+		put_len += put_space(content, 2);
+		put_len += write(1, "0x", 2);//12170632お試し
 		put_len += putnumber_prec_p(content, base_str);//put_nbr()を、prec的な表現で表す感じ
 	}
 	return (put_len);
