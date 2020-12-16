@@ -4,6 +4,7 @@ libft.a
 libftprintf.a
 *.o
 *pft_2019*
+*.swp
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos
