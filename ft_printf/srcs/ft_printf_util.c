@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 19:08:07 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/17 06:42:09 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/17 07:39:38 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,10 @@ int		is_width(char c, t_content *content, va_list *ap)
 		tmp = va_arg(*ap, int);
 		content->width = (tmp < 0) ? -tmp : tmp;
 		if (tmp < 0)
+		{
 			content->flag[E_MINUS] = true;
+			content->flag[E_ZERO] = false;
+		}
 	}
 	else if (content->width < 0 && (content->prec < 0) && ('1' <= c && c <= '9'))//widthがまだデフォかつ、precがデフォかつ、0以外の数字
 		content->width = c - '0';
@@ -283,20 +286,20 @@ char	*get_base_info(char *base_num_ptn, t_content *content)//桁数
 
 
 // void	putnbr_numarr_di(int num, char *num_arr, t_content *content)
-int		putnbr_numarr_di(int num, char *num_arr, t_content *content)
+int		putnbr_numarr_di(long num, char *num_arr, t_content *content)
 {
 	int ret;
 
 	ret = 0;
-	if (num / content->num_base == 0)
+	if (num / (long)content->num_base == 0)
 	{
 		// write(1, &num_arr[num], 1);
 		ret += put_char_count(num_arr[num]);
 		return (ret);
 	}
-	ret += putnbr_numarr_di(num / content->num_base, num_arr, content);
+	ret += putnbr_numarr_di(num / (long)content->num_base, num_arr, content);
 	// write(1, &num_arr[num % content->num_base], 1);
-	ret += put_char_count(num_arr[num % content->num_base]);
+	ret += put_char_count(num_arr[num % (long)content->num_base]);
 	return (ret);
 }
 
@@ -358,7 +361,7 @@ int		putnbr_di_minus_zero(t_content *content, char *num_arr)
 {
 	int ret_printed;
 	int i;
-	int abs_num;
+	long abs_num;
 	
 	ret_printed = 0;
 	i = 0;
@@ -376,7 +379,7 @@ int		putnbr_di_minus_zero(t_content *content, char *num_arr)
 		while (i++ < content->width - content->num_digits)
 			ret_printed += put_char_count('0');
 	}
-	abs_num = (content->num_int < 0) ? -content->num_int : content->num_int;
+	abs_num = (content->num_int < 0) ? (long)content->num_int * -1 : (long)content->num_int;
 	ret_printed += putnbr_numarr_di(abs_num, num_arr, content);
 	return (ret_printed);
 }
