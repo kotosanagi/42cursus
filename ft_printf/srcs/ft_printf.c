@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 22:10:08 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/17 07:39:53 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/18 08:43:42 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2446,49 +2446,68 @@ int main () {///
 //     printf("\nft ret : %d\n", x-5);
 //     printf("og ret : %d\n\n", y-5);
 
-    printf("d, INT_MAX - 1\n");
-    x = ft_printf("ft:[%d]", INT_MAX - 1);
-    printf("\n");
-    y = printf("og:[%d]", INT_MAX - 1);
-    printf("\nft ret : %d\n", x-5);
-    printf("og ret : %d\n\n", y-5);
+    // printf("d, INT_MAX - 1\n");
+    // x = ft_printf("ft:[%d]", INT_MAX - 1);
+    // printf("\n");
+    // y = printf("og:[%d]", INT_MAX - 1);
+    // printf("\nft ret : %d\n", x-5);
+    // printf("og ret : %d\n\n", y-5);
 
-    printf("d, INT_MAX\n");
-    x = ft_printf("ft:[%d]", INT_MAX);
-    printf("\n");
-    y = printf("og:[%d]", INT_MAX);
-    printf("\nft ret : %d\n", x-5);
-    printf("og ret : %d\n\n", y-5);
+    // printf("d, INT_MAX\n");
+    // x = ft_printf("ft:[%d]", INT_MAX);
+    // printf("\n");
+    // y = printf("og:[%d]", INT_MAX);
+    // printf("\nft ret : %d\n", x-5);
+    // printf("og ret : %d\n\n", y-5);
 
-    printf("d, INT_MAX + 1\n");
-    x = ft_printf("ft:[%d]", INT_MAX + 1);
-    printf("\n");
-    y = printf("og:[%d]", INT_MAX + 1);
-    printf("\nft ret : %d\n", x-5);
-    printf("og ret : %d\n\n", y-5);
+    // printf("d, INT_MAX + 1\n");
+    // x = ft_printf("ft:[%d]", INT_MAX + 1);
+    // printf("\n");
+    // y = printf("og:[%d]", INT_MAX + 1);
+    // printf("\nft ret : %d\n", x-5);
+    // printf("og ret : %d\n\n", y-5);
 
-    printf("d, INT_MIN - 1\n");
-    x = ft_printf("ft:[%d]", INT_MIN - 1);
-    printf("\n");
-    y = printf("og:[%d]", INT_MIN - 1);
-    printf("\nft ret : %d\n", x-5);
-    printf("og ret : %d\n\n", y-5);
+    // printf("d, INT_MIN - 1\n");
+    // x = ft_printf("ft:[%d]", INT_MIN - 1);
+    // printf("\n");
+    // y = printf("og:[%d]", INT_MIN - 1);
+    // printf("\nft ret : %d\n", x-5);
+    // printf("og ret : %d\n\n", y-5);
 
-    printf("d, INT_MIN\n");
-    x = ft_printf("ft:[%d]", INT_MIN);
-    printf("\n");
-    y = printf("og:[%d]", INT_MIN);
-    printf("\nft ret : %d\n", x-5);
-    printf("og ret : %d\n\n", y-5);
+    // printf("d, INT_MIN\n");
+    // x = ft_printf("ft:[%d]", INT_MIN);
+    // printf("\n");
+    // y = printf("og:[%d]", INT_MIN);
+    // printf("\nft ret : %d\n", x-5);
+    // printf("og ret : %d\n\n", y-5);
 
-    printf("d, INT_MIN + 1\n");
-    x = ft_printf("ft:[%d]", INT_MIN + 1);
-    printf("\n");
-    y = printf("og:[%d]", INT_MIN + 1);
-    printf("\nft ret : %d\n", x-5);
-    printf("og ret : %d\n\n", y-5);
+    // printf("d, INT_MIN + 1\n");
+    // x = ft_printf("ft:[%d]", INT_MIN + 1);
+    // printf("\n");
+    // y = printf("og:[%d]", INT_MIN + 1);
+    // printf("\nft ret : %d\n", x-5);
+    // printf("og ret : %d\n\n", y-5);
+
+printf("ultimate4 %*.*x %*.*X\n", 1, 50, 5000, 1, 0, 10);
+ft_printf("ultimate4 %*.*x %*.*X\n", 1, 50, 5000, 1, 0, 10);
+
+printf("ultimate4 %*.*x %*.*X\n", 1, 50, 5000, 1, 0, 10);
+ft_printf("ultimate4 %*.*x %*.*X\n", 1, 50, 5000, 1, 0, 10);
+
+printf("ultimate4 %*.*X\n", 1, 0, 10);
+ft_printf("ultimate4 %*.*X\n", 1, 0, 10);
+
+printf("ultimate4 %*.*X\n", 1, 0, 10);
+ft_printf("ultimate4 %*.*X\n", 1, 0, 10);
 
 
+printf("***************%*s%*d**************%*u*************", 10, "coucou", 10, 10, -50, 20);
+printf("\n");
+ft_printf("***************%*s%*d**************%*u*************", 10, "coucou", 10, 10, -50, 20);
+printf("\n");
+
+(void)x;
+(void)y;
 
 
 }

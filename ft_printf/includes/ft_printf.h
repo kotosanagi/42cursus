@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 11:09:06 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/17 07:01:14 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/18 08:42:45 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef	struct	s_content
 	int	prec;
 	int	conv;
 	int num_int;
-	unsigned long long num_uint;
+	unsigned int num_uint;
 	unsigned long long num_ptr;/////////////////
 	int num_digits;
 	int num_base;
