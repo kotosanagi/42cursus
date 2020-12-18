@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 22:10:08 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/18 08:43:42 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/18 14:44:10 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,6 @@ int		process_percent(va_list *ap, char *str, int *printed_len)
 		*printed_len += put_notconv_count(str, str_i);//////convが指定されなかった時、そのまま出力する。printed_lenに出力した文字数を足す
 	else
 		*printed_len += put_string_or_nbr(ap, &content);////contentを元に、va_argを吐き出す。printed_lenに出力した文字数を足す
-// printf("\n====content debug===\n");
-// 	printf("flag[E_MINUS] : %2d\n", content.flag[E_MINUS]);
-// 	printf("flag[E_ZERO]  : %2d\n", content.flag[E_ZERO]);
-// 	printf("width         : %2d\n", content.width);
-// 	printf("prec          : %2d\n", content.prec);
-// 	printf("conv          : %2d\n", content.conv);
-// 	printf("num_int       : %2d\n", content.num_int);
-// 	printf("num_uint      : %2llu\n", content.num_uint);
-// 	printf("num_ptr       : %2llu\n", content.num_ptr);
-// 	printf("num_digits    : %2d\n", content.num_digits);
-// 	printf("num_base      : %2d\n", content.num_base);
-// printf("i:%d\n",str_i);
-// printf("====================\n");
 	return (str_i);
 }
 
@@ -251,23 +238,23 @@ int main () {///
 
     // printf("========  string  =======\n\n");
 
-    // x = ft_printf("ft:[%-6.s]", "kotoyori shota");
-    // printf("\n");
-    // y = printf("og:[%-6.s]", "kotoyori shota");
-    // printf("\nft ret : %d\n", x-5);
-    // printf("og ret : %d\n\n", y-5);
+    x = ft_printf("ft:[%-6.s]", "kotoyori shota");
+    printf("\n");
+    y = printf("og:[%-6.s]", "kotoyori shota");
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
     
-    // x = ft_printf("ft:[%-6.3s]", "kotoyori shota");
-    // printf("\n");
-    // y = printf("og:[%-6.3s]", "kotoyori shota");
-    // printf("\nft ret : %d\n", x-5);
-    // printf("og ret : %d\n\n", y-5);
+    x = ft_printf("ft:[%-6.3s]", "kotoyori shota");
+    printf("\n");
+    y = printf("og:[%-6.3s]", "kotoyori shota");
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
     
-    // x = ft_printf("ft:[%4.3s]", "kotoyori shota");
-    // printf("\n");
-    // y = printf("og:[%4.3s]", "kotoyori shota");
-    // printf("\nft ret : %d\n", x-5);
-    // printf("og ret : %d\n\n", y-5);
+    x = ft_printf("ft:[%4.3s]", "kotoyori shota");
+    printf("\n");
+    y = printf("og:[%4.3s]", "kotoyori shota");
+    printf("\nft ret : %d\n", x-5);
+    printf("og ret : %d\n\n", y-5);
 
     // x = ft_printf("ft:[%3.0s]", "kotoyori shota");
     // printf("\n");
@@ -2488,26 +2475,26 @@ int main () {///
     // printf("\nft ret : %d\n", x-5);
     // printf("og ret : %d\n\n", y-5);
 
-printf("ultimate4 %*.*x %*.*X\n", 1, 50, 5000, 1, 0, 10);
-ft_printf("ultimate4 %*.*x %*.*X\n", 1, 50, 5000, 1, 0, 10);
+// printf("ultimate4 %*.*x %*.*X\n", 1, 50, 5000, 1, 0, 10);
+// ft_printf("ultimate4 %*.*x %*.*X\n", 1, 50, 5000, 1, 0, 10);
 
-printf("ultimate4 %*.*x %*.*X\n", 1, 50, 5000, 1, 0, 10);
-ft_printf("ultimate4 %*.*x %*.*X\n", 1, 50, 5000, 1, 0, 10);
+// printf("ultimate4 %*.*x %*.*X\n", 1, 50, 5000, 1, 0, 10);
+// ft_printf("ultimate4 %*.*x %*.*X\n", 1, 50, 5000, 1, 0, 10);
 
-printf("ultimate4 %*.*X\n", 1, 0, 10);
-ft_printf("ultimate4 %*.*X\n", 1, 0, 10);
+// printf("ultimate4 %*.*X\n", 1, 0, 10);
+// ft_printf("ultimate4 %*.*X\n", 1, 0, 10);
 
-printf("ultimate4 %*.*X\n", 1, 0, 10);
-ft_printf("ultimate4 %*.*X\n", 1, 0, 10);
+// printf("ultimate4 %*.*X\n", 1, 0, 10);
+// ft_printf("ultimate4 %*.*X\n", 1, 0, 10);
 
 
-printf("***************%*s%*d**************%*u*************", 10, "coucou", 10, 10, -50, 20);
-printf("\n");
-ft_printf("***************%*s%*d**************%*u*************", 10, "coucou", 10, 10, -50, 20);
-printf("\n");
+// printf("***************%*s%*d**************%*u*************", 10, "coucou", 10, 10, -50, 20);
+// printf("\n");
+// ft_printf("***************%*s%*d**************%*u*************", 10, "coucou", 10, 10, -50, 20);
+// printf("\n");
 
-(void)x;
-(void)y;
+// (void)x;
+// (void)y;
 
 
 }

@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 19:08:07 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/18 09:01:53 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/18 18:07:36 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,32 +135,21 @@ int		put_conv_percent(t_content *content)
 	if (content->flag[E_MINUS])//左寄せ空白埋め
 	{
 		put_len += put_char_count('%');
-		// write(1, "%%", 1);
 		while (i++ < content->width)
 			put_len += put_char_count(' ');
-			// write(1, " ", 1);
 	}
 	else if (content->flag[E_ZERO])//右寄せゼロ埋め
 	{
 		while (i++ < content->width)
 			put_len += put_char_count('0');
-			// write(1, "0", 1);
 		put_len += put_char_count('%');
-		// write(1, "%%", 1);
 	}
 	else//右寄せ空白埋め
 	{
 		while (i++ < content->width)
 			put_len += put_char_count(' ');
-			// write(1, " ", 1);
 		put_len += put_char_count('%');
-		// write(1, "%%", 1);
 	}
-	// if (content->width <= 1)
-	// 	put_len++;
-		// *printed_len += 1;
-	// else
-	// 	*printed_len += content->width;
 	return (put_len);
 }
 
@@ -176,25 +165,16 @@ int		put_conv_c(va_list *ap, t_content *content)
 	c = (char)va_arg(*ap, int);
 	if (content->flag[E_MINUS])//左寄せ空白埋め
 	{
-		// write(1, &c, 1);
 		put_len += put_char_count(c);
 		while (i++ < content->width)
 			put_len += put_char_count(' ');
-			// write(1, " ", 1);
 	}
 	else//右寄せ空白埋め
 	{
 		while (i++ < content->width)
 			put_len += put_char_count(' ');
-			// write(1, " ", 1);
 		put_len += put_char_count(c);
-		// write(1, &c, 1);
 	}
-	
-	// if (content->width <= 1)
-	// 	*printed_len += 1;
-	// else
-	// 	*printed_len += content->width;
 	return (put_len);
 }
 
@@ -215,18 +195,10 @@ char *ft_strndup(char *str, int n)
 	return (ret);
 }
 
-// void	put_conv_s(va_list *ap, t_content *content, int *printed_len)
-int		put_conv_s(va_list *ap, t_content *content)
+char	*set_str(char *tmp_str, t_content *content)
 {
-	int s_len;
 	char *str;
-	int i;
-	int put_len;
-	char *tmp_str;
 
-	tmp_str = va_arg(*ap, char*);
-	put_len = 0;
-// printf("tmp_str : %s\n",tmp_str);
 	if (tmp_str == NULL)
 	{
 		if (content->prec >= 0)
@@ -241,35 +213,47 @@ int		put_conv_s(va_list *ap, t_content *content)
 		else
 			str = tmp_str;
 	}
-// printf("str : %s\n", str);
-	s_len = (int)ft_strlen(str);
-// printf("seg fault test~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nseg fault test~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nseg fault test~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+	return (str);
+}
+int write_string(int s_len, t_content *content, char *str)////////////
+{
+	int put_len;
+	int i;
+
+	put_len = 0;
 	if (s_len >= content->width)
-	{
-		write(1, str, s_len);
-		put_len += s_len;
-	}
+		put_len += write(1, str, s_len);
 	else
 	{
 		i = 0;
 		if (content->flag[E_MINUS])
 		{
-			write(1, str, s_len);
-			put_len += s_len;
+			put_len += write(1, str, s_len);
 			while (i++ < content->width - s_len)
 				put_len += put_char_count(' ');
-				// write(1, " ", 1);
 		}
 		else
 		{
 			while (i++ < content->width - s_len)
 				put_len += put_char_count(' ');
-				// write(1, " ", 1);
-			write(1, str, s_len);
-			put_len += s_len;
+			put_len += write(1, str, s_len);
 		}
-		// *printed_len += content->width;
 	}
+	return (put_len);
+}
+
+int		put_conv_s(va_list *ap, t_content *content)
+{
+	int s_len;
+	char *str;
+	int put_len;
+	char *tmp_str;
+
+	tmp_str = va_arg(*ap, char*);
+	put_len = 0;
+	str = set_str(tmp_str, content);
+	s_len = (int)ft_strlen(str);
+	put_len += write_string(s_len, content, str);
 	return (put_len);
 }
 
@@ -283,7 +267,6 @@ char	*get_base_info(char *base_num_ptn, t_content *content)//桁数
 	content->num_base = tmp_base;
 	return (base_num_ptn);
 }
-
 
 // void	putnbr_numarr_di(int num, char *num_arr, t_content *content)
 int		putnbr_numarr_di(long num, char *num_arr, t_content *content)
@@ -307,16 +290,21 @@ int		putnbr_numarr_di(long num, char *num_arr, t_content *content)
 
 
 //↓↓　IT MUST BE MODIFIED
-void	putnbr_numarr_uxxp(unsigned long long num, char *num_arr, t_content *content)
+// void	putnbr_numarr_uxxp(unsigned long long num, char *num_arr, t_content *content)
+int		putnbr_numarr_uxxp(unsigned long long num, char *num_arr, t_content *content)
 {
+	int ret_printed;
+
+	ret_printed = 0;
 	if (num / content->num_base == 0)
 	{
-		write(1, &num_arr[num], 1);
-		return ;
+		ret_printed += put_char_count(num_arr[num]);
+		return (ret_printed);
 	}
-	putnbr_numarr_uxxp(num / content->num_base, num_arr, content);
+	ret_printed += putnbr_numarr_uxxp(num / content->num_base, num_arr, content);
 // printf("\nnum : %llu\n",num);
-	write(1, &num_arr[num % content->num_base], 1);
+	ret_printed += put_char_count(num_arr[num % content->num_base]);
+	return (ret_printed);
 }
 
 /*
@@ -390,7 +378,7 @@ int		putnumber_prec_u_sx_lx(t_content *content, char *num_arr)//precを考慮し
 	int num_len;
 	int ret_printed;
 
-	ret_printed = content->num_digits;
+	ret_printed = 0;
 	num_len = content->num_digits;
 	tmp_num = content->num_uint;
 
@@ -404,7 +392,7 @@ int		putnumber_prec_u_sx_lx(t_content *content, char *num_arr)//precを考慮し
 		while (content->prec > num_len++)//0ume 
 			ret_printed += put_char_count('0');
 	}
-	putnbr_numarr_uxxp(tmp_num, num_arr, content);
+	ret_printed += putnbr_numarr_uxxp(tmp_num, num_arr, content);
 	return (ret_printed);
 }
 
@@ -500,59 +488,47 @@ int		put_space_zero(t_content *content)
 	return (put_len);
 }
 */
+int put_space_normal_ptn(t_content *content, int offset)
+{
+	int ret;
+	int i;
 
-int put_space(t_content *content, int offset)
+	ret = 0;
+	i = 0;
+	if (content->num_int < 0)
+	{
+		while (i++ < content->width - content->prec - 1 - offset)
+			ret += put_char_count(' ');
+	}
+	else
+	{
+		while (i++ < content->width - content->prec - offset)
+			ret += put_char_count(' ');
+	}
+	return (ret);
+}
+
+int put_space(t_content *content, int offset)//offset, 2:p, 0:other convs
 {
 	int i;
 	int ret;
-	// int space_num;
 
 	ret = 0;
 	i = 0;
 	if (content->flag[E_ZERO] == true && content->width > content->num_digits && content->prec < 0)
 		return (ret);
-	if (content->prec == 0 && content->num_int == 0)
+	if (content->prec == 0 && content->num_int == 0)//"%.d", 0
 	{
 		while (i++ < content->width - offset)
 			ret += put_char_count(' ');
 	}
-	else if (content->prec < content->num_digits)
+	else if (content->prec < content->num_digits)//"%8.2d", 1234
 	{
 		while (i++ < content->width - content->num_digits - offset)
 			ret += put_char_count(' ');
 	}
-	else
-	{
-		if (content->num_int < 0)
-		{
-			while (i++ < content->width - content->prec - 1 - offset)
-				ret += put_char_count(' ');
-		}
-		else
-		{
-			while (i++ < content->width - content->prec - offset)
-				ret += put_char_count(' ');
-		}
-	}
-	
-	// if (content->prec >= 0)
-	// {
-	// 	if (content->num_int < 0)
-	// 	{
-	// 		while (i++ < content->width - content->prec - 1)
-	// 			ret += put_char_count(' ');
-	// 	}
-	// 	else
-	// 	{
-	// 		while (i++ < content->width - content->prec)
-	// 			ret += put_char_count(' ');
-	// 	}
-	// }
-	// else if (content->flag[E_ZERO] == false)
-	// {
-	// 	while (i++ < content->num_digits)
-	// 		ret += put_char_count(' ');
-	// }
+	else//normal put_spaces(conetnt, offset)/////
+		ret += put_space_normal_ptn(content, offset);
 	return (ret);
 }
 
@@ -613,40 +589,43 @@ int		put_conv_u_sx_lx(va_list *ap, t_content *content, char *base_str)
 	// *printed_len += tmp_printed_len;
 }
 
+void	write_address(int *put_len, t_content *content, char *base_str)
+{
+	if (content->prec == 0 && content->num_ptr == 0)
+	{
+		*put_len += put_space(content, 2);
+		*put_len += write(1, "0x", 2);//12170632お試し
+	}
+	else if (content->width <= content->num_digits)
+	{
+		*put_len += write(1, "0x", 2);//12170632お試し
+		*put_len += putnumber_prec_p(content, base_str);//put_nbr()を、prec的な表現で表す感じ
+	}
+	else if (content->flag[E_MINUS])//widthの方が大きくて左寄せ
+	{
+		*put_len += write(1, "0x", 2);//12170632お試し
+		*put_len += putnumber_prec_p(content, base_str);//put_nbr()を、prec的な表現で表す感じ
+		*put_len += put_space(content, 2);
+	}
+	else
+	{
+		*put_len += put_space(content, 2);
+		*put_len += write(1, "0x", 2);//12170632お試し
+		*put_len += putnumber_prec_p(content, base_str);//put_nbr()を、prec的な表現で表す感じ
+	}
+}
+
 int		put_conv_p(va_list *ap, t_content *content, char *base_str)
 {//構造体の情報を基に10進数に変換して、出力した文字数をprinted_lenに足す
 	char *num_arr;
-	// int tmp_printed_len;
 	int put_len;
 
 	num_arr = get_base_info(base_str, content);
 	content->num_ptr = (unsigned long long)(va_arg(*ap, void *));//////////////////////////////////////////
 	content->num_digits = get_digits(content);
 	put_len = 0;
-	if (content->prec == 0 && content->num_ptr == 0)
-	{
-		put_len += put_space(content, 2);
-		put_len += write(1, "0x", 2);//12170632お試し
-	}
-	else if (content->width <= content->num_digits)
-	{
-		put_len += write(1, "0x", 2);//12170632お試し
-		put_len += putnumber_prec_p(content, base_str);//put_nbr()を、prec的な表現で表す感じ
-	}
-	else if (content->flag[E_MINUS])//widthの方が大きくて左寄せ
-	{
-		put_len += write(1, "0x", 2);//12170632お試し
-		put_len += putnumber_prec_p(content, base_str);//put_nbr()を、prec的な表現で表す感じ
-		put_len += put_space(content, 2);
-	}
-	else
-	{
-		put_len += put_space(content, 2);
-		put_len += write(1, "0x", 2);//12170632お試し
-		put_len += putnumber_prec_p(content, base_str);//put_nbr()を、prec的な表現で表す感じ
-	}
+	write_address(&put_len, content, base_str);
 	return (put_len);
-	// *printed_len += tmp_printed_len;
 }
 
 
