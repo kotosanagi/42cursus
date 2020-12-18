@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 19:08:07 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/17 07:39:38 by skotoyor         ###   ########.fr       */
+/*   Updated: 2020/12/18 09:01:53 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -592,7 +592,7 @@ int		put_conv_u_sx_lx(va_list *ap, t_content *content, char *base_str)
 	int put_len;
 
 	num_arr = get_base_info(base_str, content);
-	content->num_uint = va_arg(*ap, unsigned long long);//////////////////////////////////////////
+	content->num_uint = va_arg(*ap, unsigned int);//////////////////////////////////////////
 	content->num_digits = get_digits(content);
 	put_len = 0;
 	if (content->prec == 0 && content->num_uint == 0)
