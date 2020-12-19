@@ -1,32 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr.c                                        :+:      :+:    :+:   */
+/*   put_conv_c.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/27 16:22:22 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/12/19 14:48:45 by skotoyor         ###   ########.fr       */
+/*   Created: 2020/12/19 16:55:18 by skotoyor          #+#    #+#             */
+/*   Updated: 2020/12/19 17:33:28 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/ft_printf.h"
 
-void	ft_putnbr(int nb)
+int	put_conv_c(va_list *ap, t_content *content)
 {
-	long int	n;
-	char		c;
+	int		i;
+	char	c;
+	int		put_len;
 
-	n = nb;
-	if (n < 0)
+	i = 1;
+	put_len = 0;
+	c = (char)va_arg(*ap, int);
+	if (content->flag[E_MINUS])
 	{
-		write(1, "-", 1);
-		n = -n;
+		put_len += put_char_count(c);
+		while (i++ < content->width)
+			put_len += put_char_count(' ');
 	}
-	if (n >= 10)
+	else
 	{
-		ft_putnbr(n / 10);
+		while (i++ < content->width)
+			put_len += put_char_count(' ');
+		put_len += put_char_count(c);
 	}
-	c = (n % 10) + '0';
-	write(1, &c, 1);
+	return (put_len);
 }
