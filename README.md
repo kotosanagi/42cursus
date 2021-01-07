@@ -26,3 +26,10 @@ ft_printf("decimal: [%*d]\n", 10, 12345678);
 
 ft_printf("hexadecimal: [%*x]\n", 10, 12345678);
 >> hexadecimal: [    bc614e]
+
+## get_next_line
+Calling this function will read from the file specified by the file descriptor.  
+It also reads the contents of the file line by line and stores it in a "char *" type argument.
+
+## libft
+Reproduced the functions of more than 40 libc libraries.
