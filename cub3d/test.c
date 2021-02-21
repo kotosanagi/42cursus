@@ -17,15 +17,12 @@
 #define EW 0
 #define X_EVENT_KEY_PRESS	2
 #define X_EVENT_KEY_EXIT	17
+#define EAST_TEXTURE 0
+#define WEST_TEXTURE 1
+#define NORTH_TEXTURE 2
+#define SOUTH_TEXTURE 3
+#define SPRITE_TEXTURE 4
 
-// typedef struct	s_data
-// {
-// 	void	*img;
-// 	char	*addr;
-// 	int		bits_per_pixel;
-// 	int		line_length;
-// 	int		endian;
-// }				t_data;
 
 typedef struct	s_img
 {
@@ -55,15 +52,6 @@ typedef struct	s_info
 	double moveSpeed;
 	double rotSpeed;
 }				t_info;
-
-
-// void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
-// {
-// 	char *dst;
-
-// 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-// 	*(unsigned int*)dst = color;
-// }
 
 int	key_hook(int keycode, t_info *info)
 {
@@ -97,12 +85,12 @@ int print_bye(t_info *info)
 }
 
 int	worldMap[MAP_WIDTH][MAP_HEIGHT] = {
-	{1,1,1,4,4,5,5,1},
+	{1,1,1,4,4,1,1,1},
 	{1,0,0,0,0,0,0,1},
-	{1,6,0,0,0,0,0,1},
-	{1,0,0,0,6,0,0,2},
+	{1,1,0,0,0,0,0,1},
+	{1,0,0,0,2,0,0,2},
 	{1,4,0,0,0,0,0,2},
-	{1,0,0,0,0,0,6,2},
+	{1,0,0,0,0,0,2,2},
 	{1,4,0,4,0,0,0,2},
 	{1,1,1,1,1,3,3,3}
 };
@@ -147,40 +135,25 @@ void	draw(t_info *info)
 	mlx_put_image_to_window(info->mlx, info->win, info->img.img, 0, 0);
 }
 
-
-// void	verLine(t_info *info, int x, int y1, int y2, int color)
-// {
-// 	int y;
-
-// 	y = y1;
-// 	while (y <= y2)
-// 	{
-// 		mlx_pixel_put(info->mlx, info->win, x, y, color);
-// 		y++;
-// 	}
-// }
-
 void calc(t_info *info)
 {
 	int color;
 
-	for (int y = 0; y < HEIGHT; y++)
+	for (int y = 0; y < HEIGHT; y++) // in order to draw left to right, buf[y][x]
 	{
-		for (int x = 0; x < WIDTH; ++x)////////
+		for (int x = 0; x < WIDTH; x++)
 		{
 			if (y < HEIGHT / 2)
-				color = 0x9dcce0;
+				color = 0x9dcce0; // color of ceiling
 			else
-				color = 0xb26235;
-			
+				color = 0xb26235; // color of floor
 			info->buf[y][x] = color;
 		}
 	}
 
 
-	int x;
+	int x = 0;
 
-	x = 0;
 	while (x < WIDTH)
 	{
 		double cameraX = 2 * x / (double)WIDTH - 1;
@@ -255,7 +228,29 @@ void calc(t_info *info)
 		if (drawEnd > HEIGHT)
 			drawEnd = HEIGHT - 1;
 
-		int texNum = worldMap[mapX][mapY];
+		// int texNum = worldMap[mapX][mapY];
+
+//////////////////////////////// choose texture
+		int texNum;
+
+		if (side == EW)
+		{
+			if (mapX > info->posX)
+				texNum = WEST_TEXTURE;
+			else
+				texNum = EAST_TEXTURE;
+		}
+		else
+		{
+			if (mapY > info->posY)
+				texNum = SOUTH_TEXTURE;
+			else
+				texNum = NORTH_TEXTURE;
+		}
+
+
+////////////////////////////////
+
 
 		double wallX;
 		if (side == EW)
@@ -280,11 +275,10 @@ void calc(t_info *info)
 			int texY = (int)texPos & (TEX_HEIGHT - 1);
 			texPos += step;
 			int color = info->texture[texNum][TEX_HEIGHT * texY + texX];
-			// make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-			// if (side == NS)
-			// 	color = (color >> 1) & 8355111;
 			info->buf[y][x] = color;
 		}
+
+// printf("posX:%2.2f, posY:%2.2f, dirX:%2.2f, dirY:%2.2f, planeX:%2.2f, planeY:%2.2f\n", info->posX, info->posY, info->dirX, info->dirY, info->planeX, info->planeY);
 
 		x++;
 	}
@@ -382,14 +376,19 @@ void	load_texture(t_info *info)
 	t_img	img;
 
 
-	load_image(info, info->texture[1], "images/moco01.xpm", &img);
-	load_image(info, info->texture[2], "images/moco02.xpm", &img);
-	load_image(info, info->texture[3], "images/moco03.xpm", &img);
-	load_image(info, info->texture[4], "images/moco04.xpm", &img);
-	load_image(info, info->texture[5], "images/moco05.xpm", &img);
-	load_image(info, info->texture[6], "images/moco06.xpm", &img);
-	load_image(info, info->texture[0], "images/moco03.xpm", &img);
-	load_image(info, info->texture[7], "images/moco03.xpm", &img);
+	load_image(info, info->texture[EAST_TEXTURE], "images/koto_east.xpm", &img);
+	load_image(info, info->texture[WEST_TEXTURE], "images/koto_west.xpm", &img);
+	load_image(info, info->texture[SOUTH_TEXTURE], "images/koto_south.xpm", &img);
+	load_image(info, info->texture[NORTH_TEXTURE], "images/koto_north.xpm", &img);
+	load_image(info, info->texture[SPRITE_TEXTURE], "images/moco01.xpm", &img);
+	// load_image(info, info->texture[0], "images/moco03.xpm", &img);
+	// load_image(info, info->texture[1], "images/moco01.xpm", &img);
+	// load_image(info, info->texture[2], "images/moco02.xpm", &img);
+	// load_image(info, info->texture[3], "images/moco03.xpm", &img);
+	// load_image(info, info->texture[4], "images/moco04.xpm", &img);
+	// load_image(info, info->texture[5], "images/moco05.xpm", &img);
+	// load_image(info, info->texture[6], "images/moco06.xpm", &img);
+	// load_image(info, info->texture[7], "images/moco03.xpm", &img);
 	// load_image(info, info->texture[0], "textures/eagle.xpm", &img);
 	// load_image(info, info->texture[1], "textures/redbrick.xpm", &img);
 	// load_image(info, info->texture[2], "textures/purplestone.xpm", &img);
@@ -415,6 +414,8 @@ int main(void)
 	info.moveSpeed = 0.05;
 	info.rotSpeed = 0.05;
 
+	int tex_num = 5;
+
 
 	for (int i = 0; i < HEIGHT; i++)
 	{
@@ -422,14 +423,14 @@ int main(void)
 			info.buf[i][j] = 0;
 	}
 
-	if (!(info.texture = (int **)malloc(sizeof(int *) * 8)))
+	if (!(info.texture = (int **)malloc(sizeof(int *) * tex_num)))
 		return (-1);
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < tex_num; i++)
 	{
 		if (!(info.texture[i] = (int *)malloc(sizeof(int) * (TEX_HEIGHT * TEX_WIDTH))))
 			return (-1);
 	}
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < tex_num; i++)
 	{
 		for (int j = 0; j < TEX_HEIGHT * TEX_WIDTH; j++)
 			info.texture[i][j] = 0;
