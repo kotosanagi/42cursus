@@ -23,6 +23,29 @@
 #define SOUTH_TEXTURE 3
 #define SPRITE_TEXTURE 4
 
+#define num_sprites 5
+
+typedef struct	s_sprite
+{
+	double		x;
+	double		y;
+	int			texture;
+}				t_sprite;
+
+
+//////////// for sprite ////////////
+t_sprite	sprite[num_sprites] =
+{
+	{3.5, 1.5, SPRITE_TEXTURE},
+	{3.5, 2.5, SPRITE_TEXTURE},
+	{5.5, 4.5, SPRITE_TEXTURE},
+	{2.5, 5.5, SPRITE_TEXTURE},
+	{6.5, 6.5, SPRITE_TEXTURE},
+};
+
+int		sprite_order[num_sprites];
+double	sprite_distance[num_sprites];
+
 typedef struct	s_img
 {
 	void	*img;
@@ -34,6 +57,8 @@ typedef struct	s_img
 	int		img_width;
 	int		img_height;
 }				t_img;
+
+//////////// end for sprite ////////////
 
 typedef struct	s_info
 {
@@ -47,10 +72,79 @@ typedef struct	s_info
 	void *win;
 	t_img img;
 	int buf[HEIGHT][WIDTH];
+
+	double	z_buffer[WIDTH];///////////for sprite?
+
 	int **texture;
 	double move_speed;
 	double rot_speed;
 }				t_info;
+
+
+////////////// for sprite 2 ////////////
+
+typedef struct		s_pair
+{
+	double	first;
+	int		second;
+}					t_pair;
+
+static int	compare(const void *first, const void *second)
+{
+	if (*(int *)first > *(int *)second)
+		return (1);
+	else if (*(int *)first < *(int *)second)
+		return (-1);
+	else
+		return (0);
+}
+
+void	sort_order(t_pair *orders, int amount)
+{
+	t_pair	tmp;
+
+	for (int i = 0; i < amount; i++)
+	{
+		for (int j = 0; j < amount - 1; j++)
+		{
+			if (orders[j].first > orders[j + 1].first)
+			{
+				tmp.first = orders[j].first;
+				tmp.second = orders[j].second;
+				orders[j].first = orders[j + 1].first;
+				orders[j].second = orders[j + 1].second;
+				orders[j + 1].first = tmp.first;
+				orders[j + 1].second = tmp.second;
+			}
+		}
+	}
+}
+
+void	sort_sprites(int *order, double *dist, int amount)
+{
+	t_pair	*sprites;
+
+	//std::vector<std::pair<double, int>> sprites(amount);
+	sprites = (t_pair*)malloc(sizeof(t_pair) * amount);
+	for (int i = 0; i < amount; i++)
+	{
+		sprites[i].first = dist[i];
+		sprites[i].second = order[i];
+	}
+	sort_order(sprites, amount);
+	//std::sort(sprites.begin(), sprites.end());
+	for (int i = 0; i < amount; i++)
+	{
+		dist[i] = sprites[amount - i - 1].first;
+		order[i] = sprites[amount - i - 1].second;
+	}
+	free(sprites);
+}
+
+
+
+////////////// end for sprite 2 ////////////
+
 
 int	key_hook(int keycode, t_info *info)
 {
@@ -84,14 +178,14 @@ int print_bye(t_info *info)
 }
 
 int	world_map[MAP_WIDTH][MAP_HEIGHT] = {
-	{1,1,1,4,4,1,1,1},
+	{1,1,1,1,1,1,1,1},
 	{1,0,0,0,0,0,0,1},
 	{1,1,0,0,0,0,0,1},
-	{1,0,0,0,2,0,0,2},
-	{1,4,0,0,0,0,0,2},
-	{1,0,0,0,0,0,2,2},
-	{1,4,0,4,0,0,0,2},
-	{1,1,1,1,1,3,3,3}
+	{1,0,0,0,1,0,0,1},
+	{1,1,0,0,0,0,0,1},
+	{1,0,0,0,0,0,1,1},
+	{1,1,0,1,0,0,0,1},
+	{1,1,1,1,1,1,1,1}
 };
 // int	world_map[MAP_WIDTH][MAP_HEIGHT] = {
 // 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -136,6 +230,8 @@ void	draw(t_info *info)
 
 void calc(t_info *info)
 {
+
+	////////////// draw ceiling and floor /////////////////
 	int color;
 
 	for (int y = 0; y < HEIGHT; y++) // in order to draw left to right, buf[y][x]
@@ -150,6 +246,7 @@ void calc(t_info *info)
 		}
 	}
 
+	////////////// end draw ceiling and floor /////////////////
 
 	int x = 0;
 
@@ -210,7 +307,7 @@ void calc(t_info *info)
 				map_y += step_y;
 				side = NS; // NS?
 			}
-			if (world_map[map_x][map_y] > 0)
+			if (world_map[map_x][map_y] == 1)
 				hit = 1;
 		}
 		if (side == EW) // EW?
@@ -276,9 +373,82 @@ void calc(t_info *info)
 			info->buf[y][x] = color;
 		}
 
+		/////////// for fprite //////////////////////////////////////
+		//SET THE z_buffer FOR THE SPRITE CASTING
+		info->z_buffer[x] = perp_wall_dist; //perpendicular distance is used
+		/////////// end for fprite //////////////////////////////////////
+
 // printf("pos_x:%2.2f, pos_y:%2.2f, dir_x:%2.2f, dir_y:%2.2f, plane_x:%2.2f, plane_y:%2.2f\n", info->pos_x, info->pos_y, info->dir_x, info->dir_y, info->plane_x, info->plane_y);
 
 		x++;
+	}
+
+	//SPRITE CASTING
+	//sort sprites from far to close
+	for(int i = 0; i < num_sprites; i++)
+	{
+		sprite_order[i] = i;
+		sprite_distance[i] = ((info->pos_x - sprite[i].x) * (info->pos_x - sprite[i].x) + (info->pos_y - sprite[i].y) * (info->pos_y - sprite[i].y)); //sqrt not taken, unneeded
+	}
+	sort_sprites(sprite_order, sprite_distance, num_sprites);
+	//after sorting the sprites, do the projection and draw them
+	for(int i = 0; i < num_sprites; i++)
+	{
+		//translate sprite position to relative to camera
+		double sprite_x = sprite[sprite_order[i]].x - info->pos_x;
+		double spriteY = sprite[sprite_order[i]].y - info->pos_y;
+
+		//transform sprite with the inverse camera matrix
+		// [ plane_x   dir_x ] -1                                       [ dir_y      -dir_x ]
+		// [               ]       =  1/(plane_x*dir_y-dir_x*plane_y) *   [                 ]
+		// [ plane_y   dir_y ]                                          [ -plane_y  plane_x ]
+
+		double inv_det = 1.0 / (info->plane_x * info->dir_y - info->dir_x * info->plane_y); //required for correct matrix multiplication
+
+		double transform_x = inv_det * (info->dir_y * sprite_x - info->dir_x * spriteY);
+		double transform_y = inv_det * (-info->plane_y * sprite_x + info->plane_x * spriteY); //this is actually the depth inside the screen, that what Z is in 3D, the distance of sprite to player, matching sqrt(sprite_distance[i])
+
+		int sprite_screen_x = (int)((WIDTH / 2) * (1 + transform_x / transform_y));
+
+		//parameters for scaling and moving the sprites
+		#define u_div 1
+		#define v_div 1
+		#define v_move 0.0
+		int v_move_screen = (int)(v_move / transform_y);
+
+		//calculate HEIGHT of the sprite on screen
+		int sprite_height = (int)fabs((HEIGHT / transform_y) / v_div); //using "transform_y" instead of the real distance prevents fisheye
+		//calculate lowest and highest pixel to fill in current stripe
+		int draw_start_y = -sprite_height / 2 + HEIGHT / 2 + v_move_screen;
+		if(draw_start_y < 0) draw_start_y = 0;
+		int draw_end_y = sprite_height / 2 + HEIGHT / 2 + v_move_screen;
+		if(draw_end_y >= HEIGHT) draw_end_y = HEIGHT - 1;
+
+		//calculate WIDTH of the sprite
+		int sprite_width = (int)fabs((HEIGHT / transform_y) / u_div);
+		int draw_start_x = -sprite_width / 2 + sprite_screen_x;
+		if(draw_start_x < 0) draw_start_x = 0;
+		int draw_end_x = sprite_width / 2 + sprite_screen_x;
+		if(draw_end_x >= WIDTH) draw_end_x = WIDTH - 1;
+
+		//loop through every vertical stripe of the sprite on screen
+		for(int stripe = draw_start_x; stripe < draw_end_x; stripe++)
+		{
+			int tex_x = (int)((256 * (stripe - (-sprite_width / 2 + sprite_screen_x)) * TEX_WIDTH / sprite_width) / 256);
+			//the conditions in the if are:
+			//1) it's in front of camera plane so you don't see things behind you
+			//2) it's on the screen (left)
+			//3) it's on the screen (right)
+			//4) z_buffer, with perpendicular distance
+			if(transform_y > 0 && stripe > 0 && stripe < WIDTH && transform_y < info->z_buffer[stripe])
+			for(int y = draw_start_y; y < draw_end_y; y++) //for every pixel of the current stripe
+			{
+				int d = (y-v_move_screen) * 256 - HEIGHT * 128 + sprite_height * 128; //256 and 128 factors to avoid floats
+				int tex_y = ((d * TEX_HEIGHT) / sprite_height) / 256;
+				int color = info->texture[sprite[sprite_order[i]].texture][TEX_WIDTH * tex_y + tex_x]; //get current color from the texture
+				if((color & 0x00FFFFFF) != 0) info->buf[y][stripe] = color; //paint pixel if it isn't black, black is the invisible color
+			}
+		}
 	}
 }
 
@@ -377,7 +547,8 @@ void	load_texture(t_info *info)
 	load_image(info, info->texture[WEST_TEXTURE], "images/koto_west.xpm", &img);
 	load_image(info, info->texture[SOUTH_TEXTURE], "images/koto_south.xpm", &img);
 	load_image(info, info->texture[NORTH_TEXTURE], "images/koto_north.xpm", &img);
-	load_image(info, info->texture[SPRITE_TEXTURE], "images/moco01.xpm", &img);
+	load_image(info, info->texture[SPRITE_TEXTURE], "images/koto_sprite.xpm", &img);
+	// load_image(info, info->texture[SPRITE_TEXTURE], "images/moco01.xpm", &img);
 	// load_image(info, info->texture[0], "images/moco03.xpm", &img);
 	// load_image(info, info->texture[1], "images/moco01.xpm", &img);
 	// load_image(info, info->texture[2], "images/moco02.xpm", &img);
@@ -386,20 +557,11 @@ void	load_texture(t_info *info)
 	// load_image(info, info->texture[5], "images/moco05.xpm", &img);
 	// load_image(info, info->texture[6], "images/moco06.xpm", &img);
 	// load_image(info, info->texture[7], "images/moco03.xpm", &img);
-	// load_image(info, info->texture[0], "textures/eagle.xpm", &img);
-	// load_image(info, info->texture[1], "textures/redbrick.xpm", &img);
-	// load_image(info, info->texture[2], "textures/purplestone.xpm", &img);
-	// load_image(info, info->texture[3], "textures/greystone.xpm", &img);
-	// load_image(info, info->texture[4], "textures/bluestone.xpm", &img);
-	// load_image(info, info->texture[5], "textures/mossy.xpm", &img);
-	// load_image(info, info->texture[6], "textures/wood.xpm", &img);
-	// load_image(info, info->texture[7], "textures/colorstone.xpm", &img);
 }
 
 int main(void)
 {
 	t_info	info;
-	// t_data	img;
 
 	info.mlx = mlx_init();
 	info.pos_x = 1.5;
