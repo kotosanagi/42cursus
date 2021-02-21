@@ -1,4 +1,4 @@
-// gcc test.c -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz && ./a.out
+// gcc main.c -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz && ./a.out
 
 #include "mlx_linux/mlx.h"
 #include "key_linux.h"
@@ -23,7 +23,6 @@
 #define SOUTH_TEXTURE 3
 #define SPRITE_TEXTURE 4
 
-
 typedef struct	s_img
 {
 	void	*img;
@@ -38,19 +37,19 @@ typedef struct	s_img
 
 typedef struct	s_info
 {
-	double posX;
-	double posY;
-	double dirX;
-	double dirY;
-	double planeX;
-	double planeY;
+	double pos_x;
+	double pos_y;
+	double dir_x;
+	double dir_y;
+	double plane_x;
+	double plane_y;
 	void *mlx;
 	void *win;
 	t_img img;
 	int buf[HEIGHT][WIDTH];
 	int **texture;
-	double moveSpeed;
-	double rotSpeed;
+	double move_speed;
+	double rot_speed;
 }				t_info;
 
 int	key_hook(int keycode, t_info *info)
@@ -84,7 +83,7 @@ int print_bye(t_info *info)
 	return 0;
 }
 
-int	worldMap[MAP_WIDTH][MAP_HEIGHT] = {
+int	world_map[MAP_WIDTH][MAP_HEIGHT] = {
 	{1,1,1,4,4,1,1,1},
 	{1,0,0,0,0,0,0,1},
 	{1,1,0,0,0,0,0,1},
@@ -94,7 +93,7 @@ int	worldMap[MAP_WIDTH][MAP_HEIGHT] = {
 	{1,4,0,4,0,0,0,2},
 	{1,1,1,1,1,3,3,3}
 };
-// int	worldMap[MAP_WIDTH][MAP_HEIGHT] = {
+// int	world_map[MAP_WIDTH][MAP_HEIGHT] = {
 // 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 // 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1},
 // 	{1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -156,129 +155,128 @@ void calc(t_info *info)
 
 	while (x < WIDTH)
 	{
-		double cameraX = 2 * x / (double)WIDTH - 1;
-		double rayDirX = info->dirX + info->planeX * cameraX;
-		double rayDirY = info->dirY + info->planeY * cameraX;
+		double camera_x = 2 * x / (double)WIDTH - 1;
+		double ray_dir_x = info->dir_x + info->plane_x * camera_x;
+		double ray_dir_y = info->dir_y + info->plane_y * camera_x;
 
-		int mapX = (int)info->posX;
-		int mapY = (int)info->posY;
+		int map_x = (int)info->pos_x;
+		int map_y = (int)info->pos_y;
 
-		double sideDistX;
-		double sideDistY;
+		double side_dist_x;
+		double side_dist_y;
 
-		double deltaDistX = fabs(1 / rayDirX);
-		double deltaDistY = fabs(1 / rayDirY);
-		double perpWallDist;
+		double delta_dist_x = fabs(1 / ray_dir_x);
+		double delta_dist_y = fabs(1 / ray_dir_y);
+		double perp_wall_dist;
 
-		int stepX;
-		int stepY;
+		int step_x;
+		int step_y;
 
 		int hit = 0;
 		int side;
 
-		if (rayDirX < 0)
+		if (ray_dir_x < 0)
 		{
-			stepX = -1;
-			sideDistX = (info->posX - mapX) * deltaDistX;
+			step_x = -1;
+			side_dist_x = (info->pos_x - map_x) * delta_dist_x;
 		}
 		else
 		{
-			stepX = 1;
-			sideDistX = (mapX + 1.0 - info->posX) * deltaDistX;
+			step_x = 1;
+			side_dist_x = (map_x + 1.0 - info->pos_x) * delta_dist_x;
 		}
-		if (rayDirY < 0)
+		if (ray_dir_y < 0)
 		{
-			stepY = -1;
-			sideDistY = (info->posY - mapY) * deltaDistY;
+			step_y = -1;
+			side_dist_y = (info->pos_y - map_y) * delta_dist_y;
 		}
 		else
 		{
-			stepY = 1;
-			sideDistY = (mapY + 1.0 - info->posY) * deltaDistY;
+			step_y = 1;
+			side_dist_y = (map_y + 1.0 - info->pos_y) * delta_dist_y;
 		}
 
 		while (!hit)
 		{
-			if (sideDistX < sideDistY)
+			if (side_dist_x < side_dist_y)
 			{
-				sideDistX += deltaDistX;
-				mapX += stepX;
+				side_dist_x += delta_dist_x;
+				map_x += step_x;
 				side = EW; // EW?
 			}
 			else
 			{
-				sideDistY += deltaDistY;
-				mapY += stepY;
+				side_dist_y += delta_dist_y;
+				map_y += step_y;
 				side = NS; // NS?
 			}
-			if (worldMap[mapX][mapY] > 0)
+			if (world_map[map_x][map_y] > 0)
 				hit = 1;
 		}
 		if (side == EW) // EW?
-			perpWallDist = (mapX - info->posX + (1 - stepX) / 2) / rayDirX;
+			perp_wall_dist = (map_x - info->pos_x + (1 - step_x) / 2) / ray_dir_x;
 		else
-			perpWallDist = (mapY - info->posY + (1 - stepY) / 2) / rayDirY;
+			perp_wall_dist = (map_y - info->pos_y + (1 - step_y) / 2) / ray_dir_y;
 
-		int lineHeight = (int)(HEIGHT / perpWallDist);
+		int line_height = (int)(HEIGHT / perp_wall_dist);
 
-		int drawStart = -lineHeight / 2 + HEIGHT / 2;
-		if (drawStart < 0)
-			drawStart = 0;
-		int drawEnd = lineHeight / 2 + HEIGHT / 2;
-		if (drawEnd > HEIGHT)
-			drawEnd = HEIGHT - 1;
+		int draw_start = -line_height / 2 + HEIGHT / 2;
+		if (draw_start < 0)
+			draw_start = 0;
+		int draw_end = line_height / 2 + HEIGHT / 2;
+		if (draw_end > HEIGHT)
+			draw_end = HEIGHT - 1;
 
-		// int texNum = worldMap[mapX][mapY];
+		// int tex_num = world_map[map_x][map_y];
 
 //////////////////////////////// choose texture
-		int texNum;
+		int tex_num;
 
 		if (side == EW)
 		{
-			if (mapX > info->posX)
-				texNum = WEST_TEXTURE;
+			if (map_x > info->pos_x)
+				tex_num = WEST_TEXTURE;
 			else
-				texNum = EAST_TEXTURE;
+				tex_num = EAST_TEXTURE;
 		}
 		else
 		{
-			if (mapY > info->posY)
-				texNum = SOUTH_TEXTURE;
+			if (map_y > info->pos_y)
+				tex_num = SOUTH_TEXTURE;
 			else
-				texNum = NORTH_TEXTURE;
+				tex_num = NORTH_TEXTURE;
 		}
-
 
 ////////////////////////////////
 
 
-		double wallX;
+		double wall_x;
 		if (side == EW)
-			wallX = info->posY + perpWallDist * rayDirY;
+			wall_x = info->pos_y + perp_wall_dist * ray_dir_y;
 		else
-			wallX = info->posX + perpWallDist * rayDirX;
-		wallX -= floor(wallX);
+			wall_x = info->pos_x + perp_wall_dist * ray_dir_x;
+		wall_x -= floor(wall_x);
 
 		// x coordinate on the texture
-		int texX = (int)(wallX * (double)TEX_WIDTH);
-		if (side == EW && rayDirX > 0)
-			texX = TEX_WIDTH - texX - 1;
-		if (side == NS && rayDirY < 0)
-			texX = TEX_WIDTH - texX - 1;
+		int tex_x = (int)(wall_x * (double)TEX_WIDTH);
+		if (side == EW && ray_dir_x > 0)
+			tex_x = TEX_WIDTH - tex_x - 1;
+		if (side == NS && ray_dir_y < 0)
+			tex_x = TEX_WIDTH - tex_x - 1;
 
-		double step = 1.0 * TEX_HEIGHT / lineHeight;
+		double step = 1.0 * TEX_HEIGHT / line_height;
 		// Starting texture coordinate
-		double texPos = (drawStart - HEIGHT / 2 + lineHeight / 2) * step;
-		for (int y = drawStart; y < drawEnd; y++)
+		double tex_pos = (draw_start - HEIGHT / 2 + line_height / 2) * step;
+		for (int y = draw_start; y < draw_end; y++)
 		{
 			// Cast the texture coordinate to integer, and mask with (TEX_HEIGHT - 1) in case of overflow
-			int texY = (int)texPos & (TEX_HEIGHT - 1);
-			texPos += step;
-			int color = info->texture[texNum][TEX_HEIGHT * texY + texX];
+			int tex_y = (int)tex_pos & (TEX_HEIGHT - 1);
+			tex_pos += step;
+			int color = info->texture[tex_num][TEX_HEIGHT * tex_y + tex_x];
 			info->buf[y][x] = color;
 		}
 
-// printf("posX:%2.2f, posY:%2.2f, dirX:%2.2f, dirY:%2.2f, planeX:%2.2f, planeY:%2.2f\n", info->posX, info->posY, info->dirX, info->dirY, info->planeX, info->planeY);
+// printf("pos_x:%2.2f, pos_y:%2.2f, dir_x:%2.2f, dir_y:%2.2f, plane_x:%2.2f, plane_y:%2.2f\n", info->pos_x, info->pos_y, info->dir_x, info->dir_y, info->plane_x, info->plane_y);
 
 		x++;
 	}
@@ -303,56 +301,56 @@ int	key_press(int key, t_info *info)
 	//move forwards if no wall in front of you
 	if (key == K_W)
 	{
-		if (!worldMap[(int)(info->posX + info->dirX * info->moveSpeed)][(int)(info->posY)])
-			info->posX += info->dirX * info->moveSpeed;
-		if (!worldMap[(int)(info->posX)][(int)(info->posY + info->dirY * info->moveSpeed)])
-			info->posY += info->dirY * info->moveSpeed;
+		if (!world_map[(int)(info->pos_x + info->dir_x * info->move_speed)][(int)(info->pos_y)])
+			info->pos_x += info->dir_x * info->move_speed;
+		if (!world_map[(int)(info->pos_x)][(int)(info->pos_y + info->dir_y * info->move_speed)])
+			info->pos_y += info->dir_y * info->move_speed;
 	}
 	//move backwards if no wall behind you
 	if (key == K_S)
 	{
-		if (!worldMap[(int)(info->posX - info->dirX * info->moveSpeed)][(int)(info->posY)])
-			info->posX -= info->dirX * info->moveSpeed;
-		if (!worldMap[(int)(info->posX)][(int)(info->posY - info->dirY * info->moveSpeed)])
-			info->posY -= info->dirY * info->moveSpeed;
+		if (!world_map[(int)(info->pos_x - info->dir_x * info->move_speed)][(int)(info->pos_y)])
+			info->pos_x -= info->dir_x * info->move_speed;
+		if (!world_map[(int)(info->pos_x)][(int)(info->pos_y - info->dir_y * info->move_speed)])
+			info->pos_y -= info->dir_y * info->move_speed;
 	}
 	////////////move right-step if no wall right of you
 	if (key == K_D)
 	{
-		if (!worldMap[(int)(info->posX + info->planeX * info->moveSpeed)][(int)(info->posY)])
-			info->posX += info->planeX * info->moveSpeed;
-		if (!worldMap[(int)(info->posX)][(int)(info->posY + info->planeY * info->moveSpeed)])
-			info->posY += info->planeY * info->moveSpeed;
+		if (!world_map[(int)(info->pos_x + info->plane_x * info->move_speed)][(int)(info->pos_y)])
+			info->pos_x += info->plane_x * info->move_speed;
+		if (!world_map[(int)(info->pos_x)][(int)(info->pos_y + info->plane_y * info->move_speed)])
+			info->pos_y += info->plane_y * info->move_speed;
 	}
 	////////////move left-step if no wall left of you
 	if (key == K_A)
 	{
-		if (!worldMap[(int)(info->posX - info->planeX * info->moveSpeed)][(int)(info->posY)])
-			info->posX -= info->planeX * info->moveSpeed;
-		if (!worldMap[(int)(info->posX)][(int)(info->posY - info->planeY * info->moveSpeed)])
-			info->posY -= info->planeY * info->moveSpeed;
+		if (!world_map[(int)(info->pos_x - info->plane_x * info->move_speed)][(int)(info->pos_y)])
+			info->pos_x -= info->plane_x * info->move_speed;
+		if (!world_map[(int)(info->pos_x)][(int)(info->pos_y - info->plane_y * info->move_speed)])
+			info->pos_y -= info->plane_y * info->move_speed;
 	}
 	//rotate to the right
 	if (key == K_AR_R)
 	{
 		//both camera direction and camera plane must be rotated
-		double oldDirX = info->dirX;
-		info->dirX = info->dirX * cos(-info->rotSpeed) - info->dirY * sin(-info->rotSpeed);
-		info->dirY = oldDirX * sin(-info->rotSpeed) + info->dirY * cos(-info->rotSpeed);
-		double oldPlaneX = info->planeX;
-		info->planeX = info->planeX * cos(-info->rotSpeed) - info->planeY * sin(-info->rotSpeed);
-		info->planeY = oldPlaneX * sin(-info->rotSpeed) + info->planeY * cos(-info->rotSpeed);
+		double old_dir_x = info->dir_x;
+		info->dir_x = info->dir_x * cos(-info->rot_speed) - info->dir_y * sin(-info->rot_speed);
+		info->dir_y = old_dir_x * sin(-info->rot_speed) + info->dir_y * cos(-info->rot_speed);
+		double old_plane_x = info->plane_x;
+		info->plane_x = info->plane_x * cos(-info->rot_speed) - info->plane_y * sin(-info->rot_speed);
+		info->plane_y = old_plane_x * sin(-info->rot_speed) + info->plane_y * cos(-info->rot_speed);
 	}
 	//rotate to the left
 	if (key == K_AR_L)
 	{
 		//both camera direction and camera plane must be rotated
-		double oldDirX = info->dirX;
-		info->dirX = info->dirX * cos(info->rotSpeed) - info->dirY * sin(info->rotSpeed);
-		info->dirY = oldDirX * sin(info->rotSpeed) + info->dirY * cos(info->rotSpeed);
-		double oldPlaneX = info->planeX;
-		info->planeX = info->planeX * cos(info->rotSpeed) - info->planeY * sin(info->rotSpeed);
-		info->planeY = oldPlaneX * sin(info->rotSpeed) + info->planeY * cos(info->rotSpeed);
+		double old_dir_x = info->dir_x;
+		info->dir_x = info->dir_x * cos(info->rot_speed) - info->dir_y * sin(info->rot_speed);
+		info->dir_y = old_dir_x * sin(info->rot_speed) + info->dir_y * cos(info->rot_speed);
+		double old_plane_x = info->plane_x;
+		info->plane_x = info->plane_x * cos(info->rot_speed) - info->plane_y * sin(info->rot_speed);
+		info->plane_y = old_plane_x * sin(info->rot_speed) + info->plane_y * cos(info->rot_speed);
 	}
 	if (key == K_ESC)
 		exit(0);
@@ -374,7 +372,6 @@ void	load_image(t_info *info, int *texture, char *path, t_img *img)
 void	load_texture(t_info *info)
 {
 	t_img	img;
-
 
 	load_image(info, info->texture[EAST_TEXTURE], "images/koto_east.xpm", &img);
 	load_image(info, info->texture[WEST_TEXTURE], "images/koto_west.xpm", &img);
@@ -405,17 +402,16 @@ int main(void)
 	// t_data	img;
 
 	info.mlx = mlx_init();
-	info.posX = 1.5;
-	info.posY = 1.5;
-	info.dirX = -1.0;
-	info.dirY = 0.0;
-	info.planeX = 0.0;
-	info.planeY = 0.66;
-	info.moveSpeed = 0.05;
-	info.rotSpeed = 0.05;
+	info.pos_x = 1.5;
+	info.pos_y = 1.5;
+	info.dir_x = -1.0;
+	info.dir_y = 0.0;
+	info.plane_x = 0.0;
+	info.plane_y = 0.66;
+	info.move_speed = 0.05;
+	info.rot_speed = 0.05;
 
 	int tex_num = 5;
-
 
 	for (int i = 0; i < HEIGHT; i++)
 	{
