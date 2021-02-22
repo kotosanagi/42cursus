@@ -122,21 +122,26 @@ void	sort_order(t_pair *orders, int amount)
 
 void	sort_sprites(int *order, double *dist, int amount)
 {
+	int i;
 	t_pair	*sprites;
 
 	//std::vector<std::pair<double, int>> sprites(amount);
 	sprites = (t_pair*)malloc(sizeof(t_pair) * amount);
-	for (int i = 0; i < amount; i++)
+	i = 0;
+	while (i < amount)
 	{
 		sprites[i].first = dist[i];
 		sprites[i].second = order[i];
+		i++;
 	}
 	sort_order(sprites, amount);
 	//std::sort(sprites.begin(), sprites.end());
-	for (int i = 0; i < amount; i++)
+	i = 0;
+	while (i < amount)
 	{
 		dist[i] = sprites[amount - i - 1].first;
 		order[i] = sprites[amount - i - 1].second;
+		i++;
 	}
 	free(sprites);
 }
@@ -163,6 +168,12 @@ int close_window(int keycode, t_info *info)
 	if (keycode == K_ESC)
 		mlx_destroy_window(info->mlx, info->win);
 	return 0;
+}
+
+int close_window_redx(void)
+{
+	exit(EXIT_SUCCESS);
+	return (0);
 }
 
 int print_hello(t_info *info)
@@ -396,7 +407,7 @@ void calc(t_info *info)
 	{
 		//translate sprite position to relative to camera
 		double sprite_x = sprite[sprite_order[i]].x - info->pos_x;
-		double spriteY = sprite[sprite_order[i]].y - info->pos_y;
+		double sprite_y = sprite[sprite_order[i]].y - info->pos_y;
 
 		//transform sprite with the inverse camera matrix
 		// [ plane_x   dir_x ] -1                                       [ dir_y      -dir_x ]
@@ -405,27 +416,29 @@ void calc(t_info *info)
 
 		double inv_det = 1.0 / (info->plane_x * info->dir_y - info->dir_x * info->plane_y); //required for correct matrix multiplication
 
-		double transform_x = inv_det * (info->dir_y * sprite_x - info->dir_x * spriteY);
-		double transform_y = inv_det * (-info->plane_y * sprite_x + info->plane_x * spriteY); //this is actually the depth inside the screen, that what Z is in 3D, the distance of sprite to player, matching sqrt(sprite_distance[i])
+		double transform_x = inv_det * (info->dir_y * sprite_x - info->dir_x * sprite_y);
+		double transform_y = inv_det * (-info->plane_y * sprite_x + info->plane_x * sprite_y); //this is actually the depth inside the screen, that what Z is in 3D, the distance of sprite to player, matching sqrt(sprite_distance[i])
 
 		int sprite_screen_x = (int)((WIDTH / 2) * (1 + transform_x / transform_y));
 
 		//parameters for scaling and moving the sprites
-		#define u_div 1
-		#define v_div 1
-		#define v_move 0.0
-		int v_move_screen = (int)(v_move / transform_y);
+		//#define u_div 1
+		// #define v_div 1
+		// #define v_move 0.0///////////
+		//int v_move_screen = (int)(v_move / transform_y);
 
 		//calculate HEIGHT of the sprite on screen
-		int sprite_height = (int)fabs((HEIGHT / transform_y) / v_div); //using "transform_y" instead of the real distance prevents fisheye
+		int sprite_height = (int)fabs(HEIGHT / transform_y); //using "transform_y" instead of the real distance prevents fisheye
+		// int sprite_height = (int)fabs((HEIGHT / transform_y) / v_div); //using "transform_y" instead of the real distance prevents fisheye
 		//calculate lowest and highest pixel to fill in current stripe
-		int draw_start_y = -sprite_height / 2 + HEIGHT / 2 + v_move_screen;
+		int draw_start_y = -sprite_height / 2 + HEIGHT / 2;// + v_move_screen;
 		if(draw_start_y < 0) draw_start_y = 0;
-		int draw_end_y = sprite_height / 2 + HEIGHT / 2 + v_move_screen;
+		int draw_end_y = sprite_height / 2 + HEIGHT / 2;// + v_move_screen;
 		if(draw_end_y >= HEIGHT) draw_end_y = HEIGHT - 1;
 
 		//calculate WIDTH of the sprite
-		int sprite_width = (int)fabs((HEIGHT / transform_y) / u_div);
+		int sprite_width = (int)fabs(HEIGHT / transform_y);
+		// int sprite_width = (int)fabs((HEIGHT / transform_y) / u_div);
 		int draw_start_x = -sprite_width / 2 + sprite_screen_x;
 		if(draw_start_x < 0) draw_start_x = 0;
 		int draw_end_x = sprite_width / 2 + sprite_screen_x;
@@ -443,11 +456,13 @@ void calc(t_info *info)
 			if(transform_y > 0 && stripe > 0 && stripe < WIDTH && transform_y < info->z_buffer[stripe])
 			for(int y = draw_start_y; y < draw_end_y; y++) //for every pixel of the current stripe
 			{
-				int d = (y-v_move_screen) * 256 - HEIGHT * 128 + sprite_height * 128; //256 and 128 factors to avoid floats
+				int d = y * 256 - HEIGHT * 128 + sprite_height * 128; //256 and 128 factors to avoid floats
 				int tex_y = ((d * TEX_HEIGHT) / sprite_height) / 256;
-				int color = info->texture[sprite[sprite_order[i]].texture][TEX_WIDTH * tex_y + tex_x]; //get current color from the texture
-				if((color & 0x00FFFFFF) != 0) info->buf[y][stripe] = color; //paint pixel if it isn't black, black is the invisible color
+				int color = info->texture[SPRITE_TEXTURE][TEX_WIDTH * tex_y + tex_x]; //get current color from the texture
+				if(color & 0x00FFFFFF) // color & 0x00FFFFFF == 0 is black  =>  black to invisible
+					info->buf[y][stripe] = color;
 			}
+
 		}
 	}
 }
@@ -605,6 +620,7 @@ int main(void)
 	mlx_key_hook(info.win, key_hook, &info);
 	mlx_mouse_hook(info.win, mouse_hook, &info);
 	mlx_hook(info.win, 2, 1L<<0, close_window, &info);	//close window when ESC pressed
+	mlx_hook(info.win, 33, 1L<<17, close_window_redx, &info);	//close window when red cross pushed // for 2nd arg, old ver is 17 , but latest ver is 33
 	mlx_hook(info.win, 7, 1L<<4, print_hello, &info);	//enter window 
 	mlx_hook(info.win, 8, 1L<<5, print_bye, &info);		//leave window
 
