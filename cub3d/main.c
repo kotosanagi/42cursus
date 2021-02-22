@@ -1,10 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
+/*   Updated: 2021/02/22 14:19:30 by skotoyor         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 // gcc main.c -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz && ./a.out
 
 #include "mlx_linux/mlx.h"
-#include "key_linux.h"
+#include "includes/key_linux.h"
+#include "includes/libft.h"
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+
+
 
 // #define K_ESC 65307
 #define WIDTH 640
@@ -13,9 +28,11 @@
 #define TEX_HEIGHT 64
 #define MAP_WIDTH 8
 #define MAP_HEIGHT 8
+
 #define NS 1
 #define EW 0
 #define X_EVENT_KEY_PRESS	2
+#define X_EVENT_KEY_RELEASE	3
 #define X_EVENT_KEY_EXIT	17
 #define EAST_TEXTURE 0
 #define WEST_TEXTURE 1
@@ -29,18 +46,18 @@ typedef struct	s_sprite
 {
 	double		x;
 	double		y;
-	int			texture;
+	// int			texture;
 }				t_sprite;
 
 
 //////////// for sprite ////////////
 t_sprite	sprite[num_sprites] =
 {
-	{3.5, 1.5, SPRITE_TEXTURE},
-	{3.5, 2.5, SPRITE_TEXTURE},
-	{5.5, 4.5, SPRITE_TEXTURE},
-	{2.5, 5.5, SPRITE_TEXTURE},
-	{6.5, 6.5, SPRITE_TEXTURE},
+	{3.5, 1.5},//, SPRITE_TEXTURE},
+	{3.5, 2.5},//, SPRITE_TEXTURE},
+	{5.5, 4.5},//, SPRITE_TEXTURE},
+	{2.5, 5.5},//, SPRITE_TEXTURE},
+	{6.5, 6.5},//, SPRITE_TEXTURE},
 };
 
 int		sprite_order[num_sprites];
@@ -70,6 +87,15 @@ typedef struct	s_info
 	double plane_y;
 	void *mlx;
 	void *win;
+
+	int	key_w;
+	int	key_s;
+	int	key_d;
+	int	key_a;
+	int	key_ar_r;
+	int	key_ar_l;
+	int	key_esc;
+
 	t_img img;
 	int buf[HEIGHT][WIDTH];
 
@@ -151,17 +177,17 @@ void	sort_sprites(int *order, double *dist, int amount)
 ////////////// end for sprite 2 ////////////
 
 
-int	key_hook(int keycode, t_info *info)
-{
-	printf("keycode : %d\n", keycode);
-	return 0;
-}
+// int	key_hook(int keycode, t_info *info)
+// {
+// 	printf("keycode : %d\n", keycode);
+// 	return 0;
+// }
 
-int mouse_hook(int mousecode, t_info *info)
-{
-	printf("mousecode : %d\n", mousecode);
-	return 0;
-}
+// int mouse_hook(int mousecode, t_info *info)
+// {
+// 	printf("mousecode : %d\n", mousecode);
+// 	return 0;
+// }
 
 int close_window(int keycode, t_info *info)
 {
@@ -176,17 +202,17 @@ int close_window_redx(void)
 	return (0);
 }
 
-int print_hello(t_info *info)
-{
-	printf("Hello~~~~\n");
-	return 0;
-}
+// int print_hello(t_info *info)
+// {
+// 	printf("Hello~~~~\n");
+// 	return 0;
+// }
 
-int print_bye(t_info *info)
-{
-	printf("bye!!!!!\n");
-	return 0;
-}
+// int print_bye(t_info *info)
+// {
+// 	printf("bye!!!!!\n");
+// 	return 0;
+// }
 
 int	world_map[MAP_WIDTH][MAP_HEIGHT] = {
 	{1,1,1,1,1,1,1,1},
@@ -472,19 +498,11 @@ void calc(t_info *info)
 
 
 ////////////////////////////
-int main_loop(t_info *info)
-{
-	calc(info);
-	draw(info);
 
-	return (0);
-}
-
-
-int	key_press(int key, t_info *info)
+int	key_update(t_info *info)
 {
 	//move forwards if no wall in front of you
-	if (key == K_W)
+	if (info->key_w)
 	{
 		if (!world_map[(int)(info->pos_x + info->dir_x * info->move_speed)][(int)(info->pos_y)])
 			info->pos_x += info->dir_x * info->move_speed;
@@ -492,7 +510,7 @@ int	key_press(int key, t_info *info)
 			info->pos_y += info->dir_y * info->move_speed;
 	}
 	//move backwards if no wall behind you
-	if (key == K_S)
+	if (info->key_s)
 	{
 		if (!world_map[(int)(info->pos_x - info->dir_x * info->move_speed)][(int)(info->pos_y)])
 			info->pos_x -= info->dir_x * info->move_speed;
@@ -500,7 +518,7 @@ int	key_press(int key, t_info *info)
 			info->pos_y -= info->dir_y * info->move_speed;
 	}
 	////////////move right-step if no wall right of you
-	if (key == K_D)
+	if (info->key_d)
 	{
 		if (!world_map[(int)(info->pos_x + info->plane_x * info->move_speed)][(int)(info->pos_y)])
 			info->pos_x += info->plane_x * info->move_speed;
@@ -508,7 +526,7 @@ int	key_press(int key, t_info *info)
 			info->pos_y += info->plane_y * info->move_speed;
 	}
 	////////////move left-step if no wall left of you
-	if (key == K_A)
+	if (info->key_a)
 	{
 		if (!world_map[(int)(info->pos_x - info->plane_x * info->move_speed)][(int)(info->pos_y)])
 			info->pos_x -= info->plane_x * info->move_speed;
@@ -516,7 +534,7 @@ int	key_press(int key, t_info *info)
 			info->pos_y -= info->plane_y * info->move_speed;
 	}
 	//rotate to the right
-	if (key == K_AR_R)
+	if (info->key_ar_r)
 	{
 		//both camera direction and camera plane must be rotated
 		double old_dir_x = info->dir_x;
@@ -527,7 +545,7 @@ int	key_press(int key, t_info *info)
 		info->plane_y = old_plane_x * sin(-info->rot_speed) + info->plane_y * cos(-info->rot_speed);
 	}
 	//rotate to the left
-	if (key == K_AR_L)
+	if (info->key_ar_l)
 	{
 		//both camera direction and camera plane must be rotated
 		double old_dir_x = info->dir_x;
@@ -537,8 +555,56 @@ int	key_press(int key, t_info *info)
 		info->plane_x = info->plane_x * cos(info->rot_speed) - info->plane_y * sin(info->rot_speed);
 		info->plane_y = old_plane_x * sin(info->rot_speed) + info->plane_y * cos(info->rot_speed);
 	}
-	if (key == K_ESC)
+	if (info->key_esc)
 		exit(0);
+	return (0);
+}
+
+int main_loop(t_info *info)
+{
+	calc(info);
+	draw(info);
+	key_update(info);
+	return (0);
+}
+
+
+
+int	key_press(int key, t_info *info)
+{
+	if (key == K_ESC)
+		info->key_esc = 1;
+	else if (key == K_W)
+		info->key_w = 1;
+	else if (key == K_S)
+		info->key_s = 1;
+	else if (key == K_D)
+		info->key_d = 1;
+	else if (key == K_A)
+		info->key_a = 1;
+	else if (key == K_AR_R)
+		info->key_ar_r = 1;
+	else if (key == K_AR_L)
+		info->key_ar_l = 1;
+	return (0);
+}
+
+int	key_release(int key, t_info *info)
+{
+	if (key == K_ESC)
+		info->key_esc = 1;
+	else if (key == K_W)
+		info->key_w = 0;
+	else if (key == K_S)
+		info->key_s = 0;
+	else if (key == K_D)
+		info->key_d = 0;
+	else if (key == K_A)
+		info->key_a = 0;
+	else if (key == K_AR_R)
+		info->key_ar_r = 0;
+	else if (key == K_AR_L)
+		info->key_ar_l = 0;
 	return (0);
 }
 
@@ -585,8 +651,15 @@ int main(void)
 	info.dir_y = 0.0;
 	info.plane_x = 0.0;
 	info.plane_y = 0.66;
-	info.move_speed = 0.05;
-	info.rot_speed = 0.05;
+	info.move_speed = 0.008;
+	info.rot_speed = 0.005;
+	info.key_w = 0;
+	info.key_s = 0;
+	info.key_d = 0;
+	info.key_a = 0;
+	info.key_ar_r = 0;
+	info.key_ar_l = 0;
+	info.key_esc = 0;
 
 	int tex_num = 5;
 
@@ -617,18 +690,26 @@ int main(void)
 	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);
 
 
-	mlx_key_hook(info.win, key_hook, &info);
-	mlx_mouse_hook(info.win, mouse_hook, &info);
+	// mlx_key_hook(info.win, key_hook, &info);
+	// mlx_mouse_hook(info.win, mouse_hook, &info);
 	mlx_hook(info.win, 2, 1L<<0, close_window, &info);	//close window when ESC pressed
 	mlx_hook(info.win, 33, 1L<<17, close_window_redx, &info);	//close window when red cross pushed // for 2nd arg, old ver is 17 , but latest ver is 33
-	mlx_hook(info.win, 7, 1L<<4, print_hello, &info);	//enter window 
-	mlx_hook(info.win, 8, 1L<<5, print_bye, &info);		//leave window
+	// mlx_hook(info.win, 7, 1L<<4, print_hello, &info);	//enter window 
+	// mlx_hook(info.win, 8, 1L<<5, print_bye, &info);		//leave window
 
 
 	mlx_loop_hook(info.mlx, &main_loop, &info);
 
+	mlx_hook(info.win, X_EVENT_KEY_RELEASE, 1L << 1, &key_release, &info);
 	mlx_hook(info.win, X_EVENT_KEY_PRESS, 1L << 0, &key_press, &info);
 
 	mlx_loop(info.mlx);
 	return 0;
 }
+
+// int main(void){
+// 	char s[] = "53";
+
+// 	printf("%d\n", ft_atoi(s));
+// 	return 0;
+// }
