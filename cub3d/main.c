@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/22 14:19:30 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/23 06:55:17 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ typedef struct	s_info
 	int	key_a;
 	int	key_ar_r;
 	int	key_ar_l;
+	int key_ar_u;
+	int key_ar_d;
 	int	key_esc;
 
 	t_img img;
@@ -488,7 +490,6 @@ void calc(t_info *info)
 				if(color & 0x00FFFFFF) // color & 0x00FFFFFF == 0 is black  =>  black to invisible
 					info->buf[y][stripe] = color;
 			}
-
 		}
 	}
 }
@@ -498,10 +499,17 @@ void calc(t_info *info)
 
 
 ////////////////////////////
-
 int	key_update(t_info *info)
 {
-	//move forwards if no wall in front of you
+	if (info->key_ar_u && info->key_ar_d)
+		info->move_speed = 0.008;
+	else if (info->key_ar_u && !(info->key_ar_d))
+		info->move_speed = 0.023;
+	else if (!(info->key_ar_u) && info->key_ar_d)
+		info->move_speed = 0.002;
+	else if (!(info->key_ar_u) && !(info->key_ar_d))
+		info->move_speed = 0.008;
+	// move forwards if no wall in front of you
 	if (info->key_w)
 	{
 		if (!world_map[(int)(info->pos_x + info->dir_x * info->move_speed)][(int)(info->pos_y)])
@@ -586,6 +594,10 @@ int	key_press(int key, t_info *info)
 		info->key_ar_r = 1;
 	else if (key == K_AR_L)
 		info->key_ar_l = 1;
+	else if (key == K_AR_U)
+		info->key_ar_u = 1;
+	else if (key == K_AR_D)
+		info->key_ar_d = 1;
 	return (0);
 }
 
@@ -605,6 +617,10 @@ int	key_release(int key, t_info *info)
 		info->key_ar_r = 0;
 	else if (key == K_AR_L)
 		info->key_ar_l = 0;
+	else if (key == K_AR_U)
+		info->key_ar_u = 0;
+	else if (key == K_AR_D)
+		info->key_ar_d = 0;
 	return (0);
 }
 
@@ -659,6 +675,8 @@ int main(void)
 	info.key_a = 0;
 	info.key_ar_r = 0;
 	info.key_ar_l = 0;
+	info.key_ar_u = 0;
+	info.key_ar_d = 0;
 	info.key_esc = 0;
 
 	int tex_num = 5;
