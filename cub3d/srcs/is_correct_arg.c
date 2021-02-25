@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 10:31:15 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/25 10:35:07 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/26 05:33:37 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,15 @@ void	is_cub_extension(char *filename)
 	name_len = (int)ft_strlen(filename);
 	if (name_len <= 4)
 		error_exit("filename is short\n");
-	else if (strncmp(filename + name_len - 4 , ".cub", 5))
+	else if (strncmp(filename + name_len - 4, ".cub", 5))
 		error_exit("filename is not \".cub\" extension\n");
 }
-
 
 void	is_correct_arg(int argc, char *argv[], t_info *info)
 {
 	char *filename;
 
-	printf("argc:%d\n------\n",argc);
+	printf("argc:%d\n------\n", argc);
 
 	for (int i = 0; i < argc; i++)
 	{

@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:10:33 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/25 21:30:41 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/26 05:34:10 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	error_free_exit(char *msg, t_info *info)
 	safe_free(info->sprite_path);
 	while (info->map[i])
 		safe_free(info->map[i++]);
-
 	error_exit(msg);
 }
 
