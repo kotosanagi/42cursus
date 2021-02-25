@@ -10,3 +10,4 @@
 #                                                                              #
 # **************************************************************************** #
 
+# gcc -Wall -Wextra -Werror srcs/*.c libft/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out

@@ -6,126 +6,34 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/23 06:55:17 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/25 10:31:38 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// gcc main.c -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz && ./a.out
+//  COMPILATION //
+//OLD// gcc main.c -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz && ./a.out
+//OLD// gcc -Wall -Wextra -Werror main.c libft/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
+// gcc -Wall -Wextra -Werror srcs/*.c libft/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
 
-#include "mlx_linux/mlx.h"
-#include "includes/key_linux.h"
-#include "includes/libft.h"
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
+// #include "../mlx_linux/mlx.h"
+// #include "../includes/key_linux.h"
+// #include "../includes/libft.h"
+// #include <stdio.h>
+// #include <math.h>
+// #include <stdlib.h>
 
-
-
-// #define K_ESC 65307
-#define WIDTH 640
-#define HEIGHT 480
-#define TEX_WIDTH 64
-#define TEX_HEIGHT 64
-#define MAP_WIDTH 8
-#define MAP_HEIGHT 8
-
-#define NS 1
-#define EW 0
-#define X_EVENT_KEY_PRESS	2
-#define X_EVENT_KEY_RELEASE	3
-#define X_EVENT_KEY_EXIT	17
-#define EAST_TEXTURE 0
-#define WEST_TEXTURE 1
-#define NORTH_TEXTURE 2
-#define SOUTH_TEXTURE 3
-#define SPRITE_TEXTURE 4
-
-#define num_sprites 5
-
-typedef struct	s_sprite
-{
-	double		x;
-	double		y;
-	// int			texture;
-}				t_sprite;
+#include "../includes/cub3d.h"
 
 
-//////////// for sprite ////////////
-t_sprite	sprite[num_sprites] =
-{
-	{3.5, 1.5},//, SPRITE_TEXTURE},
-	{3.5, 2.5},//, SPRITE_TEXTURE},
-	{5.5, 4.5},//, SPRITE_TEXTURE},
-	{2.5, 5.5},//, SPRITE_TEXTURE},
-	{6.5, 6.5},//, SPRITE_TEXTURE},
-};
-
-int		sprite_order[num_sprites];
-double	sprite_distance[num_sprites];
-
-typedef struct	s_img
-{
-	void	*img;
-	int		*data;
-
-	int		size_l;
-	int		bpp;
-	int		endian;
-	int		img_width;
-	int		img_height;
-}				t_img;
-
-//////////// end for sprite ////////////
-
-typedef struct	s_info
-{
-	double pos_x;
-	double pos_y;
-	double dir_x;
-	double dir_y;
-	double plane_x;
-	double plane_y;
-	void *mlx;
-	void *win;
-
-	int	key_w;
-	int	key_s;
-	int	key_d;
-	int	key_a;
-	int	key_ar_r;
-	int	key_ar_l;
-	int key_ar_u;
-	int key_ar_d;
-	int	key_esc;
-
-	t_img img;
-	int buf[HEIGHT][WIDTH];
-
-	double	z_buffer[WIDTH];///////////for sprite?
-
-	int **texture;
-	double move_speed;
-	double rot_speed;
-}				t_info;
-
-
-////////////// for sprite 2 ////////////
-
-typedef struct		s_pair
-{
-	double	first;
-	int		second;
-}					t_pair;
-
-static int	compare(const void *first, const void *second)
-{
-	if (*(int *)first > *(int *)second)
-		return (1);
-	else if (*(int *)first < *(int *)second)
-		return (-1);
-	else
-		return (0);
-}
+// static int	compare(const void *first, const void *second)
+// {
+// 	if (*(int *)first > *(int *)second)
+// 		return (1);
+// 	else if (*(int *)first < *(int *)second)
+// 		return (-1);
+// 	else
+// 		return (0);
+// }
 
 void	sort_order(t_pair *orders, int amount)
 {
@@ -216,6 +124,15 @@ int close_window_redx(void)
 // 	return 0;
 // }
 
+t_sprite	sprite[num_sprites] =
+{
+	{3.5, 1.5},//, SPRITE_TEXTURE},
+	{3.5, 2.5},//, SPRITE_TEXTURE},
+	{5.5, 4.5},//, SPRITE_TEXTURE},
+	{2.5, 5.5},//, SPRITE_TEXTURE},
+	{6.5, 6.5},//, SPRITE_TEXTURE},
+};
+
 int	world_map[MAP_WIDTH][MAP_HEIGHT] = {
 	{1,1,1,1,1,1,1,1},
 	{1,0,0,0,0,0,0,1},
@@ -226,32 +143,7 @@ int	world_map[MAP_WIDTH][MAP_HEIGHT] = {
 	{1,1,0,1,0,0,0,1},
 	{1,1,1,1,1,1,1,1}
 };
-// int	world_map[MAP_WIDTH][MAP_HEIGHT] = {
-// 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-// 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1},
-// 	{1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-// 	{1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-// 	{1,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1},
-// 	{1,0,1,0,0,0,0,4,4,4,4,4,4,4,4,4,1,1,0,1,1,1,1,1},
-// 	{1,0,4,0,0,0,0,4,0,4,0,4,0,4,0,4,1,0,0,0,1,1,1,1},
-// 	{1,0,4,0,0,0,0,4,0,0,0,0,0,0,0,4,1,0,0,0,0,0,0,4},
-// 	{1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1},
-// 	{1,0,4,0,0,0,0,4,0,0,0,0,0,0,0,4,1,0,0,0,0,0,0,4},
-// 	{1,0,0,0,0,0,0,4,0,0,0,0,0,0,0,4,1,0,0,0,1,1,1,1},
-// 	{1,0,0,0,0,0,0,4,4,4,4,0,4,4,4,4,1,1,1,1,1,1,1,1},
-// 	{4,4,4,4,4,4,4,4,4,4,4,0,4,4,4,4,4,4,4,4,4,4,4,4},
-// 	{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-// 	{4,4,4,4,4,4,0,4,4,4,4,0,4,4,4,4,4,4,4,4,4,4,4,4},
-// 	{1,1,1,1,1,1,0,1,1,1,4,0,4,2,2,2,2,2,2,2,3,3,3,3},
-// 	{1,0,0,0,0,0,0,0,0,1,4,0,4,2,0,0,0,0,0,2,0,0,0,2},
-// 	{1,0,0,0,0,0,0,0,0,0,0,0,4,2,0,0,4,0,0,2,0,0,0,2},
-// 	{1,0,0,0,0,0,0,0,0,1,4,0,4,2,0,0,0,0,0,2,2,0,2,2},
-// 	{1,0,4,0,4,0,0,0,0,1,4,0,0,0,0,0,4,0,0,0,0,0,0,2},
-// 	{1,0,0,4,0,0,0,0,0,1,4,0,4,2,0,0,0,0,0,2,2,0,2,2},
-// 	{1,0,4,0,4,0,0,0,0,1,4,0,4,2,0,0,4,0,0,2,0,0,0,2},
-// 	{1,0,0,0,0,0,0,0,0,1,4,0,4,2,0,0,0,0,0,2,0,0,0,2},
-// 	{1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3}
-// };
+
 
 ////////////////////////////////////////////////////
 
@@ -497,8 +389,6 @@ void calc(t_info *info)
 ////////////////////////////////////////////////////
 
 
-
-////////////////////////////
 int	key_update(t_info *info)
 {
 	if (info->key_ar_u && info->key_ar_d)
@@ -656,78 +546,114 @@ void	load_texture(t_info *info)
 	// load_image(info, info->texture[7], "images/moco03.xpm", &img);
 }
 
-int main(void)
+
+
+
+
+
+
+
+
+
+
+
+// --------------------------- //
+
+
+
+
+
+
+
+
+
+
+
+
+
+// int main(void)
+// {
+// 	t_info	info;
+
+// 	info.mlx = mlx_init();
+// 	info.pos_x = 1.5;
+// 	info.pos_y = 1.5;
+// 	info.dir_x = -1.0;
+// 	info.dir_y = 0.0;
+// 	info.plane_x = 0.0;
+// 	info.plane_y = 0.66;
+// 	info.move_speed = 0.008;
+// 	info.rot_speed = 0.005;
+// 	info.key_w = 0;
+// 	info.key_s = 0;
+// 	info.key_d = 0;
+// 	info.key_a = 0;
+// 	info.key_ar_r = 0;
+// 	info.key_ar_l = 0;
+// 	info.key_ar_u = 0;
+// 	info.key_ar_d = 0;
+// 	info.key_esc = 0;
+
+// 	int tex_num = 5;
+
+// 	for (int i = 0; i < HEIGHT; i++)
+// 	{
+// 		for (int j = 0; j < WIDTH; j++)
+// 			info.buf[i][j] = 0;
+// 	}
+
+// 	if (!(info.texture = (int **)malloc(sizeof(int *) * tex_num)))
+// 		return (-1);
+// 	for (int i = 0; i < tex_num; i++)
+// 	{
+// 		if (!(info.texture[i] = (int *)malloc(sizeof(int) * (TEX_HEIGHT * TEX_WIDTH))))
+// 			return (-1);
+// 	}
+// 	for (int i = 0; i < tex_num; i++)
+// 	{
+// 		for (int j = 0; j < TEX_HEIGHT * TEX_WIDTH; j++)
+// 			info.texture[i][j] = 0;
+// 	}
+
+// 	load_texture(&info);
+
+// 	info.win = mlx_new_window(info.mlx, WIDTH, HEIGHT, "mocomoco world!!!!");
+
+// 	info.img.img = mlx_new_image(info.mlx, WIDTH, HEIGHT);
+// 	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);
+
+
+// 	// mlx_key_hook(info.win, key_hook, &info);
+// 	// mlx_mouse_hook(info.win, mouse_hook, &info);
+// 	mlx_hook(info.win, 2, 1L<<0, close_window, &info);	//close window when ESC pressed
+// 	mlx_hook(info.win, 33, 1L<<17, close_window_redx, &info);	//close window when red cross pushed // for 2nd arg, old ver is 17 , but latest ver is 33
+// 	// mlx_hook(info.win, 7, 1L<<4, print_hello, &info);	//enter window 
+// 	// mlx_hook(info.win, 8, 1L<<5, print_bye, &info);		//leave window
+
+
+// 	mlx_loop_hook(info.mlx, &main_loop, &info);
+
+// 	mlx_hook(info.win, X_EVENT_KEY_RELEASE, 1L << 1, &key_release, &info);
+// 	mlx_hook(info.win, X_EVENT_KEY_PRESS, 1L << 0, &key_press, &info);
+
+// 	mlx_loop(info.mlx);
+// 	return 0;
+// }
+
+
+
+// --------------------------- //
+
+
+
+
+int	main(int argc, char *argv[])
 {
 	t_info	info;
 
-	info.mlx = mlx_init();
-	info.pos_x = 1.5;
-	info.pos_y = 1.5;
-	info.dir_x = -1.0;
-	info.dir_y = 0.0;
-	info.plane_x = 0.0;
-	info.plane_y = 0.66;
-	info.move_speed = 0.008;
-	info.rot_speed = 0.005;
-	info.key_w = 0;
-	info.key_s = 0;
-	info.key_d = 0;
-	info.key_a = 0;
-	info.key_ar_r = 0;
-	info.key_ar_l = 0;
-	info.key_ar_u = 0;
-	info.key_ar_d = 0;
-	info.key_esc = 0;
+	init_info(&info);
+	is_correct_arg(argc, argv, &info);
+	
 
-	int tex_num = 5;
-
-	for (int i = 0; i < HEIGHT; i++)
-	{
-		for (int j = 0; j < WIDTH; j++)
-			info.buf[i][j] = 0;
-	}
-
-	if (!(info.texture = (int **)malloc(sizeof(int *) * tex_num)))
-		return (-1);
-	for (int i = 0; i < tex_num; i++)
-	{
-		if (!(info.texture[i] = (int *)malloc(sizeof(int) * (TEX_HEIGHT * TEX_WIDTH))))
-			return (-1);
-	}
-	for (int i = 0; i < tex_num; i++)
-	{
-		for (int j = 0; j < TEX_HEIGHT * TEX_WIDTH; j++)
-			info.texture[i][j] = 0;
-	}
-
-	load_texture(&info);
-
-	info.win = mlx_new_window(info.mlx, WIDTH, HEIGHT, "mocomoco world!!!!");
-
-	info.img.img = mlx_new_image(info.mlx, WIDTH, HEIGHT);
-	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);
-
-
-	// mlx_key_hook(info.win, key_hook, &info);
-	// mlx_mouse_hook(info.win, mouse_hook, &info);
-	mlx_hook(info.win, 2, 1L<<0, close_window, &info);	//close window when ESC pressed
-	mlx_hook(info.win, 33, 1L<<17, close_window_redx, &info);	//close window when red cross pushed // for 2nd arg, old ver is 17 , but latest ver is 33
-	// mlx_hook(info.win, 7, 1L<<4, print_hello, &info);	//enter window 
-	// mlx_hook(info.win, 8, 1L<<5, print_bye, &info);		//leave window
-
-
-	mlx_loop_hook(info.mlx, &main_loop, &info);
-
-	mlx_hook(info.win, X_EVENT_KEY_RELEASE, 1L << 1, &key_release, &info);
-	mlx_hook(info.win, X_EVENT_KEY_PRESS, 1L << 0, &key_press, &info);
-
-	mlx_loop(info.mlx);
-	return 0;
+	return (0);
 }
-
-// int main(void){
-// 	char s[] = "53";
-
-// 	printf("%d\n", ft_atoi(s));
-// 	return 0;
-// }
