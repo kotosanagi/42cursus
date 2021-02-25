@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/25 10:31:40 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/25 12:40:48 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,8 @@
 
 
 
-#define WIDTH 640
-#define HEIGHT 480
+#define R_WIDTH 640
+#define R_HEIGHT 480
 #define TEX_WIDTH 64
 #define TEX_HEIGHT 64
 #define MAP_WIDTH 8
@@ -185,9 +185,9 @@ typedef struct	s_info
 	int	key_esc;
 
 	t_img img;
-	int buf[HEIGHT][WIDTH];
+	int buf[R_HEIGHT][R_WIDTH];
 
-	double	z_buffer[WIDTH];
+	double	z_buffer[R_WIDTH];
 
 	int **texture;
 	double move_speed;

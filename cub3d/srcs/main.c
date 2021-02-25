@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/25 10:31:38 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/25 12:48:08 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,11 +149,11 @@ int	world_map[MAP_WIDTH][MAP_HEIGHT] = {
 
 void	draw(t_info *info)
 {
-	for (int y = 0; y < HEIGHT; y++)
+	for (int y = 0; y < R_HEIGHT; y++)
 	{
-		for (int x = 0; x < WIDTH; x++)
+		for (int x = 0; x < R_WIDTH; x++)
 		{
-			info->img.data[y * WIDTH + x] = info->buf[y][x];
+			info->img.data[y * R_WIDTH + x] = info->buf[y][x];
 		}
 	}
 	mlx_put_image_to_window(info->mlx, info->win, info->img.img, 0, 0);
@@ -165,11 +165,11 @@ void calc(t_info *info)
 	////////////// draw ceiling and floor /////////////////
 	int color;
 
-	for (int y = 0; y < HEIGHT; y++) // in order to draw left to right, buf[y][x]
+	for (int y = 0; y < R_HEIGHT; y++) // in order to draw left to right, buf[y][x]
 	{
-		for (int x = 0; x < WIDTH; x++)
+		for (int x = 0; x < R_WIDTH; x++)
 		{
-			if (y < HEIGHT / 2)
+			if (y < R_HEIGHT / 2)
 				color = 0x9dcce0; // color of ceiling
 			else
 				color = 0xb26235; // color of floor
@@ -181,9 +181,9 @@ void calc(t_info *info)
 
 	int x = 0;
 
-	while (x < WIDTH)
+	while (x < R_WIDTH)
 	{
-		double camera_x = 2 * x / (double)WIDTH - 1;
+		double camera_x = 2 * x / (double)R_WIDTH - 1;
 		double ray_dir_x = info->dir_x + info->plane_x * camera_x;
 		double ray_dir_y = info->dir_y + info->plane_y * camera_x;
 
@@ -246,14 +246,14 @@ void calc(t_info *info)
 		else
 			perp_wall_dist = (map_y - info->pos_y + (1 - step_y) / 2) / ray_dir_y;
 
-		int line_height = (int)(HEIGHT / perp_wall_dist);
+		int line_height = (int)(R_HEIGHT / perp_wall_dist);
 
-		int draw_start = -line_height / 2 + HEIGHT / 2;
+		int draw_start = -line_height / 2 + R_HEIGHT / 2;
 		if (draw_start < 0)
 			draw_start = 0;
-		int draw_end = line_height / 2 + HEIGHT / 2;
-		if (draw_end > HEIGHT)
-			draw_end = HEIGHT - 1;
+		int draw_end = line_height / 2 + R_HEIGHT / 2;
+		if (draw_end > R_HEIGHT)
+			draw_end = R_HEIGHT - 1;
 
 		// int tex_num = world_map[map_x][map_y];
 
@@ -294,7 +294,7 @@ void calc(t_info *info)
 
 		double step = 1.0 * TEX_HEIGHT / line_height;
 		// Starting texture coordinate
-		double tex_pos = (draw_start - HEIGHT / 2 + line_height / 2) * step;
+		double tex_pos = (draw_start - R_HEIGHT / 2 + line_height / 2) * step;
 		for (int y = draw_start; y < draw_end; y++)
 		{
 			// Cast the texture coordinate to integer, and mask with (TEX_HEIGHT - 1) in case of overflow
@@ -339,7 +339,7 @@ void calc(t_info *info)
 		double transform_x = inv_det * (info->dir_y * sprite_x - info->dir_x * sprite_y);
 		double transform_y = inv_det * (-info->plane_y * sprite_x + info->plane_x * sprite_y); //this is actually the depth inside the screen, that what Z is in 3D, the distance of sprite to player, matching sqrt(sprite_distance[i])
 
-		int sprite_screen_x = (int)((WIDTH / 2) * (1 + transform_x / transform_y));
+		int sprite_screen_x = (int)((R_WIDTH / 2) * (1 + transform_x / transform_y));
 
 		//parameters for scaling and moving the sprites
 		//#define u_div 1
@@ -347,22 +347,22 @@ void calc(t_info *info)
 		// #define v_move 0.0///////////
 		//int v_move_screen = (int)(v_move / transform_y);
 
-		//calculate HEIGHT of the sprite on screen
-		int sprite_height = (int)fabs(HEIGHT / transform_y); //using "transform_y" instead of the real distance prevents fisheye
-		// int sprite_height = (int)fabs((HEIGHT / transform_y) / v_div); //using "transform_y" instead of the real distance prevents fisheye
+		//calculate R_HEIGHT of the sprite on screen
+		int sprite_height = (int)fabs(R_HEIGHT / transform_y); //using "transform_y" instead of the real distance prevents fisheye
+		// int sprite_height = (int)fabs((R_HEIGHT / transform_y) / v_div); //using "transform_y" instead of the real distance prevents fisheye
 		//calculate lowest and highest pixel to fill in current stripe
-		int draw_start_y = -sprite_height / 2 + HEIGHT / 2;// + v_move_screen;
+		int draw_start_y = -sprite_height / 2 + R_HEIGHT / 2;// + v_move_screen;
 		if(draw_start_y < 0) draw_start_y = 0;
-		int draw_end_y = sprite_height / 2 + HEIGHT / 2;// + v_move_screen;
-		if(draw_end_y >= HEIGHT) draw_end_y = HEIGHT - 1;
+		int draw_end_y = sprite_height / 2 + R_HEIGHT / 2;// + v_move_screen;
+		if(draw_end_y >= R_HEIGHT) draw_end_y = R_HEIGHT - 1;
 
-		//calculate WIDTH of the sprite
-		int sprite_width = (int)fabs(HEIGHT / transform_y);
-		// int sprite_width = (int)fabs((HEIGHT / transform_y) / u_div);
+		//calculate R_WIDTH of the sprite
+		int sprite_width = (int)fabs(R_HEIGHT / transform_y);
+		// int sprite_width = (int)fabs((R_HEIGHT / transform_y) / u_div);
 		int draw_start_x = -sprite_width / 2 + sprite_screen_x;
 		if(draw_start_x < 0) draw_start_x = 0;
 		int draw_end_x = sprite_width / 2 + sprite_screen_x;
-		if(draw_end_x >= WIDTH) draw_end_x = WIDTH - 1;
+		if(draw_end_x >= R_WIDTH) draw_end_x = R_WIDTH - 1;
 
 		//loop through every vertical stripe of the sprite on screen
 		for(int stripe = draw_start_x; stripe < draw_end_x; stripe++)
@@ -373,10 +373,10 @@ void calc(t_info *info)
 			//2) it's on the screen (left)
 			//3) it's on the screen (right)
 			//4) z_buffer, with perpendicular distance
-			if(transform_y > 0 && stripe > 0 && stripe < WIDTH && transform_y < info->z_buffer[stripe])
+			if(transform_y > 0 && stripe > 0 && stripe < R_WIDTH && transform_y < info->z_buffer[stripe])
 			for(int y = draw_start_y; y < draw_end_y; y++) //for every pixel of the current stripe
 			{
-				int d = y * 256 - HEIGHT * 128 + sprite_height * 128; //256 and 128 factors to avoid floats
+				int d = y * 256 - R_HEIGHT * 128 + sprite_height * 128; //256 and 128 factors to avoid floats
 				int tex_y = ((d * TEX_HEIGHT) / sprite_height) / 256;
 				int color = info->texture[SPRITE_TEXTURE][TEX_WIDTH * tex_y + tex_x]; //get current color from the texture
 				if(color & 0x00FFFFFF) // color & 0x00FFFFFF == 0 is black  =>  black to invisible
@@ -596,9 +596,9 @@ void	load_texture(t_info *info)
 
 // 	int tex_num = 5;
 
-// 	for (int i = 0; i < HEIGHT; i++)
+// 	for (int i = 0; i < R_HEIGHT; i++)
 // 	{
-// 		for (int j = 0; j < WIDTH; j++)
+// 		for (int j = 0; j < R_WIDTH; j++)
 // 			info.buf[i][j] = 0;
 // 	}
 
@@ -617,9 +617,9 @@ void	load_texture(t_info *info)
 
 // 	load_texture(&info);
 
-// 	info.win = mlx_new_window(info.mlx, WIDTH, HEIGHT, "mocomoco world!!!!");
+// 	info.win = mlx_new_window(info.mlx, R_WIDTH, R_HEIGHT, "mocomoco world!!!!");
 
-// 	info.img.img = mlx_new_image(info.mlx, WIDTH, HEIGHT);
+// 	info.img.img = mlx_new_image(info.mlx, R_WIDTH, R_HEIGHT);
 // 	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);
 
 
