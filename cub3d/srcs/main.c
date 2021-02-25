@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/25 12:48:08 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/25 17:13:40 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 //OLD// gcc main.c -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz && ./a.out
 //OLD// gcc -Wall -Wextra -Werror main.c libft/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
 // gcc -Wall -Wextra -Werror srcs/*.c libft/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
+
+// leak check
+// gcc -Wall -Wextra -Werror -g -fsanitize=leak srcs/*.c libft/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
+
 
 // #include "../mlx_linux/mlx.h"
 // #include "../includes/key_linux.h"
@@ -170,9 +174,9 @@ void calc(t_info *info)
 		for (int x = 0; x < R_WIDTH; x++)
 		{
 			if (y < R_HEIGHT / 2)
-				color = 0x9dcce0; // color of ceiling
+				color = info->ceiling_color;//0x9dcce0; // color of ceiling
 			else
-				color = 0xb26235; // color of floor
+				color = info->floor_color;//0xb26235; // color of floor
 			info->buf[y][x] = color;
 		}
 	}
@@ -552,11 +556,6 @@ void	load_texture(t_info *info)
 
 
 
-
-
-
-
-
 // --------------------------- //
 
 
@@ -564,36 +563,49 @@ void	load_texture(t_info *info)
 
 
 
+// void init_info_temp(t_info *info)
+// {
+// 	info->mlx = mlx_init();
 
+// 	info->pos_x = 1.5;
+// 	info->pos_y = 1.5;
+// 	info->dir_x = -1.0;
+// 	info->dir_y = 0.0;
+// 	info->plane_x = 0.0;
+// 	info->plane_y = 0.66;
+// 	info->move_speed = 0.008;
+// 	info->rot_speed = 0.005;
 
+// 	info->key_w = 0;
+// 	info->key_s = 0;
+// 	info->key_d = 0;
+// 	info->key_a = 0;
+// 	info->key_ar_r = 0;
+// 	info->key_ar_l = 0;
+// 	info->key_ar_u = 0;
+// 	info->key_ar_d = 0;
+// 	info->key_esc = 0;
 
+// 	info->floor_red = 130;
+// 	info->floor_green = 150;
+// 	info->floor_blue = 100;
+// 	info->ceiling_red = 60;
+// 	info->ceiling_green = 190;
+// 	info->ceiling_blue = 245;
+// }
 
-
-
+void	get_floor_ceiling_color(t_info *info)// exec after get file info (end of read_file func)
+{
+	info->floor_color = (info->floor_red << 16) + (info->floor_green << 8) + info->floor_blue;
+	info->ceiling_color = (info->ceiling_red << 16) + (info->ceiling_green << 8) + info->ceiling_blue;
+}
 
 // int main(void)
 // {
 // 	t_info	info;
 
-// 	info.mlx = mlx_init();
-// 	info.pos_x = 1.5;
-// 	info.pos_y = 1.5;
-// 	info.dir_x = -1.0;
-// 	info.dir_y = 0.0;
-// 	info.plane_x = 0.0;
-// 	info.plane_y = 0.66;
-// 	info.move_speed = 0.008;
-// 	info.rot_speed = 0.005;
-// 	info.key_w = 0;
-// 	info.key_s = 0;
-// 	info.key_d = 0;
-// 	info.key_a = 0;
-// 	info.key_ar_r = 0;
-// 	info.key_ar_l = 0;
-// 	info.key_ar_u = 0;
-// 	info.key_ar_d = 0;
-// 	info.key_esc = 0;
-
+// 	init_info_temp(&info);
+// 	get_floor_ceiling_color(&info);
 // 	int tex_num = 5;
 
 // 	for (int i = 0; i < R_HEIGHT; i++)
@@ -636,7 +648,7 @@ void	load_texture(t_info *info)
 // 	mlx_hook(info.win, X_EVENT_KEY_RELEASE, 1L << 1, &key_release, &info);
 // 	mlx_hook(info.win, X_EVENT_KEY_PRESS, 1L << 0, &key_press, &info);
 
-// 	mlx_loop(info.mlx);
+// 	mlx_loop(info.mlx);// when check leak, comment out this row, and do fsanitize
 // 	return 0;
 // }
 
@@ -653,6 +665,7 @@ int	main(int argc, char *argv[])
 
 	init_info(&info);
 	is_correct_arg(argc, argv, &info);
+	get_mapfile_info(argv[1], &info);
 	
 
 	return (0);

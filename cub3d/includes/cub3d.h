@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/25 12:40:48 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/25 21:30:46 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@
 #include "../mlx_linux/mlx.h"
 // #include "key_linux.h"
 #include "libft.h"
+#include "get_next_line.h"
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <fcntl.h>
 
 /*
 ** Keyboard LETTERS
@@ -110,8 +112,8 @@
 #define R_HEIGHT 480
 #define TEX_WIDTH 64
 #define TEX_HEIGHT 64
-#define MAP_WIDTH 8
-#define MAP_HEIGHT 8
+#define MAP_WIDTH 8		// replace more large number
+#define MAP_HEIGHT 8	// replace more large number
 
 #define NS 1
 #define EW 0
@@ -161,19 +163,46 @@ typedef struct	s_img
 
 //////////// end for sprite ////////////
 
+
+
 typedef struct	s_info
 {
+
+// (start) need to get info from mapfile //
+	int		r_width;
+	int		r_height;
+	char	*east_path;
+	char	*west_path;
+	char	*south_path;
+	char	*north_path;
+	char	*sprite_path;
+
+	double	pos_x;
+	double	pos_y;
+	double	dir_x;
+	double	dir_y;
+	double	plane_x;
+	double	plane_y;
+
+
+	int		floor_red;
+	int		floor_green;
+	int		floor_blue;
+	int		ceiling_red;
+	int		ceiling_green;
+	int		ceiling_blue;
+
+	int		floor_color;
+	int		ceiling_color;
+	int		num_sprite;
+
+	char	*map[MAP_HEIGHT];//////////need to modify of MAP_WIDTH and MAP_HEIGHT in main.c
+
+// (end) need to get info from mapfile //
+
+
+// (start) NOT need to get info from mapfile //
 	int save_flg;
-
-	double pos_x;
-	double pos_y;
-	double dir_x;
-	double dir_y;
-	double plane_x;
-	double plane_y;
-	void *mlx;
-	void *win;
-
 	int	key_w;
 	int	key_s;
 	int	key_d;
@@ -183,15 +212,23 @@ typedef struct	s_info
 	int key_ar_u;
 	int key_ar_d;
 	int	key_esc;
+	double	move_speed;
+	double	rot_speed;
+	int	map_h;
 
+	void *mlx;
+	void *win;
+
+// (end) NOT need to get info from mapfile //
+
+
+// think later //
 	t_img img;
 	int buf[R_HEIGHT][R_WIDTH];
 
 	double	z_buffer[R_WIDTH];
 
 	int **texture;
-	double move_speed;
-	double rot_speed;
 
 }				t_info;
 
@@ -239,12 +276,16 @@ typedef struct		s_pair
 
 
 
-
+// error_func.c//
+void	safe_free(void *p);
 void	error_exit(char *message);
+void	error_free_exit(char *msg, t_info *info);
+void	free_elem(char **elem);
+void	error_free_elem_exit(char *msg, t_info *info, char **elem);
+
 void	is_correct_arg(int argc, char *argv[], t_info *info);
 void	init_info(t_info *info);
-
-
+void	get_mapfile_info(char *path, t_info *info);
 
 
 
