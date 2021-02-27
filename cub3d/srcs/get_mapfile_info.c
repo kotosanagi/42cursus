@@ -6,14 +6,49 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 17:15:14 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/26 07:02:58 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/27 15:39:34 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
+void DEBUG_print_info(t_info *info)/////////////////////////
+{
+printf("-------\n");
+printf("r_width :%d\n", info->r_width);
+printf("r_height:%d\n", info->r_height);
+
+printf("east  :%s\n", info->east_path);
+printf("west  :%s\n", info->west_path);
+printf("south :%s\n", info->south_path);
+printf("north :%s\n", info->north_path);
+printf("sprite:%s\n", info->sprite_path);
+
+printf("pos_x  :%f\n", info->pos_x);
+printf("pos_y  :%f\n", info->pos_y);
+printf("dir_x  :%f\n", info->dir_x);
+printf("dir_y  :%f\n", info->dir_y);
+printf("plane_x:%f\n", info->plane_x);
+printf("plane_y:%f\n", info->plane_y);
+
+printf("floor_red  :%d\n", info->floor_red);
+printf("floor_green:%d\n", info->floor_green);
+printf("floor_blue :%d\n", info->floor_blue);
+printf("ceiling_red  :%d\n", info->ceiling_red);
+printf("ceiling_green:%d\n", info->ceiling_green);
+printf("ceiling_blue :%d\n", info->ceiling_blue);
+
+printf("floor_color  :%x\n", info->floor_color);
+printf("ceiling_color:%x\n", info->ceiling_color);
+printf("num_sprite:%d\n", info->num_sprite);
+
+printf("-------\n");
+}
+
 int	is_enough_8elements(t_info *info)
 {
+	if (!info)
+		return (0);
 	if (info->r_width == -1 ||
 		info->east_path == NULL ||
 		info->west_path == NULL ||
@@ -31,6 +66,8 @@ int		cnt_elem(char **elem)
 	int i;
 
 	i = 0;
+	if (!elem)
+		return (0);
 	while (elem[i])
 		i++;
 	return (i);
@@ -41,12 +78,20 @@ int		is_num(char *str)
 	int i;
 
 	i = 0;
+	if (!str)
+		return (0);
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i++]))
 			return (0);
 	}
 	return (1);
+}
+
+void	get_floor_ceiling_color(t_info *info)// exec after get file info (end of read_file func)
+{
+	info->floor_color = (info->floor_red << 16) + (info->floor_green << 8) + info->floor_blue;
+	info->ceiling_color = (info->ceiling_red << 16) + (info->ceiling_green << 8) + info->ceiling_blue;
 }
 
 int		is_correct_rgb(t_info *info, char **elem, char **rgb)
@@ -76,12 +121,30 @@ int		is_correct_rgb(t_info *info, char **elem, char **rgb)
 	return (1);
 }
 
+int		cnt_str_c(char *str, char c)
+{
+	int i;
+	int ret;
+
+	ret = 0;
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+	{
+		if (str[i] == c)
+			ret++;
+		i++;
+	}
+	return (ret);
+}
+
 int		is_mapfile_elem4(t_info *info, char **elem)
 {
 	char **rgb;
 
-	if ((ft_strncmp(elem[0], "C", 2) == 0  && info->ceiling_red < 0 &&
-	cnt_elem(elem) == 2))
+	if (ft_strncmp(elem[0], "C", 2) == 0  && info->ceiling_red < 0 &&
+	cnt_elem(elem) == 2 && cnt_str_c(elem[1], ',') == 2)
 	{
 		rgb = ft_split(elem[1], ',');
 		is_correct_rgb(info, elem, rgb);
@@ -102,8 +165,8 @@ int		is_mapfile_elem3(t_info *info, char **elem)
 {
 	char **rgb;
 
-	if ((ft_strncmp(elem[0], "F", 2) == 0 && info->floor_red < 0 &&
-	cnt_elem(elem) == 2))
+	if (ft_strncmp(elem[0], "F", 2) == 0 && info->floor_red < 0 &&
+	cnt_elem(elem) == 2 && cnt_str_c(elem[1], ',') == 2)
 	{
 		rgb = ft_split(elem[1], ',');
 		is_correct_rgb(info, elem, rgb);
@@ -124,17 +187,10 @@ int		is_mapfile_elem2(t_info *info, char **elem)
 {
 	if ((ft_strncmp(elem[0], "EA", 3) == 0 && !info->east_path &&
 	cnt_elem(elem) == 2))
-	{
-		printf("ft_strncmp(elem[0], EA, 3):%d\n",ft_strncmp(elem[0], "EA", 3));
-		printf("elem[0]:%s, elem[1]:%s\n",elem[0],elem[1]);
 		info->east_path = ft_strdup(elem[1]);
-	}
 	else if ((ft_strncmp(elem[0], "WE", 3) == 0  && !info->west_path &&
 	cnt_elem(elem) == 2))
-	{
-		printf("elem[0]:%s, elem[1]:%s\n",elem[0],elem[1]);
 		info->west_path = ft_strdup(elem[1]);
-	}
 	else if ((ft_strncmp(elem[0], "SO", 3) == 0  && !info->south_path &&
 	cnt_elem(elem) == 2))
 		info->south_path = ft_strdup(elem[1]);
@@ -170,6 +226,14 @@ int		is_mapfile_elem(t_info *info, char **elem)
 	return (1);
 }
 
+void	DEBUG_print_MAPPPPPP(t_info *info)
+{
+	int i = 0;
+
+	while (info->map[i])
+		printf("%s\n", info->map[i++]);
+}
+
 void	get_mapfile_info(char *path, t_info *info)
 {
 	int		fd;
@@ -179,7 +243,7 @@ void	get_mapfile_info(char *path, t_info *info)
 
 	if ((fd = open(path, O_RDONLY)) == -1)
 		error_exit("can't open the file...\nplease check the path of file\n");
-	printf("success open file : fd:%d\n", fd);///
+printf("success open file : fd:%d\n", fd);///
 
 	while (!(is_enough_8elements(info)))
 	{
@@ -190,43 +254,21 @@ void	get_mapfile_info(char *path, t_info *info)
 		safe_free(line);
 		is_mapfile_elem(info, elem);
 
-printf("-------\n");
-printf("r_width :%d\n", info->r_width);
-printf("r_height:%d\n", info->r_height);
 
-printf("east  :%s\n", info->east_path);
-printf("west  :%s\n", info->west_path);
-printf("south :%s\n", info->south_path);
-printf("north :%s\n", info->north_path);
-printf("sprite:%s\n", info->sprite_path);
-
-printf("pos_x  :%f\n", info->pos_x);
-printf("pos_y  :%f\n", info->pos_y);
-printf("dir_x  :%f\n", info->dir_x);
-printf("dir_y  :%f\n", info->dir_y);
-printf("plane_x:%f\n", info->plane_x);
-printf("plane_y:%f\n", info->plane_y);
-
-printf("floor_red  :%d\n", info->floor_red);
-printf("floor_green:%d\n", info->floor_green);
-printf("floor_blue :%d\n", info->floor_blue);
-printf("ceiling_red  :%d\n", info->ceiling_red);
-printf("ceiling_green:%d\n", info->ceiling_green);
-printf("ceiling_blue :%d\n", info->ceiling_blue);
-
-printf("floor_color  :%x\n", info->floor_color);
-printf("ceiling_color:%x\n", info->ceiling_color);
-printf("num_sprite:%d\n", info->num_sprite);
-
-
-
-printf("-------\n");
-
+DEBUG_print_info(info);
 
 
 		if ((gnl_ret == 0) && !(is_enough_8elements(info)))
 			error_free_elem_exit("map elements is not enough\n", info, elem);
 		free_elem(elem);
 	}
-	printf("escape!\n");
+
+	get_floor_ceiling_color(info);
+DEBUG_print_info(info);
+	get_mappart_data(fd, &line, info);
+DEBUG_print_MAPPPPPP(info);
+
+
+printf("escape!\n");
+	close(fd);
 }

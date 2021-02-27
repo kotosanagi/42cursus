@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/25 21:30:46 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/27 16:01:42 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,7 +286,14 @@ void	error_free_elem_exit(char *msg, t_info *info, char **elem);
 void	is_correct_arg(int argc, char *argv[], t_info *info);
 void	init_info(t_info *info);
 void	get_mapfile_info(char *path, t_info *info);
+void	get_mappart_data(int fd, char **line, t_info *info);
+void	error_free_line(char *msg, t_info *info, char *str, int fd);
+void	error_fd_close(char *msg, t_info *info, int fd);
 
+// get_mapfile_info.c
+void	get_floor_ceiling_color(t_info *info);// exec after get file info (end of read_file func)
+
+//--------------
 
 
 

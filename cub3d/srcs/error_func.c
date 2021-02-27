@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:10:33 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/26 05:34:10 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/27 16:01:27 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,18 @@ void	free_elem(char **elem)
 void	error_free_elem_exit(char *msg, t_info *info, char **elem)
 {
 	free_elem(elem);
+	error_free_exit(msg, info);
+}
+
+void	error_free_line(char *msg, t_info *info, char *str, int fd)
+{
+	close(fd);
+	safe_free(str);
+	error_free_exit(msg, info);
+}
+
+void	error_fd_close(char *msg, t_info *info, int fd)
+{
+	close(fd);
 	error_free_exit(msg, info);
 }

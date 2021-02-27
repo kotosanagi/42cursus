@@ -6,17 +6,18 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/25 17:13:40 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/27 15:53:36 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //  COMPILATION //
 //OLD// gcc main.c -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz && ./a.out
 //OLD// gcc -Wall -Wextra -Werror main.c libft/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
-// gcc -Wall -Wextra -Werror srcs/*.c libft/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
+//OLD// gcc -Wall -Wextra -Werror srcs/*.c libft/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
+// gcc -Wall -Wextra -Werror srcs/*.c libft/*.o gnl/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
 
 // leak check
-// gcc -Wall -Wextra -Werror -g -fsanitize=leak srcs/*.c libft/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
+// gcc -Wall -Wextra -Werror -g -fsanitize=leak srcs/*.c libft/*.o gnl/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
 
 
 // #include "../mlx_linux/mlx.h"
@@ -594,12 +595,6 @@ void	load_texture(t_info *info)
 // 	info->ceiling_blue = 245;
 // }
 
-void	get_floor_ceiling_color(t_info *info)// exec after get file info (end of read_file func)
-{
-	info->floor_color = (info->floor_red << 16) + (info->floor_green << 8) + info->floor_blue;
-	info->ceiling_color = (info->ceiling_red << 16) + (info->ceiling_green << 8) + info->ceiling_blue;
-}
-
 // int main(void)
 // {
 // 	t_info	info;
@@ -654,7 +649,7 @@ void	get_floor_ceiling_color(t_info *info)// exec after get file info (end of re
 
 
 
-// --------------------------- //
+// // --------------------------- //
 
 
 
