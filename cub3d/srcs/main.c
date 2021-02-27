@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/27 15:53:36 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/27 19:43:15 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 //OLD// gcc main.c -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz && ./a.out
 //OLD// gcc -Wall -Wextra -Werror main.c libft/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
 //OLD// gcc -Wall -Wextra -Werror srcs/*.c libft/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
-// gcc -Wall -Wextra -Werror srcs/*.c libft/*.o gnl/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
+// gcc -Wall -Wextra -Werror srcs/*.c libft/*.o gnl/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out koto.cub
 
 // leak check
 // gcc -Wall -Wextra -Werror -g -fsanitize=leak srcs/*.c libft/*.o gnl/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
@@ -661,7 +661,7 @@ int	main(int argc, char *argv[])
 	init_info(&info);
 	is_correct_arg(argc, argv, &info);
 	get_mapfile_info(argv[1], &info);
-	
+	analyze_mapdata(&info);
 
 	return (0);
 }

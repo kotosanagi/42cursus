@@ -6,21 +6,21 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/27 16:01:42 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/27 19:50:13 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-#include "../mlx_linux/mlx.h"
 // #include "key_linux.h"
-#include "libft.h"
-#include "get_next_line.h"
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
-#include <fcntl.h>
+# include "../mlx_linux/mlx.h"
+# include "libft.h"
+# include "get_next_line.h"
+# include <stdio.h>
+# include <math.h>
+# include <stdlib.h>
+# include <fcntl.h>
 
 /*
 ** Keyboard LETTERS
@@ -108,25 +108,24 @@
 
 
 
-#define R_WIDTH 640
-#define R_HEIGHT 480
-#define TEX_WIDTH 64
-#define TEX_HEIGHT 64
-#define MAP_WIDTH 8		// replace more large number
-#define MAP_HEIGHT 8	// replace more large number
+# define R_WIDTH 640
+# define R_HEIGHT 480
+# define TEX_WIDTH 64
+# define TEX_HEIGHT 64
+# define MAP_WIDTH 8		// replace more large number
+# define MAP_HEIGHT 8	// replace more large number
 
-#define NS 1
-#define EW 0
-#define X_EVENT_KEY_PRESS	2
-#define X_EVENT_KEY_RELEASE	3
-#define X_EVENT_KEY_EXIT	17
-#define EAST_TEXTURE 0
-#define WEST_TEXTURE 1
-#define NORTH_TEXTURE 2
-#define SOUTH_TEXTURE 3
-#define SPRITE_TEXTURE 4
-
-#define num_sprites 5
+# define NS 1
+# define EW 0
+# define X_EVENT_KEY_PRESS	2
+# define X_EVENT_KEY_RELEASE	3
+# define X_EVENT_KEY_EXIT	17
+# define EAST_TEXTURE 0
+# define WEST_TEXTURE 1
+# define NORTH_TEXTURE 2
+# define SOUTH_TEXTURE 3
+# define SPRITE_TEXTURE 4
+# define num_sprites 5
 
 typedef struct	s_sprite
 {
@@ -134,7 +133,6 @@ typedef struct	s_sprite
 	double		y;
 	// int			texture;
 }				t_sprite;
-
 
 //////////// for sprite ////////////
 // t_sprite	sprite[num_sprites] =
@@ -163,11 +161,8 @@ typedef struct	s_img
 
 //////////// end for sprite ////////////
 
-
-
 typedef struct	s_info
 {
-
 // (start) need to get info from mapfile //
 	int		r_width;
 	int		r_height;
@@ -184,7 +179,6 @@ typedef struct	s_info
 	double	plane_x;
 	double	plane_y;
 
-
 	int		floor_red;
 	int		floor_green;
 	int		floor_blue;
@@ -197,9 +191,7 @@ typedef struct	s_info
 	int		num_sprite;
 
 	char	*map[MAP_HEIGHT];//////////need to modify of MAP_WIDTH and MAP_HEIGHT in main.c
-
 // (end) need to get info from mapfile //
-
 
 // (start) NOT need to get info from mapfile //
 	int save_flg;
@@ -220,7 +212,6 @@ typedef struct	s_info
 	void *win;
 
 // (end) NOT need to get info from mapfile //
-
 
 // think later //
 	t_img img;
@@ -292,6 +283,9 @@ void	error_fd_close(char *msg, t_info *info, int fd);
 
 // get_mapfile_info.c
 void	get_floor_ceiling_color(t_info *info);// exec after get file info (end of read_file func)
+
+// analyze_mapdata.c
+void	analyze_mapdata(t_info *info);
 
 //--------------
 

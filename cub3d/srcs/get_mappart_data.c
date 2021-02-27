@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 14:30:34 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/27 16:01:57 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/27 19:35:56 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	get_mappart_data(int fd, char **line, t_info *info)
 			start = 1;
 		if ((start == 1) && (end == 0))
 		{
-			if (ft_strlen(*line) > MAP_WIDTH)
+			if (ft_strlen(*line) > MAP_WIDTH - 1)
 				error_free_line("width of map is too much\n", info, *line, fd);
 			info->map[i++] = ft_strdup(*line);
 		}
