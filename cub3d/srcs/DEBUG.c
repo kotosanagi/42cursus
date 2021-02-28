@@ -61,7 +61,6 @@ printf("move_speed:%f\n", info->move_speed);
 printf("rot_speed :%f\n", info->rot_speed);
 printf("map_h:%d\n", info->map_h);
 
-
 printf("------\n");
 printf("map\n");
 for (int y = 0; info->map[y] != NULL;)
@@ -77,7 +76,16 @@ for (int y = 0; y < MAP_HEIGHT; y++)
 	}
 	printf("\n");
 }
-
+printf("-----\n");
+printf("sp:%p\n", info->sp);
+if (info->num_sprite > 0)
+{
+	for (int i = 0; i < info->num_sprite; i++)
+	{
+		printf("sprite[%d]:x:%f\n", i, info->sp[i].x);
+		printf("sprite[%d]:y:%f\n", i, info->sp[i].y);
+	}
+}
 printf("-------\n");
 }
 

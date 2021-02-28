@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 19:52:51 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 18:19:28 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:27:45 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,6 @@ void	analyze_mapdata(t_info *info)
 		}
 		y++;
 	}
-printf("no dust in the map\n");
+//printf("no dust in the map\n");
 	is_closed_map(info);
 }

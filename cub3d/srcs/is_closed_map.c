@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/28 17:00:26 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 18:54:26 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:33:59 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static void	flood_fill(char tmp_map[MAP_HEIGHT][MAP_WIDTH],
 int y, int x, int *close)
 {
-printf("y:%d, x:%d\n", y, x);
 	if (y == 0 || x == 0 ||
 		y >= MAP_HEIGHT - 2 || x >= MAP_WIDTH - 2 ||
 		tmp_map[y][x] == '\0' || tmp_map[y] == NULL)
@@ -67,7 +66,8 @@ void		is_closed_map(t_info *info)
 	}
 	close = 1;
 	flood_fill(tmp_map, (int)info->pos_y, (int)info->pos_x, &close);
-DEBUG_print_tmpmap(tmp_map, info);
+// DEBUG_print_tmpmap(tmp_map, info);
+// DEBUG_print_info(info);
 	if(close == 0)
 		error_free_exit("it's not closed map\n", info);
 printf("IS CLOSED MAP!!!\n");

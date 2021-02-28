@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 19:00:59 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:52:00 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,6 +216,8 @@ typedef struct	s_info
 // (end) NOT need to get info from mapfile //
 
 // think later //
+	t_sprite *sp;
+
 	t_img img;
 	int buf[R_HEIGHT][R_WIDTH];
 
@@ -294,6 +296,9 @@ void	analyze_mapdata(t_info *info);
 
 // is_closed_map.c
 void	is_closed_map(t_info *info);
+
+// get_sprite_info.c
+void	get_sprite_info(t_info *info);
 //--------------
 
 

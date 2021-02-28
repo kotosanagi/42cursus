@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 18:54:49 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:36:07 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -697,10 +697,12 @@ int	main(int argc, char *argv[])
 	is_correct_arg(argc, argv, &info);
 	get_mapfile_info(argv[1], &info);
 	analyze_mapdata(&info);
+	get_sprite_info(&info);
 	
 
 
 DEBUG_print_info(&info);
+printf("here is end of main.c\n");
 	
 	return (0);
 }

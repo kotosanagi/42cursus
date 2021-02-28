@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 09:38:45 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 16:49:23 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:22:17 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ void	init_info(t_info *info)
 	info->move_speed = 0.008;
 	info->rot_speed = 0.006;
 	info->map_h = 0;
+
+	info->sp = NULL;
 
 	i = 0;
 	while (i < MAP_HEIGHT)
