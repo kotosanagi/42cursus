@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 19:52:51 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 13:56:46 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/28 18:19:28 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,10 @@ void	analyze_mapdata(t_info *info)
 	while (y < info->map_h)
 	{
 		x = 0;
-		printf("koto\n");
 		while (info->map[y][x] != '\0')
 		{
-			
 			if (info->map[y][x] == '1')
-			{
-		printf("!!!moco\n");
-
 				info->world_map[y][x] = 1;
-			}
 			else if (info->map[y][x] == '2')
 				info->num_sprite++;
 			else if (ft_strchr("WESN", info->map[y][x]))
@@ -91,9 +85,11 @@ void	analyze_mapdata(t_info *info)
 			else if (info->map[y][x] == '0' || info->map[y][x] == ' ')
 				;
 			else
-				error_free_exit("invalid mappart elements\n", info);
+				error_free_exit("invalid character in the map\n", info);
 			x++;
 		}
 		y++;
 	}
+printf("no dust in the map\n");
+	is_closed_map(info);
 }

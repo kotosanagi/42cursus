@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 10:31:15 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/26 05:33:37 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/28 16:54:39 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,10 @@ void	is_correct_arg(int argc, char *argv[], t_info *info)
 {
 	char *filename;
 
-	printf("argc:%d\n------\n", argc);
-
-	for (int i = 0; i < argc; i++)
-	{
-		printf("argv[%d]:%s\n",i, argv[i]);
-	}
-
-	printf("---\n");
+printf("argc:%d\n------\n", argc);////////////
+for (int i = 0; i < argc; i++)////////////
+	printf("argv[%d]:%s\n",i, argv[i]);////////////
+printf("---\n");////////////
 
 	if (argc < 2)
 		error_exit("please add map file path on next argument\n");
@@ -53,6 +49,6 @@ void	is_correct_arg(int argc, char *argv[], t_info *info)
 		filename = argv[1];
 	is_cub_extension(filename);
 
-	printf("save_flg:%d\n", info->save_flg);
-	printf("filename:%s\n", filename);
+printf("save_flg:%d\n", info->save_flg);////////////
+printf("filename:%s\n", filename);////////////
 }

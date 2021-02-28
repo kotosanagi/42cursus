@@ -10,7 +10,16 @@ void	DEBUG_print_MAPPPPPP(t_info *info)
 
 void DEBUG_print_info(t_info *info)/////////////////////////
 {
-printf("-------\n");
+
+printf("\n");
+printf("******************\n");
+printf("******************\n");
+printf("*** DEBUG ZONE ***\n");
+printf("******************\n");
+printf("******************\n");
+printf("\n");
+
+
 printf("r_width :%d\n", info->r_width);
 printf("r_height:%d\n", info->r_height);
 
@@ -38,6 +47,19 @@ printf("floor_color  :%x\n", info->floor_color);
 printf("ceiling_color:%x\n", info->ceiling_color);
 printf("num_sprite:%d\n", info->num_sprite);
 
+printf("save_flg:%d\n",info->save_flg);
+printf("key_w:%d\n", info->key_w);
+printf("key_s:%d\n", info->key_s);
+printf("key_d:%d\n", info->key_d);
+printf("key_a:%d\n", info->key_a);
+printf("key_ar_r:%d\n", info->key_ar_r);
+printf("key_ar_l:%d\n", info->key_ar_l);
+printf("key_ar_u:%d\n", info->key_ar_u);
+printf("key_ar_d:%d\n", info->key_ar_d);
+printf("key_esc:%d\n", info->key_esc);
+printf("move_speed:%f\n", info->move_speed);
+printf("rot_speed :%f\n", info->rot_speed);
+printf("map_h:%d\n", info->map_h);
 
 
 printf("------\n");
@@ -57,4 +79,14 @@ for (int y = 0; y < MAP_HEIGHT; y++)
 }
 
 printf("-------\n");
+}
+
+
+void	DEBUG_print_tmpmap(char tmp_map[MAP_HEIGHT][MAP_WIDTH], t_info *info)
+{
+	int y = 0;
+	
+	printf("---tmp_map---\n");
+	while (y < info->map_h)
+		printf("%s\n", tmp_map[y++]);
 }

@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 13:52:05 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/28 18:54:49 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 // leak check
 // gcc -Wall -Wextra -Werror -g -fsanitize=leak srcs/*.c libft/*.o gnl/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
-
+// valgrind --leak-check=full --show-leak-kinds=all ./a.out koto.cub
 
 // #include "../mlx_linux/mlx.h"
 // #include "../includes/key_linux.h"
@@ -113,6 +113,7 @@ int close_window(int keycode, t_info *info)
 
 int close_window_redx(void)
 {
+	// exit_successful(info); // I want to exec this row...
 	exit(EXIT_SUCCESS);
 	return (0);
 }
@@ -139,9 +140,9 @@ t_sprite	sprite[num_sprites] =
 };
 
 int	world_map[MAP_HEIGHT][MAP_WIDTH] = {
-	{1,1,1,1,1,1,1,1},
+	{1,1,0,1,1,1,1,1},
+	{1,0,1,0,0,0,0,1},
 	{1,0,0,0,0,0,0,1},
-	{1,1,0,0,0,0,0,1},
 	{1,0,0,0,1,0,0,1},
 	{1,1,0,0,0,0,0,1},
 	{1,0,0,0,0,0,1,1},
@@ -459,7 +460,7 @@ int	key_update(t_info *info)
 		info->plane_y = old_plane_x * sin(info->rot_speed) + info->plane_y * cos(info->rot_speed);
 	}
 	if (info->key_esc)
-		exit(0);
+		exit_successful(info);
 	return (0);
 }
 
@@ -471,7 +472,21 @@ int main_loop(t_info *info)
 	return (0);
 }
 
+void	exit_successful(t_info *info)
+{
+	int	i;
 
+	i = 0;
+	safe_free(info->east_path);
+	safe_free(info->west_path);
+	safe_free(info->south_path);
+	safe_free(info->north_path);
+	safe_free(info->sprite_path);
+	while (info->map[i])
+		safe_free(info->map[i++]);
+	printf("thank you for playing!\n");
+	exit(EXIT_SUCCESS);
+}
 
 int	key_press(int key, t_info *info)
 {
@@ -669,7 +684,7 @@ void	load_texture(t_info *info)
 
 
 
-// --------------------------- //
+// // // --------------------------- //
 
 
 
@@ -682,11 +697,10 @@ int	main(int argc, char *argv[])
 	is_correct_arg(argc, argv, &info);
 	get_mapfile_info(argv[1], &info);
 	analyze_mapdata(&info);
+	
 
-for (int i = 0; i<info.map_h; i++){
-	printf ("%d:%s\n",i, info.map[i]);
-}
 
 DEBUG_print_info(&info);
+	
 	return (0);
 }

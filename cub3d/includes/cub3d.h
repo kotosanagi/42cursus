@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 14:08:10 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/28 19:00:59 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,7 @@ typedef struct	s_info
 // (start) need to get info from mapfile //
 	int		r_width;
 	int		r_height;
+	
 	char	*east_path;
 	char	*west_path;
 	char	*south_path;
@@ -254,7 +255,9 @@ typedef struct		s_pair
 
 
 
+// main.c //
 
+void	exit_successful(t_info *info);//
 
 
 
@@ -288,6 +291,9 @@ void	get_floor_ceiling_color(t_info *info);// exec after get file info (end of r
 // analyze_mapdata.c
 void	analyze_mapdata(t_info *info);
 
+
+// is_closed_map.c
+void	is_closed_map(t_info *info);
 //--------------
 
 
@@ -295,5 +301,6 @@ void	analyze_mapdata(t_info *info);
 //should be deleted//
 void DEBUG_print_info(t_info *info);///
 void	DEBUG_print_MAPPPPPP(t_info *info);///
+void	DEBUG_print_tmpmap(char tmp_map[MAP_HEIGHT][MAP_WIDTH], t_info *info);
 
 #endif
