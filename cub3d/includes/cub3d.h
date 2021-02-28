@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/27 19:50:13 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/28 14:08:10 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,10 @@
 # define X_EVENT_KEY_PRESS	2
 # define X_EVENT_KEY_RELEASE	3
 # define X_EVENT_KEY_EXIT	17
-# define EAST_TEXTURE 0
-# define WEST_TEXTURE 1
-# define NORTH_TEXTURE 2
-# define SOUTH_TEXTURE 3
+# define NORTH_TEXTURE 0
+# define SOUTH_TEXTURE 1
+# define WEST_TEXTURE 2
+# define EAST_TEXTURE 3
 # define SPRITE_TEXTURE 4
 # define num_sprites 5
 
@@ -191,6 +191,7 @@ typedef struct	s_info
 	int		num_sprite;
 
 	char	*map[MAP_HEIGHT];//////////need to modify of MAP_WIDTH and MAP_HEIGHT in main.c
+	int		world_map[MAP_HEIGHT][MAP_WIDTH];
 // (end) need to get info from mapfile //
 
 // (start) NOT need to get info from mapfile //
@@ -291,5 +292,8 @@ void	analyze_mapdata(t_info *info);
 
 
 
+//should be deleted//
+void DEBUG_print_info(t_info *info);///
+void	DEBUG_print_MAPPPPPP(t_info *info);///
 
 #endif

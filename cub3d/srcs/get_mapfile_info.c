@@ -6,44 +6,11 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 17:15:14 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/27 15:39:34 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/28 14:09:44 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
-
-void DEBUG_print_info(t_info *info)/////////////////////////
-{
-printf("-------\n");
-printf("r_width :%d\n", info->r_width);
-printf("r_height:%d\n", info->r_height);
-
-printf("east  :%s\n", info->east_path);
-printf("west  :%s\n", info->west_path);
-printf("south :%s\n", info->south_path);
-printf("north :%s\n", info->north_path);
-printf("sprite:%s\n", info->sprite_path);
-
-printf("pos_x  :%f\n", info->pos_x);
-printf("pos_y  :%f\n", info->pos_y);
-printf("dir_x  :%f\n", info->dir_x);
-printf("dir_y  :%f\n", info->dir_y);
-printf("plane_x:%f\n", info->plane_x);
-printf("plane_y:%f\n", info->plane_y);
-
-printf("floor_red  :%d\n", info->floor_red);
-printf("floor_green:%d\n", info->floor_green);
-printf("floor_blue :%d\n", info->floor_blue);
-printf("ceiling_red  :%d\n", info->ceiling_red);
-printf("ceiling_green:%d\n", info->ceiling_green);
-printf("ceiling_blue :%d\n", info->ceiling_blue);
-
-printf("floor_color  :%x\n", info->floor_color);
-printf("ceiling_color:%x\n", info->ceiling_color);
-printf("num_sprite:%d\n", info->num_sprite);
-
-printf("-------\n");
-}
 
 int	is_enough_8elements(t_info *info)
 {
@@ -226,14 +193,6 @@ int		is_mapfile_elem(t_info *info, char **elem)
 	return (1);
 }
 
-void	DEBUG_print_MAPPPPPP(t_info *info)
-{
-	int i = 0;
-
-	while (info->map[i])
-		printf("%s\n", info->map[i++]);
-}
-
 void	get_mapfile_info(char *path, t_info *info)
 {
 	int		fd;
@@ -255,7 +214,7 @@ printf("success open file : fd:%d\n", fd);///
 		is_mapfile_elem(info, elem);
 
 
-DEBUG_print_info(info);
+// DEBUG_print_info(info);
 
 
 		if ((gnl_ret == 0) && !(is_enough_8elements(info)))
@@ -264,7 +223,7 @@ DEBUG_print_info(info);
 	}
 
 	get_floor_ceiling_color(info);
-DEBUG_print_info(info);
+// DEBUG_print_info(info);
 	get_mappart_data(fd, &line, info);
 DEBUG_print_MAPPPPPP(info);
 

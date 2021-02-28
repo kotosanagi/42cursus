@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 14:30:34 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/27 19:35:56 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/27 22:13:16 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	get_mappart_data(int fd, char **line, t_info *info)
 	if (info->map[0] == NULL)
 		error_fd_close("doesn't find map\n", info, fd);
 	if (i >= MAP_HEIGHT)
-	{
 		error_fd_close("height of map is too much\n", info, fd);
-	}
+	info->map_h = i;
 }

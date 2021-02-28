@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/27 19:43:15 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/02/28 13:52:05 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ t_sprite	sprite[num_sprites] =
 	{6.5, 6.5},//, SPRITE_TEXTURE},
 };
 
-int	world_map[MAP_WIDTH][MAP_HEIGHT] = {
+int	world_map[MAP_HEIGHT][MAP_WIDTH] = {
 	{1,1,1,1,1,1,1,1},
 	{1,0,0,0,0,0,0,1},
 	{1,1,0,0,0,0,0,1},
@@ -243,7 +243,7 @@ void calc(t_info *info)
 				map_y += step_y;
 				side = NS; // NS?
 			}
-			if (world_map[map_x][map_y] == 1)
+			if (world_map[map_x][map_y] == 1)///////////
 				hit = 1;
 		}
 		if (side == EW) // EW?
@@ -534,11 +534,11 @@ void	load_image(t_info *info, int *texture, char *path, t_img *img)
 void	load_texture(t_info *info)
 {
 	t_img	img;
-
-	load_image(info, info->texture[EAST_TEXTURE], "images/koto_east.xpm", &img);
-	load_image(info, info->texture[WEST_TEXTURE], "images/koto_west.xpm", &img);
-	load_image(info, info->texture[SOUTH_TEXTURE], "images/koto_south.xpm", &img);
-	load_image(info, info->texture[NORTH_TEXTURE], "images/koto_north.xpm", &img);
+//CAUSE OF DIRECTION CALC, NEED TO MODIFY WALL DEFINITION
+	load_image(info, info->texture[NORTH_TEXTURE], "images/koto_west.xpm", &img);
+	load_image(info, info->texture[SOUTH_TEXTURE], "images/koto_east.xpm", &img);
+	load_image(info, info->texture[WEST_TEXTURE], "images/koto_south.xpm", &img);
+	load_image(info, info->texture[EAST_TEXTURE], "images/koto_north.xpm", &img);
 	load_image(info, info->texture[SPRITE_TEXTURE], "images/koto_sprite.xpm", &img);
 	// load_image(info, info->texture[SPRITE_TEXTURE], "images/moco01.xpm", &img);
 	// load_image(info, info->texture[0], "images/moco03.xpm", &img);
@@ -570,10 +570,30 @@ void	load_texture(t_info *info)
 
 // 	info->pos_x = 1.5;
 // 	info->pos_y = 1.5;
-// 	info->dir_x = -1.0;
+
+// // // NORTH
+// // 	info->dir_x = -1.0;
+// // 	info->dir_y = 0.0;
+// // 	info->plane_x = 0.0;
+// // 	info->plane_y = 0.66;
+// // // WEST
+// // 	info->dir_x = 0.0;
+// // 	info->dir_y = -1.0;
+// // 	info->plane_x = -0.66;
+// // 	info->plane_y = 0.0;
+// // // EAST
+// // 	info->dir_x = 0.0;
+// // 	info->dir_y = 1.0;
+// // 	info->plane_x = 0.66;
+// // 	info->plane_y = 0.0;
+// // SOUTH
+// 	info->dir_x = 1.0;
 // 	info->dir_y = 0.0;
 // 	info->plane_x = 0.0;
-// 	info->plane_y = 0.66;
+// 	info->plane_y = -0.66;
+
+
+
 // 	info->move_speed = 0.008;
 // 	info->rot_speed = 0.005;
 
@@ -649,7 +669,7 @@ void	load_texture(t_info *info)
 
 
 
-// // --------------------------- //
+// --------------------------- //
 
 
 
@@ -663,5 +683,10 @@ int	main(int argc, char *argv[])
 	get_mapfile_info(argv[1], &info);
 	analyze_mapdata(&info);
 
+for (int i = 0; i<info.map_h; i++){
+	printf ("%d:%s\n",i, info.map[i]);
+}
+
+DEBUG_print_info(&info);
 	return (0);
 }
