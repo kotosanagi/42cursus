@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 19:36:07 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/01 07:03:56 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -573,6 +573,13 @@ void	load_texture(t_info *info)
 
 
 // --------------------------- //
+// --------------------------- //
+// --------------------------- //
+// --------------------------- //
+// --------------------------- //
+// --------------------------- //
+// --------------------------- //
+// --------------------------- //
 
 
 
@@ -689,20 +696,21 @@ void	load_texture(t_info *info)
 
 
 
-int	main(int argc, char *argv[])
-{
-	t_info	info;
+// int	main(int argc, char *argv[])
+// {
+// 	t_info	info;
 
-	init_info(&info);
-	is_correct_arg(argc, argv, &info);
-	get_mapfile_info(argv[1], &info);
-	analyze_mapdata(&info);
-	get_sprite_info(&info);
+// 	init_info(&info);
+// 	is_correct_arg(argc, argv, &info);
+// 	get_mapfile_info(argv[1], &info);
+// 	analyze_mapdata(&info);
+// 	get_sprite_info(&info);
+// 	get_window_size(&info);
+// 	printf("STARTING GAME\n");
+
+
+// DEBUG_print_info(&info);
+// printf("here is end of main.c\n");
 	
-
-
-DEBUG_print_info(&info);
-printf("here is end of main.c\n");
-	
-	return (0);
-}
+// 	return (0);
+// }

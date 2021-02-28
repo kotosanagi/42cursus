@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 17:15:14 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 19:54:38 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/01 05:34:50 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,6 +228,6 @@ printf("success open file : fd:%d\n", fd);///
 DEBUG_print_MAPPPPPP(info);
 
 
-printf("done for reading cub file\n");
+printf("done for reading cub file\n");//////////////////
 	close(fd);
 }

@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 19:52:00 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/01 07:46:40 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@
 
 
 
-# define R_WIDTH 640
-# define R_HEIGHT 480
+# define R_WIDTH 256
+# define R_HEIGHT 192
 # define TEX_WIDTH 64
 # define TEX_HEIGHT 64
 # define MAP_WIDTH 8		// replace more large number
@@ -120,12 +120,12 @@
 # define X_EVENT_KEY_PRESS	2
 # define X_EVENT_KEY_RELEASE	3
 # define X_EVENT_KEY_EXIT	17
-# define NORTH_TEXTURE 0
-# define SOUTH_TEXTURE 1
-# define WEST_TEXTURE 2
-# define EAST_TEXTURE 3
-# define SPRITE_TEXTURE 4
-# define num_sprites 5
+# define NORTH_TEXTURE 0///////should be deleted
+# define SOUTH_TEXTURE 1///////should be deleted
+# define WEST_TEXTURE 2///////should be deleted
+# define EAST_TEXTURE 3///////should be deleted
+# define SPRITE_TEXTURE 4///////should be deleted
+# define num_sprites 5///////should be deleted
 
 typedef struct	s_sprite
 {
@@ -217,11 +217,14 @@ typedef struct	s_info
 
 // think later //
 	t_sprite *sp;
+	double	*z_buffer;
+	// double	z_buffer[R_WIDTH];
+
+
 
 	t_img img;
 	int buf[R_HEIGHT][R_WIDTH];
 
-	double	z_buffer[R_WIDTH];
 
 	int **texture;
 
@@ -299,6 +302,11 @@ void	is_closed_map(t_info *info);
 
 // get_sprite_info.c
 void	get_sprite_info(t_info *info);
+
+
+// get_window_size.c
+void	get_window_size(t_info *info);
+
 //--------------
 
 
