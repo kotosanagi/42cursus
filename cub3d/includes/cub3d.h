@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/02 05:44:39 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/02 06:06:59 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,13 +217,14 @@ typedef struct	s_info
 
 // think later //
 	t_sprite *sp;
-	// double	*z_buffer;
-	double	z_buffer[R_WIDTH];
+	double	*z_buffer;
+	// double	z_buffer[R_WIDTH];
 
 
 
 	t_img img;
-	int buf[R_HEIGHT][R_WIDTH];
+	int **buf;
+	// int buf[R_HEIGHT][R_WIDTH];
 
 
 	int **texture;

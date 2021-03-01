@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:10:33 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 19:20:34 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/02 06:14:25 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ void	error_free_exit(char *msg, t_info *info)
 		safe_free(info->map[i++]);
 	if (info->num_sprite > 0)
 		safe_free(info->sp);
+	i = info->r_height;
+	while (i >= 0)
+		safe_free(info->buf[i--]);
+	safe_free(info->buf);
 	error_exit(msg);
 }
 

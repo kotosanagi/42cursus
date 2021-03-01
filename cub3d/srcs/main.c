@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/01 22:24:54 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/02 06:25:05 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,11 +155,11 @@ int	world_map[MAP_HEIGHT][MAP_WIDTH] = {
 
 void	draw(t_info *info)
 {
-	for (int y = 0; y < R_HEIGHT; y++)
+	for (int y = 0; y < info->r_height; y++)
 	{
-		for (int x = 0; x < R_WIDTH; x++)
+		for (int x = 0; x < info->r_width; x++)
 		{
-			info->img.data[y * R_WIDTH + x] = info->buf[y][x];
+			info->img.data[y * info->r_width + x] = info->buf[y][x];
 		}
 	}
 	mlx_put_image_to_window(info->mlx, info->win, info->img.img, 0, 0);
@@ -171,11 +171,11 @@ void calc(t_info *info)
 	////////////// draw ceiling and floor /////////////////
 	int color;
 
-	for (int y = 0; y < R_HEIGHT; y++) // in order to draw left to right, buf[y][x]
+	for (int y = 0; y < info->r_height; y++) // in order to draw left to right, buf[y][x]
 	{
-		for (int x = 0; x < R_WIDTH; x++)
+		for (int x = 0; x < info->r_width; x++)
 		{
-			if (y < R_HEIGHT / 2)
+			if (y < info->r_height / 2)
 				color = info->ceiling_color;//0x9dcce0; // color of ceiling
 			else
 				color = info->floor_color;//0xb26235; // color of floor
@@ -187,9 +187,9 @@ void calc(t_info *info)
 
 	int x = 0;
 
-	while (x < R_WIDTH)
+	while (x < info->r_width)
 	{
-		double camera_x = 2 * x / (double)R_WIDTH - 1;
+		double camera_x = 2 * x / (double)info->r_width - 1;
 		double ray_dir_x = info->dir_x + info->plane_x * camera_x;
 		double ray_dir_y = info->dir_y + info->plane_y * camera_x;
 
@@ -252,14 +252,14 @@ void calc(t_info *info)
 		else
 			perp_wall_dist = (map_y - info->pos_y + (1 - step_y) / 2) / ray_dir_y;
 
-		int line_height = (int)(R_HEIGHT / perp_wall_dist);
+		int line_height = (int)(info->r_height / perp_wall_dist);
 
-		int draw_start = -line_height / 2 + R_HEIGHT / 2;
+		int draw_start = -line_height / 2 + info->r_height / 2;
 		if (draw_start < 0)
 			draw_start = 0;
-		int draw_end = line_height / 2 + R_HEIGHT / 2;
-		if (draw_end > R_HEIGHT)
-			draw_end = R_HEIGHT - 1;
+		int draw_end = line_height / 2 + info->r_height / 2;
+		if (draw_end > info->r_height)
+			draw_end = info->r_height - 1;
 
 		// int tex_num = world_map[map_x][map_y];
 
@@ -300,7 +300,7 @@ void calc(t_info *info)
 
 		double step = 1.0 * TEX_HEIGHT / line_height;
 		// Starting texture coordinate
-		double tex_pos = (draw_start - R_HEIGHT / 2 + line_height / 2) * step;
+		double tex_pos = (draw_start - info->r_height / 2 + line_height / 2) * step;
 		for (int y = draw_start; y < draw_end; y++)
 		{
 			// Cast the texture coordinate to integer, and mask with (TEX_HEIGHT - 1) in case of overflow
@@ -345,7 +345,7 @@ void calc(t_info *info)
 		double transform_x = inv_det * (info->dir_y * sprite_x - info->dir_x * sprite_y);
 		double transform_y = inv_det * (-info->plane_y * sprite_x + info->plane_x * sprite_y); //this is actually the depth inside the screen, that what Z is in 3D, the distance of sprite to player, matching sqrt(sprite_distance[i])
 
-		int sprite_screen_x = (int)((R_WIDTH / 2) * (1 + transform_x / transform_y));
+		int sprite_screen_x = (int)((info->r_width / 2) * (1 + transform_x / transform_y));
 
 		//parameters for scaling and moving the sprites
 		//#define u_div 1
@@ -353,22 +353,22 @@ void calc(t_info *info)
 		// #define v_move 0.0///////////
 		//int v_move_screen = (int)(v_move / transform_y);
 
-		//calculate R_HEIGHT of the sprite on screen
-		int sprite_height = (int)fabs(R_HEIGHT / transform_y); //using "transform_y" instead of the real distance prevents fisheye
-		// int sprite_height = (int)fabs((R_HEIGHT / transform_y) / v_div); //using "transform_y" instead of the real distance prevents fisheye
+		//calculate info->r_height of the sprite on screen
+		int sprite_height = (int)fabs(info->r_height / transform_y); //using "transform_y" instead of the real distance prevents fisheye
+		// int sprite_height = (int)fabs((info->r_height / transform_y) / v_div); //using "transform_y" instead of the real distance prevents fisheye
 		//calculate lowest and highest pixel to fill in current stripe
-		int draw_start_y = -sprite_height / 2 + R_HEIGHT / 2;// + v_move_screen;
+		int draw_start_y = -sprite_height / 2 + info->r_height / 2;// + v_move_screen;
 		if(draw_start_y < 0) draw_start_y = 0;
-		int draw_end_y = sprite_height / 2 + R_HEIGHT / 2;// + v_move_screen;
-		if(draw_end_y >= R_HEIGHT) draw_end_y = R_HEIGHT - 1;
+		int draw_end_y = sprite_height / 2 + info->r_height / 2;// + v_move_screen;
+		if(draw_end_y >= info->r_height) draw_end_y = info->r_height - 1;
 
-		//calculate R_WIDTH of the sprite
-		int sprite_width = (int)fabs(R_HEIGHT / transform_y);
-		// int sprite_width = (int)fabs((R_HEIGHT / transform_y) / u_div);
+		//calculate info->r_width of the sprite
+		int sprite_width = (int)fabs(info->r_height / transform_y);
+		// int sprite_width = (int)fabs((info->r_height / transform_y) / u_div);
 		int draw_start_x = -sprite_width / 2 + sprite_screen_x;
 		if(draw_start_x < 0) draw_start_x = 0;
 		int draw_end_x = sprite_width / 2 + sprite_screen_x;
-		if(draw_end_x >= R_WIDTH) draw_end_x = R_WIDTH - 1;
+		if(draw_end_x >= info->r_width) draw_end_x = info->r_width - 1;
 
 		//loop through every vertical stripe of the sprite on screen
 		for(int stripe = draw_start_x; stripe < draw_end_x; stripe++)
@@ -379,10 +379,10 @@ void calc(t_info *info)
 			//2) it's on the screen (left)
 			//3) it's on the screen (right)
 			//4) z_buffer, with perpendicular distance
-			if(transform_y > 0 && stripe > 0 && stripe < R_WIDTH && transform_y < info->z_buffer[stripe])
+			if(transform_y > 0 && stripe > 0 && stripe < info->r_width && transform_y < info->z_buffer[stripe])
 			for(int y = draw_start_y; y < draw_end_y; y++) //for every pixel of the current stripe
 			{
-				int d = y * 256 - R_HEIGHT * 128 + sprite_height * 128; //256 and 128 factors to avoid floats
+				int d = y * 256 - info->r_height * 128 + sprite_height * 128; //256 and 128 factors to avoid floats
 				int tex_y = ((d * TEX_HEIGHT) / sprite_height) / 256;
 				int color = info->texture[SPRITE_TEXTURE][TEX_WIDTH * tex_y + tex_x]; //get current color from the texture
 				if(color & 0x00FFFFFF) // color & 0x00FFFFFF == 0 is black  =>  black to invisible
@@ -637,20 +637,47 @@ void init_info_temp(t_info *info)
 	info->ceiling_blue = 245;
 }
 
-int main(void)
+void	set_buf(t_info *info)
+{
+	int i;
+
+	if (!(info->buf = (int **)malloc(sizeof(int *) * info->r_height)))
+		error_free_exit("1st buf malloc error\n", info);
+	i = 0;
+	while (i < info->r_height)
+	{
+		if (!(info-> buf[i++] = (int *)malloc(sizeof(int) * info->r_width)))
+			error_free_exit("2nd buf malloc error\n", info);
+	}
+	for (int i = 0; i < info->r_height; i++)
+	{
+		for (int j = 0; j < info->r_width; j++)
+			info->buf[i][j] = 0;
+	}
+}
+
+// int main(void)
+int	main(int argc, char *argv[])
 {
 	t_info	info;
 
-	init_info_temp(&info);
-	get_floor_ceiling_color(&info);
+	// init_info_temp(&info);
+	// get_floor_ceiling_color(&info);
+
+	init_info(&info);
+	is_correct_arg(argc, argv, &info);
+	get_mapfile_info(argv[1], &info);
+	analyze_mapdata(&info);
+	get_sprite_info(&info);
+	get_window_size(&info);
+	printf("STARTING GAME\n");
+	DEBUG_print_info(&info);
+
+	set_buf(&info);
+
 	int tex_num = 5;
 
-	for (int i = 0; i < R_HEIGHT; i++)
-	{
-		for (int j = 0; j < R_WIDTH; j++)
-			info.buf[i][j] = 0;
-	}
-
+printf("hello!!!!!!!!!!\n");
 	if (!(info.texture = (int **)malloc(sizeof(int *) * tex_num)))
 		return (-1);
 	for (int i = 0; i < tex_num; i++)
@@ -663,12 +690,11 @@ int main(void)
 		for (int j = 0; j < TEX_HEIGHT * TEX_WIDTH; j++)
 			info.texture[i][j] = 0;
 	}
-
 	load_texture(&info);
 
-	info.win = mlx_new_window(info.mlx, R_WIDTH, R_HEIGHT, "mocomoco world!!!!");
+	info.win = mlx_new_window(info.mlx, info.r_width, info.r_height, "mocomoco world!!!!");
 
-	info.img.img = mlx_new_image(info.mlx, R_WIDTH, R_HEIGHT);
+	info.img.img = mlx_new_image(info.mlx, info.r_width, info.r_height);
 	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);
 
 

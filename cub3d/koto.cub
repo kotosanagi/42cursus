@@ -1,12 +1,12 @@
-R 9000 90 
-WE west.com
-NO north.com
-EA east.com
+R 512 256
+WE images/koto_west.xpm
+NO images/koto_north.xpm
+EA images/koto_east.xpm
 S sprite.com
 F 4,65,1
 
 C 5,1,2
-SO south....com
+SO images/koto_south.xpm
 
 1111111
 10S0201
