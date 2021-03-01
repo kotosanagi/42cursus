@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/02 08:13:29 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/02 08:40:09 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,15 +325,15 @@ void calc(t_info *info)
 	for(int i = 0; i < num_sprites; i++)
 	{
 		sprite_order[i] = i;
-		sprite_distance[i] = ((info->pos_x - sprite[i].x) * (info->pos_x - sprite[i].x) + (info->pos_y - sprite[i].y) * (info->pos_y - sprite[i].y)); //sqrt not taken, unneeded
+		sprite_distance[i] = ((info->pos_x - info->sp[i].x) * (info->pos_x - info->sp[i].x) + (info->pos_y - info->sp[i].y) * (info->pos_y - info->sp[i].y)); //sqrt not taken, unneeded
 	}
 	sort_sprites(sprite_order, sprite_distance, num_sprites);
 	//after sorting the sprites, do the projection and draw them
 	for(int i = 0; i < num_sprites; i++)
 	{
 		//translate sprite position to relative to camera
-		double sprite_x = sprite[sprite_order[i]].x - info->pos_x;
-		double sprite_y = sprite[sprite_order[i]].y - info->pos_y;
+		double sprite_x = info->sp[sprite_order[i]].x - info->pos_x;
+		double sprite_y = info->sp[sprite_order[i]].y - info->pos_y;
 
 		//transform sprite with the inverse camera matrix
 		// [ plane_x   dir_x ] -1                                       [ dir_y      -dir_x ]
