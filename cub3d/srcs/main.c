@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/01 07:03:56 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/01 22:24:54 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -586,112 +586,112 @@ void	load_texture(t_info *info)
 
 
 
-// void init_info_temp(t_info *info)
-// {
-// 	info->mlx = mlx_init();
+void init_info_temp(t_info *info)
+{
+	info->mlx = mlx_init();
 
-// 	info->pos_x = 1.5;
-// 	info->pos_y = 1.5;
+	info->pos_x = 1.5;
+	info->pos_y = 1.5;
 
-// // // NORTH
-// // 	info->dir_x = -1.0;
-// // 	info->dir_y = 0.0;
-// // 	info->plane_x = 0.0;
-// // 	info->plane_y = 0.66;
-// // // WEST
-// // 	info->dir_x = 0.0;
-// // 	info->dir_y = -1.0;
-// // 	info->plane_x = -0.66;
-// // 	info->plane_y = 0.0;
-// // // EAST
-// // 	info->dir_x = 0.0;
-// // 	info->dir_y = 1.0;
-// // 	info->plane_x = 0.66;
-// // 	info->plane_y = 0.0;
-// // SOUTH
-// 	info->dir_x = 1.0;
+// // NORTH
+// 	info->dir_x = -1.0;
 // 	info->dir_y = 0.0;
 // 	info->plane_x = 0.0;
-// 	info->plane_y = -0.66;
+// 	info->plane_y = 0.66;
+// // WEST
+// 	info->dir_x = 0.0;
+// 	info->dir_y = -1.0;
+// 	info->plane_x = -0.66;
+// 	info->plane_y = 0.0;
+// // EAST
+// 	info->dir_x = 0.0;
+// 	info->dir_y = 1.0;
+// 	info->plane_x = 0.66;
+// 	info->plane_y = 0.0;
+// SOUTH
+	info->dir_x = 1.0;
+	info->dir_y = 0.0;
+	info->plane_x = 0.0;
+	info->plane_y = -0.66;
 
 
 
-// 	info->move_speed = 0.008;
-// 	info->rot_speed = 0.005;
+	info->move_speed = 0.008;
+	info->rot_speed = 0.005;
 
-// 	info->key_w = 0;
-// 	info->key_s = 0;
-// 	info->key_d = 0;
-// 	info->key_a = 0;
-// 	info->key_ar_r = 0;
-// 	info->key_ar_l = 0;
-// 	info->key_ar_u = 0;
-// 	info->key_ar_d = 0;
-// 	info->key_esc = 0;
+	info->key_w = 0;
+	info->key_s = 0;
+	info->key_d = 0;
+	info->key_a = 0;
+	info->key_ar_r = 0;
+	info->key_ar_l = 0;
+	info->key_ar_u = 0;
+	info->key_ar_d = 0;
+	info->key_esc = 0;
 
-// 	info->floor_red = 130;
-// 	info->floor_green = 150;
-// 	info->floor_blue = 100;
-// 	info->ceiling_red = 60;
-// 	info->ceiling_green = 190;
-// 	info->ceiling_blue = 245;
-// }
+	info->floor_red = 130;
+	info->floor_green = 150;
+	info->floor_blue = 100;
+	info->ceiling_red = 60;
+	info->ceiling_green = 190;
+	info->ceiling_blue = 245;
+}
 
-// int main(void)
-// {
-// 	t_info	info;
+int main(void)
+{
+	t_info	info;
 
-// 	init_info_temp(&info);
-// 	get_floor_ceiling_color(&info);
-// 	int tex_num = 5;
+	init_info_temp(&info);
+	get_floor_ceiling_color(&info);
+	int tex_num = 5;
 
-// 	for (int i = 0; i < R_HEIGHT; i++)
-// 	{
-// 		for (int j = 0; j < R_WIDTH; j++)
-// 			info.buf[i][j] = 0;
-// 	}
+	for (int i = 0; i < R_HEIGHT; i++)
+	{
+		for (int j = 0; j < R_WIDTH; j++)
+			info.buf[i][j] = 0;
+	}
 
-// 	if (!(info.texture = (int **)malloc(sizeof(int *) * tex_num)))
-// 		return (-1);
-// 	for (int i = 0; i < tex_num; i++)
-// 	{
-// 		if (!(info.texture[i] = (int *)malloc(sizeof(int) * (TEX_HEIGHT * TEX_WIDTH))))
-// 			return (-1);
-// 	}
-// 	for (int i = 0; i < tex_num; i++)
-// 	{
-// 		for (int j = 0; j < TEX_HEIGHT * TEX_WIDTH; j++)
-// 			info.texture[i][j] = 0;
-// 	}
+	if (!(info.texture = (int **)malloc(sizeof(int *) * tex_num)))
+		return (-1);
+	for (int i = 0; i < tex_num; i++)
+	{
+		if (!(info.texture[i] = (int *)malloc(sizeof(int) * (TEX_HEIGHT * TEX_WIDTH))))
+			return (-1);
+	}
+	for (int i = 0; i < tex_num; i++)
+	{
+		for (int j = 0; j < TEX_HEIGHT * TEX_WIDTH; j++)
+			info.texture[i][j] = 0;
+	}
 
-// 	load_texture(&info);
+	load_texture(&info);
 
-// 	info.win = mlx_new_window(info.mlx, R_WIDTH, R_HEIGHT, "mocomoco world!!!!");
+	info.win = mlx_new_window(info.mlx, R_WIDTH, R_HEIGHT, "mocomoco world!!!!");
 
-// 	info.img.img = mlx_new_image(info.mlx, R_WIDTH, R_HEIGHT);
-// 	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);
-
-
-// 	// mlx_key_hook(info.win, key_hook, &info);
-// 	// mlx_mouse_hook(info.win, mouse_hook, &info);
-// 	mlx_hook(info.win, 2, 1L<<0, close_window, &info);	//close window when ESC pressed
-// 	mlx_hook(info.win, 33, 1L<<17, close_window_redx, &info);	//close window when red cross pushed // for 2nd arg, old ver is 17 , but latest ver is 33
-// 	// mlx_hook(info.win, 7, 1L<<4, print_hello, &info);	//enter window 
-// 	// mlx_hook(info.win, 8, 1L<<5, print_bye, &info);		//leave window
+	info.img.img = mlx_new_image(info.mlx, R_WIDTH, R_HEIGHT);
+	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);
 
 
-// 	mlx_loop_hook(info.mlx, &main_loop, &info);
-
-// 	mlx_hook(info.win, X_EVENT_KEY_RELEASE, 1L << 1, &key_release, &info);
-// 	mlx_hook(info.win, X_EVENT_KEY_PRESS, 1L << 0, &key_press, &info);
-
-// 	mlx_loop(info.mlx);// when check leak, comment out this row, and do fsanitize
-// 	return 0;
-// }
+	// mlx_key_hook(info.win, key_hook, &info);
+	// mlx_mouse_hook(info.win, mouse_hook, &info);
+	mlx_hook(info.win, 2, 1L<<0, close_window, &info);	//close window when ESC pressed
+	mlx_hook(info.win, 33, 1L<<17, close_window_redx, &info);	//close window when red cross pushed // for 2nd arg, old ver is 17 , but latest ver is 33
+	// mlx_hook(info.win, 7, 1L<<4, print_hello, &info);	//enter window 
+	// mlx_hook(info.win, 8, 1L<<5, print_bye, &info);		//leave window
 
 
+	mlx_loop_hook(info.mlx, &main_loop, &info);
 
-// // // --------------------------- //
+	mlx_hook(info.win, X_EVENT_KEY_RELEASE, 1L << 1, &key_release, &info);
+	mlx_hook(info.win, X_EVENT_KEY_PRESS, 1L << 0, &key_press, &info);
+
+	mlx_loop(info.mlx);// when check leak, comment out this row, and do fsanitize
+	return 0;
+}
+
+
+
+// // --------------------------- //
 
 
 

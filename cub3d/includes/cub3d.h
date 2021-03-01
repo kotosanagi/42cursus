@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/01 07:46:40 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/02 05:44:39 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@
 
 
 
-# define R_WIDTH 256
-# define R_HEIGHT 192
+# define R_WIDTH 512
+# define R_HEIGHT 384
 # define TEX_WIDTH 64
 # define TEX_HEIGHT 64
 # define MAP_WIDTH 8		// replace more large number
@@ -217,8 +217,8 @@ typedef struct	s_info
 
 // think later //
 	t_sprite *sp;
-	double	*z_buffer;
-	// double	z_buffer[R_WIDTH];
+	// double	*z_buffer;
+	double	z_buffer[R_WIDTH];
 
 
 

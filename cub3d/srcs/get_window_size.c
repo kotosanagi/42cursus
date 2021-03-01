@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 05:55:38 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/01 06:58:01 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/01 22:31:01 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ printf("window_h:%d\n", window_h);
 
 printf("r_height:%d\n", info->r_height);
 printf("r_width :%d\n", info->r_width);
-	if (!(info->z_buffer = (double *)malloc(sizeof(double) * info->r_width)))
-		error_free_exit("can't allocate z_buffer\n", info);
+	// if (!(info->z_buffer = (double *)malloc(sizeof(double) * info->r_width)))
+	// 	error_free_exit("can't allocate z_buffer\n", info);
+printf("hellooooo!!!!!!!!!!!!!\n");
+
 }
