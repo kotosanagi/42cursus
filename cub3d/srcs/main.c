@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/02 06:25:05 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/02 08:13:29 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +244,7 @@ void calc(t_info *info)
 				map_y += step_y;
 				side = NS; // NS?
 			}
-			if (world_map[map_x][map_y] == 1)///////////
+			if (info->world_map[map_x][map_y] == 1)///////////
 				hit = 1;
 		}
 		if (side == EW) // EW?
@@ -261,7 +261,7 @@ void calc(t_info *info)
 		if (draw_end > info->r_height)
 			draw_end = info->r_height - 1;
 
-		// int tex_num = world_map[map_x][map_y];
+		// int tex_num = info->world_map[map_x][map_y];
 
 //////////////////////////////// choose texture
 		int tex_num;
@@ -408,33 +408,33 @@ int	key_update(t_info *info)
 	// move forwards if no wall in front of you
 	if (info->key_w)
 	{
-		if (!world_map[(int)(info->pos_x + info->dir_x * info->move_speed)][(int)(info->pos_y)])
+		if (!info->world_map[(int)(info->pos_x + info->dir_x * info->move_speed)][(int)(info->pos_y)])
 			info->pos_x += info->dir_x * info->move_speed;
-		if (!world_map[(int)(info->pos_x)][(int)(info->pos_y + info->dir_y * info->move_speed)])
+		if (!info->world_map[(int)(info->pos_x)][(int)(info->pos_y + info->dir_y * info->move_speed)])
 			info->pos_y += info->dir_y * info->move_speed;
 	}
 	//move backwards if no wall behind you
 	if (info->key_s)
 	{
-		if (!world_map[(int)(info->pos_x - info->dir_x * info->move_speed)][(int)(info->pos_y)])
+		if (!info->world_map[(int)(info->pos_x - info->dir_x * info->move_speed)][(int)(info->pos_y)])
 			info->pos_x -= info->dir_x * info->move_speed;
-		if (!world_map[(int)(info->pos_x)][(int)(info->pos_y - info->dir_y * info->move_speed)])
+		if (!info->world_map[(int)(info->pos_x)][(int)(info->pos_y - info->dir_y * info->move_speed)])
 			info->pos_y -= info->dir_y * info->move_speed;
 	}
 	////////////move right-step if no wall right of you
 	if (info->key_d)
 	{
-		if (!world_map[(int)(info->pos_x + info->plane_x * info->move_speed)][(int)(info->pos_y)])
+		if (!info->world_map[(int)(info->pos_x + info->plane_x * info->move_speed)][(int)(info->pos_y)])
 			info->pos_x += info->plane_x * info->move_speed;
-		if (!world_map[(int)(info->pos_x)][(int)(info->pos_y + info->plane_y * info->move_speed)])
+		if (!info->world_map[(int)(info->pos_x)][(int)(info->pos_y + info->plane_y * info->move_speed)])
 			info->pos_y += info->plane_y * info->move_speed;
 	}
 	////////////move left-step if no wall left of you
 	if (info->key_a)
 	{
-		if (!world_map[(int)(info->pos_x - info->plane_x * info->move_speed)][(int)(info->pos_y)])
+		if (!info->world_map[(int)(info->pos_x - info->plane_x * info->move_speed)][(int)(info->pos_y)])
 			info->pos_x -= info->plane_x * info->move_speed;
-		if (!world_map[(int)(info->pos_x)][(int)(info->pos_y - info->plane_y * info->move_speed)])
+		if (!info->world_map[(int)(info->pos_x)][(int)(info->pos_y - info->plane_y * info->move_speed)])
 			info->pos_y -= info->plane_y * info->move_speed;
 	}
 	//rotate to the right
@@ -537,6 +537,9 @@ int	key_release(int key, t_info *info)
 void	load_image(t_info *info, int *texture, char *path, t_img *img)
 {
 	img->img = mlx_xpm_file_to_image(info->mlx, path, &img->img_width, &img->img_height);
+	if (img->img == NULL)
+		error_free_exit("can't load sprite\n", info);
+printf("success load %s\n", path);
 	img->data = (int *)mlx_get_data_addr(img->img, &img->bpp, &img->size_l, &img->endian);
 	for (int y = 0; y < img->img_height; y++)
 	{
@@ -550,11 +553,16 @@ void	load_texture(t_info *info)
 {
 	t_img	img;
 //CAUSE OF DIRECTION CALC, NEED TO MODIFY WALL DEFINITION
-	load_image(info, info->texture[NORTH_TEXTURE], "images/koto_west.xpm", &img);
-	load_image(info, info->texture[SOUTH_TEXTURE], "images/koto_east.xpm", &img);
-	load_image(info, info->texture[WEST_TEXTURE], "images/koto_south.xpm", &img);
-	load_image(info, info->texture[EAST_TEXTURE], "images/koto_north.xpm", &img);
-	load_image(info, info->texture[SPRITE_TEXTURE], "images/koto_sprite.xpm", &img);
+	load_image(info, info->texture[NORTH_TEXTURE], info->west_path, &img);
+	load_image(info, info->texture[SOUTH_TEXTURE], info->east_path, &img);
+	load_image(info, info->texture[WEST_TEXTURE], info->south_path, &img);
+	load_image(info, info->texture[EAST_TEXTURE], info->north_path, &img);
+	load_image(info, info->texture[SPRITE_TEXTURE], info->sprite_path , &img);
+	// load_image(info, info->texture[NORTH_TEXTURE], "images/koto_west.xpm", &img);
+	// load_image(info, info->texture[SOUTH_TEXTURE], "images/koto_east.xpm", &img);
+	// load_image(info, info->texture[WEST_TEXTURE], "images/koto_south.xpm", &img);
+	// load_image(info, info->texture[EAST_TEXTURE], "images/koto_north.xpm", &img);
+	// load_image(info, info->texture[SPRITE_TEXTURE], "images/koto_sprite.xpm", &img);
 	// load_image(info, info->texture[SPRITE_TEXTURE], "images/moco01.xpm", &img);
 	// load_image(info, info->texture[0], "images/moco03.xpm", &img);
 	// load_image(info, info->texture[1], "images/moco01.xpm", &img);
@@ -577,6 +585,7 @@ void	load_texture(t_info *info)
 // --------------------------- //
 // --------------------------- //
 // --------------------------- //
+
 // --------------------------- //
 // --------------------------- //
 // --------------------------- //

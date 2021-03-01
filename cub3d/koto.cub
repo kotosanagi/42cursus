@@ -2,16 +2,16 @@ R 512 256
 WE images/koto_west.xpm
 NO images/koto_north.xpm
 EA images/koto_east.xpm
-S sprite.com
+S images/koto_sprite.xpm
 F 4,65,1
 
 C 5,1,2
 SO images/koto_south.xpm
 
 1111111
-10S0201
+1000201
 1020 01
-1000001
-120011
+1222221
+120 N11
 1022221
 1111111

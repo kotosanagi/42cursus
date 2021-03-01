@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 09:38:45 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 19:22:17 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/02 07:45:04 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,6 @@ void	init_info(t_info *info)
 			info->world_map[i][j++] = 0;
 		i++;
 	}
+
+	
 }
