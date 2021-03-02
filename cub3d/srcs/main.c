@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/02 08:40:09 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/03 06:10:55 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,18 +322,18 @@ void calc(t_info *info)
 
 	//SPRITE CASTING
 	//sort sprites from far to close
-	for(int i = 0; i < num_sprites; i++)
+	for(int i = 0; i < info->num_sprite; i++)
 	{
-		sprite_order[i] = i;
-		sprite_distance[i] = ((info->pos_x - info->sp[i].x) * (info->pos_x - info->sp[i].x) + (info->pos_y - info->sp[i].y) * (info->pos_y - info->sp[i].y)); //sqrt not taken, unneeded
+		info->sprite_order[i] = i;
+		info->sprite_distance[i] = ((info->pos_x - info->sp[i].x) * (info->pos_x - info->sp[i].x) + (info->pos_y - info->sp[i].y) * (info->pos_y - info->sp[i].y)); //sqrt not taken, unneeded
 	}
-	sort_sprites(sprite_order, sprite_distance, num_sprites);
+	sort_sprites(info->sprite_order, info->sprite_distance, info->num_sprite);
 	//after sorting the sprites, do the projection and draw them
-	for(int i = 0; i < num_sprites; i++)
+	for(int i = 0; i < info->num_sprite; i++)
 	{
 		//translate sprite position to relative to camera
-		double sprite_x = info->sp[sprite_order[i]].x - info->pos_x;
-		double sprite_y = info->sp[sprite_order[i]].y - info->pos_y;
+		double sprite_x = info->sp[info->sprite_order[i]].x - info->pos_x;
+		double sprite_y = info->sp[info->sprite_order[i]].y - info->pos_y;
 
 		//transform sprite with the inverse camera matrix
 		// [ plane_x   dir_x ] -1                                       [ dir_y      -dir_x ]
@@ -343,7 +343,7 @@ void calc(t_info *info)
 		double inv_det = 1.0 / (info->plane_x * info->dir_y - info->dir_x * info->plane_y); //required for correct matrix multiplication
 
 		double transform_x = inv_det * (info->dir_y * sprite_x - info->dir_x * sprite_y);
-		double transform_y = inv_det * (-info->plane_y * sprite_x + info->plane_x * sprite_y); //this is actually the depth inside the screen, that what Z is in 3D, the distance of sprite to player, matching sqrt(sprite_distance[i])
+		double transform_y = inv_det * (-info->plane_y * sprite_x + info->plane_x * sprite_y); //this is actually the depth inside the screen, that what Z is in 3D, the distance of sprite to player, matching sqrt(info->sprite_distance[i])
 
 		int sprite_screen_x = (int)((info->r_width / 2) * (1 + transform_x / transform_y));
 
@@ -663,6 +663,7 @@ void	set_buf(t_info *info)
 		for (int j = 0; j < info->r_width; j++)
 			info->buf[i][j] = 0;
 	}
+	info->buf_malloc_flg = 1;
 }
 
 // int main(void)
@@ -676,6 +677,7 @@ int	main(int argc, char *argv[])
 	init_info(&info);
 	is_correct_arg(argc, argv, &info);
 	get_mapfile_info(argv[1], &info);
+
 	analyze_mapdata(&info);
 	get_sprite_info(&info);
 	get_window_size(&info);
@@ -686,7 +688,6 @@ int	main(int argc, char *argv[])
 
 	int tex_num = 5;
 
-printf("hello!!!!!!!!!!\n");
 	if (!(info.texture = (int **)malloc(sizeof(int *) * tex_num)))
 		return (-1);
 	for (int i = 0; i < tex_num; i++)

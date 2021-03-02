@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/28 19:36:35 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 20:01:04 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/03 05:57:58 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,8 @@ void			get_sprite_info(t_info *info)
 		}
 		y++;
 	}
+	if (!(info->sprite_order = (int *)malloc(sizeof(int) * info->num_sprite)))
+		error_free_exit("can't allocate sprite_order\n", info);
+	if (!(info->sprite_distance = (double *)malloc(sizeof(double) * info->num_sprite)))
+		error_free_exit("can't allocate sprite_distance\n", info);
 }

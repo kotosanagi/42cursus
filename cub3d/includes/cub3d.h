@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/02 06:06:59 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/03 06:12:02 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,8 +144,7 @@ typedef struct	s_sprite
 // 	{6.5, 6.5},//, SPRITE_TEXTURE},
 // };
 
-int		sprite_order[num_sprites];
-double	sprite_distance[num_sprites];
+
 
 typedef struct	s_img
 {
@@ -225,9 +224,12 @@ typedef struct	s_info
 	t_img img;
 	int **buf;
 	// int buf[R_HEIGHT][R_WIDTH];
-
+	int buf_malloc_flg;
 
 	int **texture;
+
+	int		*sprite_order;//[num_sprites];
+	double	*sprite_distance;//[num_sprites];
 
 }				t_info;
 

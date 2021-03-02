@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:10:33 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/02 07:45:15 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/03 06:12:57 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,27 +29,40 @@ void	error_free_exit(char *msg, t_info *info)
 {
 	int	i;
 
-	i = 0;
 	safe_free(info->east_path);
 	safe_free(info->west_path);
 	safe_free(info->south_path);
 	safe_free(info->north_path);
 	safe_free(info->sprite_path);
+	
+	i = 0;
 	while (info->map[i])
 		safe_free(info->map[i++]);
+printf("hello!!!!!!!!!!\n");
 	if (info->num_sprite > 0)
 		safe_free(info->sp);
-	i = info->r_height;
-	while (i >= 0)
-		safe_free(info->buf[i--]);
-	safe_free(info->buf);
-	i = 5;
+printf("hello2222\n");
+	if (info->buf_malloc_flg == 1)
+	{
+		i = info->r_height - 1;
+		while (i >= 0)
+			safe_free(info->buf[i--]);
+		safe_free(info->buf);
+	}
+printf("hello3333\n");
+	i = 4;
 	// if (info->texture[0]->w > 0)
 	// {
 	// 	while (i >= 0)
 	// 		safe_free(info->texture[i--]);
 	// }
 	// safe_free(info->texture);
+	
+	safe_free(info->sprite_order);
+printf("hello4444\n");
+	safe_free(info->sprite_distance);
+printf("hello5555\n");
+	
 	error_exit(msg);
 }
 

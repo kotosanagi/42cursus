@@ -3,9 +3,8 @@ WE images/koto_west.xpm
 NO images/koto_north.xpm
 EA images/koto_east.xpm
 S images/koto_sprite.xpm
-F 4,65,1
-
-C 5,1,2
+C 0,0,255
+F 0,255,0
 SO images/koto_south.xpm
 
 1111111
