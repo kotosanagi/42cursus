@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 17:15:14 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/03 06:04:58 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/03 07:38:56 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,8 @@ printf("success open file : fd:%d\n", fd);///
 	{
 		gnl_ret = get_next_line(fd, &line);
 		if (gnl_ret == -1)
-			error_exit("expect the path is not file\n");
+			error_free_exit("expect the path is not file\n", info);
+			// error_exit("expect the path is not file\n");
 		elem = ft_split(line, ' ');
 		safe_free(line);
 		is_mapfile_elem(info, elem);

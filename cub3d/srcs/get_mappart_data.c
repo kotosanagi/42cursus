@@ -6,11 +6,26 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 14:30:34 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/27 22:13:16 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/03 21:20:42 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
+
+void	reverse_map(char **map, int map_h)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	while (i < map_h / 2)
+	{
+		tmp = map[i];
+		map[i] = map[map_h - i - 1];
+		map[map_h - i - 1] = tmp;
+		i++;
+	}
+}
 
 void	get_mappart_data(int fd, char **line, t_info *info)
 {
@@ -47,4 +62,5 @@ void	get_mappart_data(int fd, char **line, t_info *info)
 	if (i >= MAP_HEIGHT)
 		error_fd_close("height of map is too much\n", info, fd);
 	info->map_h = i;
+	reverse_map(info->map, info->map_h);
 }

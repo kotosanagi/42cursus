@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/03 06:10:55 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/03 21:23:44 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +244,7 @@ void calc(t_info *info)
 				map_y += step_y;
 				side = NS; // NS?
 			}
-			if (info->world_map[map_x][map_y] == 1)///////////
+			if (info->world_map[map_x][map_y] == 1)///////////0303
 				hit = 1;
 		}
 		if (side == EW) // EW?
@@ -553,10 +553,14 @@ void	load_texture(t_info *info)
 {
 	t_img	img;
 //CAUSE OF DIRECTION CALC, NEED TO MODIFY WALL DEFINITION
-	load_image(info, info->texture[NORTH_TEXTURE], info->west_path, &img);
-	load_image(info, info->texture[SOUTH_TEXTURE], info->east_path, &img);
-	load_image(info, info->texture[WEST_TEXTURE], info->south_path, &img);
-	load_image(info, info->texture[EAST_TEXTURE], info->north_path, &img);
+	load_image(info, info->texture[NORTH_TEXTURE], info->south_path, &img);
+	load_image(info, info->texture[SOUTH_TEXTURE], info->north_path, &img);
+	load_image(info, info->texture[WEST_TEXTURE], info->east_path, &img);
+	load_image(info, info->texture[EAST_TEXTURE], info->west_path, &img);
+	// load_image(info, info->texture[NORTH_TEXTURE], info->west_path, &img);
+	// load_image(info, info->texture[SOUTH_TEXTURE], info->east_path, &img);
+	// load_image(info, info->texture[WEST_TEXTURE], info->south_path, &img);
+	// load_image(info, info->texture[EAST_TEXTURE], info->north_path, &img);
 	load_image(info, info->texture[SPRITE_TEXTURE], info->sprite_path , &img);
 	// load_image(info, info->texture[NORTH_TEXTURE], "images/koto_west.xpm", &img);
 	// load_image(info, info->texture[SOUTH_TEXTURE], "images/koto_east.xpm", &img);

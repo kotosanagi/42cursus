@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 19:52:51 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 19:27:45 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/03 21:27:30 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 void	set_player2(char c, t_info *info)
 {
-	if (c == 'S')
+	if (c == 'E')
 	{
 		info->dir_x = 1.0;
 		info->dir_y = 0.0;
 		info->plane_x = 0.0;
 		info->plane_y = -0.66;
 	}
-	else if (c == 'N')
+	else if (c == 'W')
 	{
 		info->dir_x = -1.0;
 		info->dir_y = 0.0;
@@ -38,14 +38,14 @@ void	set_player(char c, t_info *info, int y, int x)
 		error_free_exit("one player only allowed\n", info);//////
 	info->pos_x = (double)x + 0.5;
 	info->pos_y = (double)y + 0.5;
-	if (c == 'E')
+	if (c == 'N')
 	{
 		info->dir_x = 0.0;
 		info->dir_y = 1.0;
 		info->plane_x = 0.66;
 		info->plane_y = 0.0;
 	}
-	else if (c == 'W')
+	else if (c == 'S')
 	{
 		info->dir_x = 0.0;
 		info->dir_y = -1.0;
@@ -62,7 +62,7 @@ void	analyze_mapdata(t_info *info)
 	// 	*to get pos_x/y
 	// 	*to get dir_x/y
 	// 	*to get plane_x/y
-	//		->only one E/W/S/N is arrowed
+	//		->only one E/W/S/N is allowed
 
 	// 	*is valid map (flood fill)
 	// 	*count sprites
@@ -77,7 +77,7 @@ void	analyze_mapdata(t_info *info)
 		while (info->map[y][x] != '\0')
 		{
 			if (info->map[y][x] == '1')
-				info->world_map[y][x] = 1;
+				info->world_map[x][y] = 1;////0303
 			else if (info->map[y][x] == '2')
 				info->num_sprite++;
 			else if (ft_strchr("WESN", info->map[y][x]))

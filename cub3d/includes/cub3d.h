@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/03 06:12:02 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/03 08:05:41 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,8 @@
 # define R_HEIGHT 384
 # define TEX_WIDTH 64
 # define TEX_HEIGHT 64
-# define MAP_WIDTH 8		// replace more large number
-# define MAP_HEIGHT 8	// replace more large number
+# define MAP_WIDTH 80		// replace more large number
+# define MAP_HEIGHT 80	// replace more large number
 
 # define NS 1
 # define EW 0
@@ -213,6 +213,7 @@ typedef struct	s_info
 	void *win;
 
 // (end) NOT need to get info from mapfile //
+
 
 // think later //
 	t_sprite *sp;
