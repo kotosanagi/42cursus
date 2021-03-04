@@ -87,6 +87,7 @@ if (info->num_sprite > 0)
 	}
 }
 printf("-------\n");
+
 }
 
 

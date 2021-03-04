@@ -1,10 +1,10 @@
-R 912 556
+R 410 256
 WE images/koto_west.xpm
 NO images/koto_north.xpm
 EA images/koto_east.xpm
 S images/koto_sprite.xpm
-C 0,0,255
-F 0,255,0
+C 255,0,0
+F 1,255,0
 SO images/koto_south.xpm
 
 
@@ -16,12 +16,10 @@ SO images/koto_south.xpm
 
 
 
-11111
-12  1
-12 01
-12  1
-12  1
-12  1
-12 11
-1E221
-11111
+111111111111
+1          1
+100000000001
+100000S00001
+100000000111
+100000000001
+111111111111

@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/03 08:05:41 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/05 07:36:32 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,8 @@ typedef struct	s_sprite
 typedef struct	s_img
 {
 	void	*img;
-	int		*data;
+	// char		*data;////0304
+	int		*data;////before 0304
 
 	int		size_l;
 	int		bpp;
@@ -159,6 +160,14 @@ typedef struct	s_img
 }				t_img;
 
 //////////// end for sprite ////////////
+
+typedef struct		s_tex
+{
+	unsigned int	*addr;
+	int				w;
+	int				h;
+}					t_tex;
+
 
 typedef struct	s_info
 {
@@ -227,7 +236,8 @@ typedef struct	s_info
 	// int buf[R_HEIGHT][R_WIDTH];
 	int buf_malloc_flg;
 
-	int **texture;
+	// int **texture;
+	t_tex tex[5];
 
 	int		*sprite_order;//[num_sprites];
 	double	*sprite_distance;//[num_sprites];

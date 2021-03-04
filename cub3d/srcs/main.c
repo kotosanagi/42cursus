@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/03 21:23:44 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/05 07:34:04 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,8 @@ void	draw(t_info *info)
 	{
 		for (int x = 0; x < info->r_width; x++)
 		{
-			info->img.data[y * info->r_width + x] = info->buf[y][x];
+			info->img.data[y * info->r_width + x] = info->buf[y][x];//0305
+			// info->img.data[y * (info->img.size_l) + x * (info->img.bpp / 8)] = info->buf[y][x];//0305
 		}
 	}
 	mlx_put_image_to_window(info->mlx, info->win, info->img.img, 0, 0);
@@ -306,7 +307,10 @@ void calc(t_info *info)
 			// Cast the texture coordinate to integer, and mask with (TEX_HEIGHT - 1) in case of overflow
 			int tex_y = (int)tex_pos & (TEX_HEIGHT - 1);
 			tex_pos += step;
-			int color = info->texture[tex_num][TEX_HEIGHT * tex_y + tex_x];
+
+
+			// int color = info->texture[tex_num][TEX_HEIGHT * tex_y + tex_x];
+			int color = info->tex[tex_num].addr[TEX_HEIGHT * tex_y + tex_x];
 			info->buf[y][x] = color;
 		}
 
@@ -316,7 +320,7 @@ void calc(t_info *info)
 		/////////// end for fprite //////////////////////////////////////
 
 // printf("pos_x:%2.2f, pos_y:%2.2f, dir_x:%2.2f, dir_y:%2.2f, plane_x:%2.2f, plane_y:%2.2f\n", info->pos_x, info->pos_y, info->dir_x, info->dir_y, info->plane_x, info->plane_y);
-
+printf("buf[0][0]:%x\n", info->buf[0][0]);
 		x++;
 	}
 
@@ -384,7 +388,8 @@ void calc(t_info *info)
 			{
 				int d = y * 256 - info->r_height * 128 + sprite_height * 128; //256 and 128 factors to avoid floats
 				int tex_y = ((d * TEX_HEIGHT) / sprite_height) / 256;
-				int color = info->texture[SPRITE_TEXTURE][TEX_WIDTH * tex_y + tex_x]; //get current color from the texture
+				// int color = info->texture[SPRITE_TEXTURE][TEX_WIDTH * tex_y + tex_x]; //get current color from the texture
+				int color = info->tex[SPRITE_TEXTURE].addr[TEX_WIDTH * tex_y + tex_x]; //get current color from the texture
 				if(color & 0x00FFFFFF) // color & 0x00FFFFFF == 0 is black  =>  black to invisible
 					info->buf[y][stripe] = color;
 			}
@@ -534,34 +539,97 @@ int	key_release(int key, t_info *info)
 	return (0);
 }
 
-void	load_image(t_info *info, int *texture, char *path, t_img *img)
+void	load_image2(unsigned int *addr, t_img *img)
 {
-	img->img = mlx_xpm_file_to_image(info->mlx, path, &img->img_width, &img->img_height);
-	if (img->img == NULL)
-		error_free_exit("can't load sprite\n", info);
-printf("success load %s\n", path);
-	img->data = (int *)mlx_get_data_addr(img->img, &img->bpp, &img->size_l, &img->endian);
-	for (int y = 0; y < img->img_height; y++)
+	int	x;
+	int	y;
+
+	y = 0;
+// printf("in load_image2\n");
+// printf("img_width :%d\n", img->img_width);
+// printf("img_height:%d\n", img->img_height);
+	while (y < img->img_height)
 	{
-		for (int x = 0; x < img->img_width; x++)
-			texture[img->img_width * y + x] = img->data[img->img_width * y + x];
+		x = 0;
+		while (x < img->img_width)
+		{
+	// printf("x:%d, y:%d\n",x, y);
+// printf("img.img:%p\n",img->img);
+// printf("img.data:%p\n",img->data);
+// printf("img.size_l:%d\n",img->size_l);
+// printf("img.bpp:%d\n",img->bpp);
+// printf("img.endian:%d\n",img->endian);
+// printf("img.img_width:%d\n",img->img_width);
+// printf("img.img_height:%d\n",img->img_height);
+
+
+// printf("-------\n");
+printf("y:%d, x:%d\n", y ,x);
+			// addr[y * img->img_width + x] = 
+				// *(unsigned int *)(img->data + (y * img->size_l + x * (img->bpp / 8)));//0305
+			addr[y * img->img_width + x] = \
+				*(unsigned int *)(img->data + (y * img->img_width + x));//0305
+			x++;
+		}
+		
+		y++;
 	}
-	mlx_destroy_image(info->mlx, img->img);
+
+}
+
+void	load_image(t_info *info, char *path, int tex_num)
+{
+	t_img img;
+
+	img.img = mlx_xpm_file_to_image(info->mlx, path, &img.img_width, &img.img_height);
+	if (img.img == NULL)
+		error_free_exit("can't load texture\n", info);
+printf("success load %s\n", path);
+	img.data = (int *)mlx_get_data_addr(img.img, &img.bpp, &img.size_l, &img.endian);
+	// img.data = mlx_get_data_addr(img.img, &img.bpp, &img.size_l, &img.endian);////0305
+printf("img_width :%d\n", img.img_width);
+printf("img_height:%d\n", img.img_height);
+	if (!(info->tex[tex_num].addr = (unsigned int *)malloc(sizeof(unsigned int) * img.img_width * img.img_height)))
+		error_free_exit("can't allocate texture data\n", info);
+
+	load_image2(info->tex[tex_num].addr, &img);
+	info->tex[tex_num].h = img.img_height;
+	info->tex[tex_num].w = img.img_width;
+
+	mlx_destroy_image(info->mlx, img.img);
+
+
+
+
+	// for (int y = 0; y < img.img_height; y++)
+	// {
+	// 	for (int x = 0; x < img.img_width; x++)
+	// 		texture[img.img_width * y + x] = img.data[img.img_width * y + x];
+	// }
+	// mlx_destroy_image(info->mlx, img.img);
 }
 
 void	load_texture(t_info *info)
 {
-	t_img	img;
-//CAUSE OF DIRECTION CALC, NEED TO MODIFY WALL DEFINITION
-	load_image(info, info->texture[NORTH_TEXTURE], info->south_path, &img);
-	load_image(info, info->texture[SOUTH_TEXTURE], info->north_path, &img);
-	load_image(info, info->texture[WEST_TEXTURE], info->east_path, &img);
-	load_image(info, info->texture[EAST_TEXTURE], info->west_path, &img);
+
+	load_image(info, info->south_path, NORTH_TEXTURE);
+	load_image(info, info->north_path, SOUTH_TEXTURE);
+	load_image(info, info->east_path, WEST_TEXTURE);
+	load_image(info, info->west_path, EAST_TEXTURE);
+	load_image(info, info->sprite_path , SPRITE_TEXTURE);
+	
+	
+// 	t_img	img;
+// //CAUSE OF DIRECTION CALC, NEED TO MODIFY WALL DEFINITION
+// 	load_image(info, info->texture[NORTH_TEXTURE], info->south_path, &img);
+// 	load_image(info, info->texture[SOUTH_TEXTURE], info->north_path, &img);
+// 	load_image(info, info->texture[WEST_TEXTURE], info->east_path, &img);
+// 	load_image(info, info->texture[EAST_TEXTURE], info->west_path, &img);
+// 	load_image(info, info->texture[SPRITE_TEXTURE], info->sprite_path , &img);
 	// load_image(info, info->texture[NORTH_TEXTURE], info->west_path, &img);
 	// load_image(info, info->texture[SOUTH_TEXTURE], info->east_path, &img);
 	// load_image(info, info->texture[WEST_TEXTURE], info->south_path, &img);
 	// load_image(info, info->texture[EAST_TEXTURE], info->north_path, &img);
-	load_image(info, info->texture[SPRITE_TEXTURE], info->sprite_path , &img);
 	// load_image(info, info->texture[NORTH_TEXTURE], "images/koto_west.xpm", &img);
 	// load_image(info, info->texture[SOUTH_TEXTURE], "images/koto_east.xpm", &img);
 	// load_image(info, info->texture[WEST_TEXTURE], "images/koto_south.xpm", &img);
@@ -686,30 +754,32 @@ int	main(int argc, char *argv[])
 	get_sprite_info(&info);
 	get_window_size(&info);
 	printf("STARTING GAME\n");
-	DEBUG_print_info(&info);
+	// DEBUG_print_info(&info);
 
 	set_buf(&info);
 
-	int tex_num = 5;
+	// int tex_num = 5;
 
-	if (!(info.texture = (int **)malloc(sizeof(int *) * tex_num)))
-		return (-1);
-	for (int i = 0; i < tex_num; i++)
-	{
-		if (!(info.texture[i] = (int *)malloc(sizeof(int) * (TEX_HEIGHT * TEX_WIDTH))))
-			return (-1);
-	}
-	for (int i = 0; i < tex_num; i++)
-	{
-		for (int j = 0; j < TEX_HEIGHT * TEX_WIDTH; j++)
-			info.texture[i][j] = 0;
-	}
+	// if (!(info.texture = (int **)malloc(sizeof(int *) * tex_num)))
+	// 	return (-1);
+	// for (int i = 0; i < tex_num; i++)
+	// {
+	// 	if (!(info.texture[i] = (int *)malloc(sizeof(int) * (TEX_HEIGHT * TEX_WIDTH))))
+	// 		return (-1);
+	// }
+	// for (int i = 0; i < tex_num; i++)
+	// {
+	// 	for (int j = 0; j < TEX_HEIGHT * TEX_WIDTH; j++)
+	// 		info.texture[i][j] = 0;
+	// }
 	load_texture(&info);
+	// DEBUG_print_info(&info);
 
 	info.win = mlx_new_window(info.mlx, info.r_width, info.r_height, "mocomoco world!!!!");
 
 	info.img.img = mlx_new_image(info.mlx, info.r_width, info.r_height);
-	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);
+	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);////
+	// info.img.data = mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);////0305
 
 
 	// mlx_key_hook(info.win, key_hook, &info);

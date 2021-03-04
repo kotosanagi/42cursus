@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 09:38:45 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/03 06:12:07 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/04 06:20:54 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,9 @@ void	init_info(t_info *info)
 	info->sprite_order = NULL;
 	info->sprite_distance = NULL;
 	info->buf_malloc_flg = 0;
+
+	info->tex[0].w = 0;
+	i = 0;
+	while (i < 5)
+		info->tex[i++].addr = NULL;
 }
