@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/05 07:36:32 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 07:12:38 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,8 @@
 
 # define R_WIDTH 512
 # define R_HEIGHT 384
-# define TEX_WIDTH 64
-# define TEX_HEIGHT 64
+# define TEX_WIDTH 64//0306tex
+# define TEX_HEIGHT 64//0306tex
 # define MAP_WIDTH 80		// replace more large number
 # define MAP_HEIGHT 80	// replace more large number
 
@@ -321,6 +321,8 @@ void	get_sprite_info(t_info *info);
 // get_window_size.c
 void	get_window_size(t_info *info);
 
+// load_texture.c
+void	load_texture(t_info *info);
 //--------------
 
 

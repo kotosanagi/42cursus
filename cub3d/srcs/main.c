@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/05 07:34:04 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 07:18:02 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,24 +293,24 @@ void calc(t_info *info)
 		wall_x -= floor(wall_x);
 
 		// x coordinate on the texture
-		int tex_x = (int)(wall_x * (double)TEX_WIDTH);
+		int tex_x = (int)(wall_x * (double)TEX_WIDTH);//0306tex
 		if (side == EW && ray_dir_x > 0)
-			tex_x = TEX_WIDTH - tex_x - 1;
+			tex_x = TEX_WIDTH - tex_x - 1;//0306tex
 		if (side == NS && ray_dir_y < 0)
-			tex_x = TEX_WIDTH - tex_x - 1;
+			tex_x = TEX_WIDTH - tex_x - 1;//0306tex
 
-		double step = 1.0 * TEX_HEIGHT / line_height;
+		double step = 1.0 * TEX_HEIGHT / line_height;//0306tex
 		// Starting texture coordinate
 		double tex_pos = (draw_start - info->r_height / 2 + line_height / 2) * step;
 		for (int y = draw_start; y < draw_end; y++)
 		{
 			// Cast the texture coordinate to integer, and mask with (TEX_HEIGHT - 1) in case of overflow
-			int tex_y = (int)tex_pos & (TEX_HEIGHT - 1);
+			int tex_y = (int)tex_pos & (TEX_HEIGHT - 1);//0306tex
 			tex_pos += step;
 
 
 			// int color = info->texture[tex_num][TEX_HEIGHT * tex_y + tex_x];
-			int color = info->tex[tex_num].addr[TEX_HEIGHT * tex_y + tex_x];
+			int color = info->tex[tex_num].addr[TEX_HEIGHT * tex_y + tex_x];//0306tex
 			info->buf[y][x] = color;
 		}
 
@@ -320,7 +320,7 @@ void calc(t_info *info)
 		/////////// end for fprite //////////////////////////////////////
 
 // printf("pos_x:%2.2f, pos_y:%2.2f, dir_x:%2.2f, dir_y:%2.2f, plane_x:%2.2f, plane_y:%2.2f\n", info->pos_x, info->pos_y, info->dir_x, info->dir_y, info->plane_x, info->plane_y);
-printf("buf[0][0]:%x\n", info->buf[0][0]);
+// printf("buf[0][0]:%x\n", info->buf[0][0]);
 		x++;
 	}
 
@@ -377,7 +377,7 @@ printf("buf[0][0]:%x\n", info->buf[0][0]);
 		//loop through every vertical stripe of the sprite on screen
 		for(int stripe = draw_start_x; stripe < draw_end_x; stripe++)
 		{
-			int tex_x = (int)((256 * (stripe - (-sprite_width / 2 + sprite_screen_x)) * TEX_WIDTH / sprite_width) / 256);
+			int tex_x = (int)((256 * (stripe - (-sprite_width / 2 + sprite_screen_x)) * TEX_WIDTH / sprite_width) / 256);//0306tex
 			//the conditions in the if are:
 			//1) it's in front of camera plane so you don't see things behind you
 			//2) it's on the screen (left)
@@ -387,9 +387,9 @@ printf("buf[0][0]:%x\n", info->buf[0][0]);
 			for(int y = draw_start_y; y < draw_end_y; y++) //for every pixel of the current stripe
 			{
 				int d = y * 256 - info->r_height * 128 + sprite_height * 128; //256 and 128 factors to avoid floats
-				int tex_y = ((d * TEX_HEIGHT) / sprite_height) / 256;
+				int tex_y = ((d * TEX_HEIGHT) / sprite_height) / 256;//0306tex
 				// int color = info->texture[SPRITE_TEXTURE][TEX_WIDTH * tex_y + tex_x]; //get current color from the texture
-				int color = info->tex[SPRITE_TEXTURE].addr[TEX_WIDTH * tex_y + tex_x]; //get current color from the texture
+				int color = info->tex[SPRITE_TEXTURE].addr[TEX_WIDTH * tex_y + tex_x]; //get current color from the texture//0306tex
 				if(color & 0x00FFFFFF) // color & 0x00FFFFFF == 0 is black  =>  black to invisible
 					info->buf[y][stripe] = color;
 			}
@@ -403,13 +403,25 @@ printf("buf[0][0]:%x\n", info->buf[0][0]);
 int	key_update(t_info *info)
 {
 	if (info->key_ar_u && info->key_ar_d)
+	{
 		info->move_speed = 0.008;
+		info->rot_speed = 0.006;
+	}
 	else if (info->key_ar_u && !(info->key_ar_d))
-		info->move_speed = 0.023;
+	{
+		info->move_speed = 0.043;
+		info->rot_speed = 0.026;
+	}
 	else if (!(info->key_ar_u) && info->key_ar_d)
-		info->move_speed = 0.002;
+	{
+		info->move_speed = 0.003;
+		info->rot_speed = 0.002;
+	}
 	else if (!(info->key_ar_u) && !(info->key_ar_d))
+	{
 		info->move_speed = 0.008;
+		info->rot_speed = 0.006;
+	}
 	// move forwards if no wall in front of you
 	if (info->key_w)
 	{
@@ -489,6 +501,29 @@ void	exit_successful(t_info *info)
 	safe_free(info->sprite_path);
 	while (info->map[i])
 		safe_free(info->map[i++]);
+
+	if (info->num_sprite > 0)
+		safe_free(info->sp);
+	if (info->buf_malloc_flg == 1)
+	{
+		i = info->r_height - 1;
+		while (i >= 0)
+			safe_free(info->buf[i--]);
+		safe_free(info->buf);
+	}
+	i = 0;//////////////////////////
+	if (info->tex[0].w > 0)
+	{
+		while (i < 5)
+			safe_free(info->tex[i++].addr);//////////////////////////
+	}
+
+	// safe_free(info->tex);
+	
+	safe_free(info->sprite_order);
+	safe_free(info->sprite_distance);
+
+
 	printf("thank you for playing!\n");
 	exit(EXIT_SUCCESS);
 }
@@ -539,112 +574,112 @@ int	key_release(int key, t_info *info)
 	return (0);
 }
 
-void	load_image2(unsigned int *addr, t_img *img)
-{
-	int	x;
-	int	y;
+// void	load_image2(unsigned int *addr, t_img *img)
+// {
+// 	int	x;
+// 	int	y;
 
-	y = 0;
-// printf("in load_image2\n");
-// printf("img_width :%d\n", img->img_width);
-// printf("img_height:%d\n", img->img_height);
-	while (y < img->img_height)
-	{
-		x = 0;
-		while (x < img->img_width)
-		{
-	// printf("x:%d, y:%d\n",x, y);
-// printf("img.img:%p\n",img->img);
-// printf("img.data:%p\n",img->data);
-// printf("img.size_l:%d\n",img->size_l);
-// printf("img.bpp:%d\n",img->bpp);
-// printf("img.endian:%d\n",img->endian);
-// printf("img.img_width:%d\n",img->img_width);
-// printf("img.img_height:%d\n",img->img_height);
+// 	y = 0;
+// // printf("in load_image2\n");
+// // printf("img_width :%d\n", img->img_width);
+// // printf("img_height:%d\n", img->img_height);
+// 	while (y < img->img_height)
+// 	{
+// 		x = 0;
+// 		while (x < img->img_width)
+// 		{
+// 	// printf("x:%d, y:%d\n",x, y);
+// // printf("img.img:%p\n",img->img);
+// // printf("img.data:%p\n",img->data);
+// // printf("img.size_l:%d\n",img->size_l);
+// // printf("img.bpp:%d\n",img->bpp);
+// // printf("img.endian:%d\n",img->endian);
+// // printf("img.img_width:%d\n",img->img_width);
+// // printf("img.img_height:%d\n",img->img_height);
 
 
-// printf("-------\n");
-printf("y:%d, x:%d\n", y ,x);
-			// addr[y * img->img_width + x] = 
-				// *(unsigned int *)(img->data + (y * img->size_l + x * (img->bpp / 8)));//0305
-			addr[y * img->img_width + x] = \
-				*(unsigned int *)(img->data + (y * img->img_width + x));//0305
-			x++;
-		}
+// // printf("-------\n");
+// // printf("y:%d, x:%d\n", y ,x);
+// 			// addr[y * img->img_width + x] = 
+// 				// *(unsigned int *)(img->data + (y * img->size_l + x * (img->bpp / 8)));//0305
+// 			addr[y * img->img_width + x] = \
+// 				*(unsigned int *)(img->data + (y * img->img_width + x));//0305
+// 			x++;
+// 		}
 		
-		y++;
-	}
+// 		y++;
+// 	}
 
-}
+// }
 
-void	load_image(t_info *info, char *path, int tex_num)
-{
-	t_img img;
+// void	load_image(t_info *info, char *path, int tex_num)
+// {
+// 	t_img img;
 
-	img.img = mlx_xpm_file_to_image(info->mlx, path, &img.img_width, &img.img_height);
-	if (img.img == NULL)
-		error_free_exit("can't load texture\n", info);
-printf("success load %s\n", path);
-	img.data = (int *)mlx_get_data_addr(img.img, &img.bpp, &img.size_l, &img.endian);
-	// img.data = mlx_get_data_addr(img.img, &img.bpp, &img.size_l, &img.endian);////0305
-printf("img_width :%d\n", img.img_width);
-printf("img_height:%d\n", img.img_height);
-	if (!(info->tex[tex_num].addr = (unsigned int *)malloc(sizeof(unsigned int) * img.img_width * img.img_height)))
-		error_free_exit("can't allocate texture data\n", info);
+// 	img.img = mlx_xpm_file_to_image(info->mlx, path, &img.img_width, &img.img_height);
+// 	if (img.img == NULL)
+// 		error_free_exit("can't load texture\n", info);
+// // printf("success load %s\n", path);
+// 	img.data = (int *)mlx_get_data_addr(img.img, &img.bpp, &img.size_l, &img.endian);
+// 	// img.data = mlx_get_data_addr(img.img, &img.bpp, &img.size_l, &img.endian);////0305
+// // printf("img_width :%d\n", img.img_width);
+// // printf("img_height:%d\n", img.img_height);
+// 	if (!(info->tex[tex_num].addr = (unsigned int *)malloc(sizeof(unsigned int) * img.img_width * img.img_height)))
+// 		error_free_exit("can't allocate texture data\n", info);
 
-	load_image2(info->tex[tex_num].addr, &img);
-	info->tex[tex_num].h = img.img_height;
-	info->tex[tex_num].w = img.img_width;
+// 	load_image2(info->tex[tex_num].addr, &img);
+// 	info->tex[tex_num].h = img.img_height;
+// 	info->tex[tex_num].w = img.img_width;
 
-	mlx_destroy_image(info->mlx, img.img);
-
-
+// 	mlx_destroy_image(info->mlx, img.img);
 
 
-	// for (int y = 0; y < img.img_height; y++)
-	// {
-	// 	for (int x = 0; x < img.img_width; x++)
-	// 		texture[img.img_width * y + x] = img.data[img.img_width * y + x];
-	// }
-	// mlx_destroy_image(info->mlx, img.img);
-}
 
-void	load_texture(t_info *info)
-{
 
-	load_image(info, info->south_path, NORTH_TEXTURE);
-	load_image(info, info->north_path, SOUTH_TEXTURE);
-	load_image(info, info->east_path, WEST_TEXTURE);
-	load_image(info, info->west_path, EAST_TEXTURE);
-	load_image(info, info->sprite_path , SPRITE_TEXTURE);
+// 	// for (int y = 0; y < img.img_height; y++)
+// 	// {
+// 	// 	for (int x = 0; x < img.img_width; x++)
+// 	// 		texture[img.img_width * y + x] = img.data[img.img_width * y + x];
+// 	// }
+// 	// mlx_destroy_image(info->mlx, img.img);
+// }
+
+// void	load_texture(t_info *info)
+// {
+
+// 	load_image(info, info->south_path, NORTH_TEXTURE);
+// 	load_image(info, info->north_path, SOUTH_TEXTURE);
+// 	load_image(info, info->east_path, WEST_TEXTURE);
+// 	load_image(info, info->west_path, EAST_TEXTURE);
+// 	load_image(info, info->sprite_path , SPRITE_TEXTURE);
 	
 	
-// 	t_img	img;
-// //CAUSE OF DIRECTION CALC, NEED TO MODIFY WALL DEFINITION
-// 	load_image(info, info->texture[NORTH_TEXTURE], info->south_path, &img);
-// 	load_image(info, info->texture[SOUTH_TEXTURE], info->north_path, &img);
-// 	load_image(info, info->texture[WEST_TEXTURE], info->east_path, &img);
-// 	load_image(info, info->texture[EAST_TEXTURE], info->west_path, &img);
-// 	load_image(info, info->texture[SPRITE_TEXTURE], info->sprite_path , &img);
-	// load_image(info, info->texture[NORTH_TEXTURE], info->west_path, &img);
-	// load_image(info, info->texture[SOUTH_TEXTURE], info->east_path, &img);
-	// load_image(info, info->texture[WEST_TEXTURE], info->south_path, &img);
-	// load_image(info, info->texture[EAST_TEXTURE], info->north_path, &img);
-	// load_image(info, info->texture[NORTH_TEXTURE], "images/koto_west.xpm", &img);
-	// load_image(info, info->texture[SOUTH_TEXTURE], "images/koto_east.xpm", &img);
-	// load_image(info, info->texture[WEST_TEXTURE], "images/koto_south.xpm", &img);
-	// load_image(info, info->texture[EAST_TEXTURE], "images/koto_north.xpm", &img);
-	// load_image(info, info->texture[SPRITE_TEXTURE], "images/koto_sprite.xpm", &img);
-	// load_image(info, info->texture[SPRITE_TEXTURE], "images/moco01.xpm", &img);
-	// load_image(info, info->texture[0], "images/moco03.xpm", &img);
-	// load_image(info, info->texture[1], "images/moco01.xpm", &img);
-	// load_image(info, info->texture[2], "images/moco02.xpm", &img);
-	// load_image(info, info->texture[3], "images/moco03.xpm", &img);
-	// load_image(info, info->texture[4], "images/moco04.xpm", &img);
-	// load_image(info, info->texture[5], "images/moco05.xpm", &img);
-	// load_image(info, info->texture[6], "images/moco06.xpm", &img);
-	// load_image(info, info->texture[7], "images/moco03.xpm", &img);
-}
+// // 	t_img	img;
+// // //CAUSE OF DIRECTION CALC, NEED TO MODIFY WALL DEFINITION
+// // 	load_image(info, info->texture[NORTH_TEXTURE], info->south_path, &img);
+// // 	load_image(info, info->texture[SOUTH_TEXTURE], info->north_path, &img);
+// // 	load_image(info, info->texture[WEST_TEXTURE], info->east_path, &img);
+// // 	load_image(info, info->texture[EAST_TEXTURE], info->west_path, &img);
+// // 	load_image(info, info->texture[SPRITE_TEXTURE], info->sprite_path , &img);
+// 	// load_image(info, info->texture[NORTH_TEXTURE], info->west_path, &img);
+// 	// load_image(info, info->texture[SOUTH_TEXTURE], info->east_path, &img);
+// 	// load_image(info, info->texture[WEST_TEXTURE], info->south_path, &img);
+// 	// load_image(info, info->texture[EAST_TEXTURE], info->north_path, &img);
+// 	// load_image(info, info->texture[NORTH_TEXTURE], "images/koto_west.xpm", &img);
+// 	// load_image(info, info->texture[SOUTH_TEXTURE], "images/koto_east.xpm", &img);
+// 	// load_image(info, info->texture[WEST_TEXTURE], "images/koto_south.xpm", &img);
+// 	// load_image(info, info->texture[EAST_TEXTURE], "images/koto_north.xpm", &img);
+// 	// load_image(info, info->texture[SPRITE_TEXTURE], "images/koto_sprite.xpm", &img);
+// 	// load_image(info, info->texture[SPRITE_TEXTURE], "images/moco01.xpm", &img);
+// 	// load_image(info, info->texture[0], "images/moco03.xpm", &img);
+// 	// load_image(info, info->texture[1], "images/moco01.xpm", &img);
+// 	// load_image(info, info->texture[2], "images/moco02.xpm", &img);
+// 	// load_image(info, info->texture[3], "images/moco03.xpm", &img);
+// 	// load_image(info, info->texture[4], "images/moco04.xpm", &img);
+// 	// load_image(info, info->texture[5], "images/moco05.xpm", &img);
+// 	// load_image(info, info->texture[6], "images/moco06.xpm", &img);
+// 	// load_image(info, info->texture[7], "images/moco03.xpm", &img);
+// }
 
 
 
@@ -667,7 +702,7 @@ void	load_texture(t_info *info)
 
 
 
-void init_info_temp(t_info *info)
+void init_info_temp(t_info *info)// must be deleted!!!!!
 {
 	info->mlx = mlx_init();
 
@@ -775,7 +810,7 @@ int	main(int argc, char *argv[])
 	load_texture(&info);
 	// DEBUG_print_info(&info);
 
-	info.win = mlx_new_window(info.mlx, info.r_width, info.r_height, "mocomoco world!!!!");
+	info.win = mlx_new_window(info.mlx, info.r_width, info.r_height, "cub3d");
 
 	info.img.img = mlx_new_image(info.mlx, info.r_width, info.r_height);
 	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);////

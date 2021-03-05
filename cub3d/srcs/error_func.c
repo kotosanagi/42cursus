@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:10:33 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/04 07:33:13 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 06:16:02 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	error_free_exit(char *msg, t_info *info)
 		while (i < 5)
 			safe_free(info->tex[i++].addr);//////////////////////////
 	}
-	safe_free(info->tex);
+	// safe_free(info->tex);
 	
 	safe_free(info->sprite_order);
 	safe_free(info->sprite_distance);
