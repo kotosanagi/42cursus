@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 14:20:15 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 15:55:15 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -367,6 +367,11 @@ void calc_func(t_info *info);
 
 // store_wall.c
 void	store_wall(t_raycasting *rc, t_info *info);
+
+// store_wall2.c
+void	choose_texture(t_raycasting *rc, t_info *info);
+void	get_wall_tex_x(t_raycasting *rc, t_info *info);
+void	store_wall_tex(t_raycasting *rc, t_info *info);
 
 //--------------
 
