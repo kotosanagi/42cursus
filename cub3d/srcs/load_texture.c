@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 07:11:14 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 09:10:16 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 13:13:18 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,10 @@ static void	load_image(t_info *info, char *path, int tex_num)
 void		load_texture(t_info *info)
 {
 
-	load_image(info, info->south_path, NORTH_TEXTURE);
-	load_image(info, info->north_path, SOUTH_TEXTURE);
-	load_image(info, info->east_path, WEST_TEXTURE);
-	load_image(info, info->west_path, EAST_TEXTURE);
+	load_image(info, info->south_path, SOUTH_TEXTURE);
+	load_image(info, info->north_path, NORTH_TEXTURE);
+	load_image(info, info->east_path, EAST_TEXTURE);
+	load_image(info, info->west_path, WEST_TEXTURE);
 	load_image(info, info->sprite_path , SPRITE_TEXTURE);
 
 // 	t_img	img;

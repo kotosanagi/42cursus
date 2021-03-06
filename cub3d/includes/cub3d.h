@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 12:58:38 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 14:20:15 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,9 +246,32 @@ typedef struct		s_pair
 //////////////// for calc_func.c ///////////////////
 typedef struct		s_raycasting
 {
-	int	color;
-	int y;
-	int x;
+	int		color;
+	int		y;
+	int		x;
+	double	camera_x;
+	double	ray_dir_x;
+	double	ray_dir_y;
+	int		map_x;
+	int		map_y;
+	double	side_dist_x;
+	double	side_dist_y;
+	double	delta_dist_x;
+	double	delta_dist_y;
+	double	perp_wall_dist;
+	int		step_x;
+	int		step_y;
+	int		hit;
+	int		side;
+	int		line_height;
+	int		draw_start;
+	int		draw_end;
+	int		tex_num;
+	double	wall_x;
+	int		tex_x;
+	double	step;
+	double	tex_pos;
+	int		tex_y;
 }					t_raycasting;
 
 
