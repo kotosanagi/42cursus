@@ -6,22 +6,21 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 11:37:12 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 19:09:16 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 20:17:21 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-int close_window(int keycode, t_info *info)
+int			close_window(int keycode, t_info *info)
 {
 	if (keycode == K_ESC)
 		mlx_destroy_window(info->mlx, info->win);
-	return 0;
+	return (0);
 }
 
-int close_window_redx(void)
+int			close_window_redx(void)
 {
-	// exit_successful(info); // I want to exec this row...
 	printf("thank you for playing!!\n");
 	exit(EXIT_SUCCESS);
 	return (0);
@@ -43,7 +42,7 @@ static void	exit_successful2(t_info *info)
 	exit(EXIT_SUCCESS);
 }
 
-void	exit_successful(t_info *info)
+void		exit_successful(t_info *info)
 {
 	int	i;
 

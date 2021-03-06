@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/28 19:36:35 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/03 05:57:58 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 19:55:33 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,15 @@ static t_sprite	set_sprite(int y, int x)
 	new_sprite.y = (double)y + 0.5;
 	new_sprite.x = (double)x + 0.5;
 	return (new_sprite);
+}
+
+static void		sprite_malloc(t_info *info)
+{
+	if (!(info->sprite_order = (int *)malloc(sizeof(int) * info->num_sprite)))
+		error_free_exit("can't allocate sprite_order\n", info);
+	if (!(info->sprite_distance = (double *)malloc(sizeof(double)
+	* info->num_sprite)))
+		error_free_exit("can't allocate sprite_distance\n", info);
 }
 
 void			get_sprite_info(t_info *info)
@@ -44,8 +53,5 @@ void			get_sprite_info(t_info *info)
 		}
 		y++;
 	}
-	if (!(info->sprite_order = (int *)malloc(sizeof(int) * info->num_sprite)))
-		error_free_exit("can't allocate sprite_order\n", info);
-	if (!(info->sprite_distance = (double *)malloc(sizeof(double) * info->num_sprite)))
-		error_free_exit("can't allocate sprite_distance\n", info);
+	sprite_malloc(info);
 }

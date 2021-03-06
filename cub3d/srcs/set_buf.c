@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 10:58:41 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 11:00:58 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 20:11:05 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ void	set_buf(t_info *info)
 			error_free_exit("2nd buf malloc error\n", info);
 	}
 	i = 0;
-	while (i < info->r_height)// for (int i = 0; i < info->r_height; i++)
+	while (i < info->r_height)
 	{
 		j = 0;
-		while (j < info->r_width)// for (int j = 0; j < info->r_width; j++)
+		while (j < info->r_width)
 		{
 			info->buf[i][j] = 0;
 			j++;

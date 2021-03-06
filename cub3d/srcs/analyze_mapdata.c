@@ -6,13 +6,13 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 19:52:51 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/03 21:27:30 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 19:51:14 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-void	set_player2(char c, t_info *info)
+static void	set_player2(char c, t_info *info)
 {
 	if (c == 'E')
 	{
@@ -32,10 +32,10 @@ void	set_player2(char c, t_info *info)
 		error_free_exit("set player error\n", info);
 }
 
-void	set_player(char c, t_info *info, int y, int x)
+static void	set_player(char c, t_info *info, int y, int x)
 {
 	if (info->pos_x != -2.0)
-		error_free_exit("one player only allowed\n", info);//////
+		error_free_exit("one player only allowed\n", info);
 	info->pos_x = (double)x + 0.5;
 	info->pos_y = (double)y + 0.5;
 	if (c == 'N')
@@ -56,17 +56,8 @@ void	set_player(char c, t_info *info, int y, int x)
 		set_player2(c, info);
 }
 
-void	analyze_mapdata(t_info *info)
+void		analyze_mapdata(t_info *info)
 {
-	// what do I want do?
-	// 	*to get pos_x/y
-	// 	*to get dir_x/y
-	// 	*to get plane_x/y
-	//		->only one E/W/S/N is allowed
-
-	// 	*is valid map (flood fill)
-	// 	*count sprites
-	// 	info->map to info->world_map
 	int y;
 	int x;
 
@@ -77,11 +68,11 @@ void	analyze_mapdata(t_info *info)
 		while (info->map[y][x] != '\0')
 		{
 			if (info->map[y][x] == '1')
-				info->world_map[x][y] = 1;////0303
+				info->world_map[x][y] = 1;
 			else if (info->map[y][x] == '2')
 				info->num_sprite++;
 			else if (ft_strchr("WESN", info->map[y][x]))
-				set_player(info->map[y][x], info, y, x);//if double player is here, do exit
+				set_player(info->map[y][x], info, y, x);
 			else if (info->map[y][x] == '0' || info->map[y][x] == ' ')
 				;
 			else
@@ -90,6 +81,5 @@ void	analyze_mapdata(t_info *info)
 		}
 		y++;
 	}
-//printf("no dust in the map\n");
 	is_closed_map(info);
 }

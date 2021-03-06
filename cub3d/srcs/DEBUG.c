@@ -1,7 +1,7 @@
 #include "../includes/cub3d.h"
 
-void	DEBUG_print_MAPPPPPP(t_info *info)
-{
+void	DEBUG_print_MAPPPPPP(t_info *info)//////////
+{/////
 	int i = 0;
 
 	while (info->map[i])
@@ -91,10 +91,10 @@ printf("-------\n");
 }
 
 
-void	DEBUG_print_tmpmap(char tmp_map[MAP_HEIGHT][MAP_WIDTH], t_info *info)
-{
+void	DEBUG_print_tmpmap(char tmp_map[MAP_HEIGHT][MAP_WIDTH], t_info *info)/////
+{/////
 	int y = 0;
-	
+	/////
 	printf("---tmp_map---\n");
 	while (y < info->map_h)
 		printf("%s\n", tmp_map[y++]);

@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 17:15:14 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 19:43:48 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 19:46:59 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,5 @@ void			get_mapfile_info(char *path, t_info *info)
 	}
 	get_floor_ceiling_color(info);
 	get_mappart_data(fd, &line, info);
-DEBUG_print_MAPPPPPP(info);//////////////////
 	close(fd);
 }
