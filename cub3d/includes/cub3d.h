@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 19:38:48 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 20:45:55 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,6 +289,13 @@ typedef struct		s_raycasting
 	int		d;
 }					t_raycasting;
 
+typedef struct		s_mapdata
+{
+	int	ret;
+	int	start;
+	int	end;
+	int	i;
+}					t_mapdata;
 
 
 

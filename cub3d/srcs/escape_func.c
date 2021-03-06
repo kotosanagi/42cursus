@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 11:37:12 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 20:17:21 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 20:27:16 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int			close_window(int keycode, t_info *info)
 
 int			close_window_redx(void)
 {
-	printf("thank you for playing!!\n");
+	printf("thank you for playing!\n");
 	exit(EXIT_SUCCESS);
 	return (0);
 }

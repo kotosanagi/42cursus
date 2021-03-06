@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/28 17:00:26 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 19:33:59 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 20:34:27 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ int y, int x, int *close)
 	if (y == 0 || x == 0 ||
 		y >= MAP_HEIGHT - 2 || x >= MAP_WIDTH - 2 ||
 		tmp_map[y][x] == '\0' || tmp_map[y] == NULL)
-		{
-			*close = 0;
-			return ;
-		}
+	{
+		*close = 0;
+		return ;
+	}
 	tmp_map[y][x] = '#';
 	if (tmp_map[y - 1][x] != '1' && tmp_map[y - 1][x] != '#')
 		flood_fill(tmp_map, y - 1, x, close);
@@ -31,14 +31,6 @@ int y, int x, int *close)
 		flood_fill(tmp_map, y, x - 1, close);
 	if (tmp_map[y][x + 1] != '1' && tmp_map[y][x + 1] != '#')
 		flood_fill(tmp_map, y, x + 1, close);
-	// if (tmp_map[y - 1][x] != '1')
-	// 	flood_fill(tmp_map, y - 1, x, close);
-	// if (tmp_map[y + 1][x] != '1')
-	// 	flood_fill(tmp_map, y + 1, x, close);
-	// if (tmp_map[y][x - 1] != '1')
-	// 	flood_fill(tmp_map, y, x - 1, close);
-	// if (tmp_map[y][x + 1] != '1')
-	// 	flood_fill(tmp_map, y, x + 1, close);
 	return ;
 }
 
@@ -48,6 +40,7 @@ void		is_closed_map(t_info *info)
 	int		y;
 	int		x;
 	int		close;
+
 	y = 0;
 	while (y < info->map_h)
 	{
@@ -66,9 +59,6 @@ void		is_closed_map(t_info *info)
 	}
 	close = 1;
 	flood_fill(tmp_map, (int)info->pos_y, (int)info->pos_x, &close);
-// DEBUG_print_tmpmap(tmp_map, info);
-// DEBUG_print_info(info);
-	if(close == 0)
+	if (close == 0)
 		error_free_exit("it's not closed map\n", info);
-printf("IS CLOSED MAP!!!\n");
 }

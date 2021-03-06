@@ -6,13 +6,13 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/27 14:30:34 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/03 21:20:42 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 20:48:42 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-void	reverse_map(char **map, int map_h)
+static void	reverse_map(char **map, int map_h)
 {
 	int		i;
 	char	*tmp;
@@ -27,40 +27,43 @@ void	reverse_map(char **map, int map_h)
 	}
 }
 
-void	get_mappart_data(int fd, char **line, t_info *info)
+static void	inspect_mapdata(int fd, char **line, t_info *info, t_mapdata *md)
 {
-	int	ret;
-	int	start;
-	int	end;
-	int	i;
-
-	ret = 1;
-	start = 0;
-	end = 0;
-	i = 0;
-	while (ret > 0 && i < MAP_HEIGHT)
+	md->ret = get_next_line(fd, line);
+	if ((md->end == 1) && (ft_strncmp(*line, "", 1) != 0))
+		error_free_line("No allowed separated map\n", info, *line, fd);
+	if ((md->start == 1) && (ft_strncmp(*line, "", 1) == 0))
+		md->end = 1;
+	if ((md->start == 0) && (ft_strncmp(*line, "", 1) != 0))
+		md->start = 1;
+	if ((md->start == 1) && (md->end == 0))
 	{
-		ret = get_next_line(fd, line);
-		if ((end == 1) && (ft_strncmp(*line, "", 1) != 0))
-			error_free_line("No allowed separated map\n", info, *line, fd);
-		if ((start == 1) && (ft_strncmp(*line, "", 1) == 0))
-			end = 1;
-		if ((start == 0) && (ft_strncmp(*line, "", 1) != 0))
-			start = 1;
-		if ((start == 1) && (end == 0))
-		{
-			if (ft_strlen(*line) > MAP_WIDTH - 1)
-				error_free_line("width of map is too much\n", info, *line, fd);
-			info->map[i++] = ft_strdup(*line);
-		}
-		if (ret == 0)
-			end = 1;
+		if (ft_strlen(*line) > MAP_WIDTH - 1)
+			error_free_line("width of map is too much\n", info, *line, fd);
+		info->map[md->i] = ft_strdup(*line);
+		md->i += 1;
+	}
+	if (md->ret == 0)
+		md->end = 1;
+}
+
+void		get_mappart_data(int fd, char **line, t_info *info)
+{
+	t_mapdata	md;
+
+	md.ret = 1;
+	md.start = 0;
+	md.end = 0;
+	md.i = 0;
+	while (md.ret > 0 && md.i < MAP_HEIGHT)
+	{
+		inspect_mapdata(fd, line, info, &md);
 		safe_free(*line);
 	}
 	if (info->map[0] == NULL)
 		error_fd_close("doesn't find map\n", info, fd);
-	if (i >= MAP_HEIGHT)
+	if (md.i >= MAP_HEIGHT)
 		error_fd_close("height of map is too much\n", info, fd);
-	info->map_h = i;
+	info->map_h = md.i;
 	reverse_map(info->map, info->map_h);
 }

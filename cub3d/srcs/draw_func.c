@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 11:44:34 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 11:45:15 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 20:32:04 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	draw_func(t_info *info)
 		x = 0;
 		while (x < info->r_width)
 		{
-			info->img.data[y * info->r_width + x] = info->buf[y][x];//0305
+			info->img.data[y * info->r_width + x] = info->buf[y][x];
 			x++;
 		}
 		y++;
