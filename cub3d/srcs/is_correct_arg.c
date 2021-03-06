@@ -6,13 +6,13 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 10:31:15 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/02/28 16:54:39 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 19:22:05 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-void	is_cub_extension(char *filename)
+static void	is_cub_extension(char *filename)
 {
 	int name_len;
 
@@ -23,14 +23,9 @@ void	is_cub_extension(char *filename)
 		error_exit("filename is not \".cub\" extension\n");
 }
 
-void	is_correct_arg(int argc, char *argv[], t_info *info)
+void		is_correct_arg(int argc, char *argv[], t_info *info)
 {
 	char *filename;
-
-printf("argc:%d\n------\n", argc);////////////
-for (int i = 0; i < argc; i++)////////////
-	printf("argv[%d]:%s\n",i, argv[i]);////////////
-printf("---\n");////////////
 
 	if (argc < 2)
 		error_exit("please add map file path on next argument\n");
@@ -48,7 +43,4 @@ printf("---\n");////////////
 	else
 		filename = argv[1];
 	is_cub_extension(filename);
-
-printf("save_flg:%d\n", info->save_flg);////////////
-printf("filename:%s\n", filename);////////////
 }

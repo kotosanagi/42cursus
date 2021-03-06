@@ -6,111 +6,17 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 17:15:14 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/03 07:38:56 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 19:43:48 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-int	is_enough_8elements(t_info *info)
-{
-	if (!info)
-		return (0);
-	if (info->r_width == -1 ||
-		info->east_path == NULL ||
-		info->west_path == NULL ||
-		info->south_path == NULL ||
-		info->north_path == NULL ||
-		info->sprite_path == NULL ||
-		info->floor_red == -1 ||
-		info->ceiling_red == -1)
-		return (0);
-	return (1);
-}
-
-int		cnt_elem(char **elem)
-{
-	int i;
-
-	i = 0;
-	if (!elem)
-		return (0);
-	while (elem[i])
-		i++;
-	return (i);
-}
-
-int		is_num(char *str)
-{
-	int i;
-
-	i = 0;
-	if (!str)
-		return (0);
-	while (str[i])
-	{
-		if (!ft_isdigit(str[i++]))
-			return (0);
-	}
-	return (1);
-}
-
-void	get_floor_ceiling_color(t_info *info)// exec after get file info (end of read_file func)
-{
-	info->floor_color = (info->floor_red << 16) + (info->floor_green << 8) + info->floor_blue;
-	info->ceiling_color = (info->ceiling_red << 16) + (info->ceiling_green << 8) + info->ceiling_blue;
-}
-
-int		is_correct_rgb(t_info *info, char **elem, char **rgb)
-{
-	if (cnt_elem(rgb) != 3)
-	{
-		free_elem(rgb);
-		error_free_elem_exit("F or C color needs 3 numbers\n", info, elem);
-	}
-	else if (!(is_num(rgb[0]) || !(is_num(rgb[1]) || !(is_num(rgb[2])))))
-	{
-		free_elem(rgb);
-		error_free_elem_exit("F or C color needs positive nums\n", info, elem);
-	}
-	else if ((rgb[0][0] == '0' && ft_strlen(rgb[0]) != 1)
-			|| (rgb[1][0] == '0' && ft_strlen(rgb[1]) != 1)
-			|| (rgb[2][0] == '0' && ft_strlen(rgb[2]) != 1))
-	{
-		free_elem(rgb);
-		error_free_elem_exit("F/C need to start without zero\n", info, elem);
-	}
-	else if (ft_strlen(rgb[0]) > 3 || ft_strlen(rgb[1]) > 3 || ft_strlen(rgb[2]) > 3)
-	{
-		free_elem(rgb);
-		error_free_elem_exit("F/C read too large num\n", info, elem);
-	}
-	return (1);
-}
-
-int		cnt_str_c(char *str, char c)
-{
-	int i;
-	int ret;
-
-	ret = 0;
-	i = 0;
-	if (!str)
-		return (0);
-	while (str[i])
-	{
-		if (str[i] == c)
-			ret++;
-		i++;
-	}
-	return (ret);
-}
-
-int		is_mapfile_elem4(t_info *info, char **elem)
+static int		is_mapfile_elem4(t_info *info, char **elem)
 {
 	char **rgb;
 
-	if (ft_strncmp(elem[0], "C", 2) == 0  && info->ceiling_red < 0 &&
+	if (ft_strncmp(elem[0], "C", 2) == 0 && info->ceiling_red < 0 &&
 	cnt_elem(elem) == 2 && cnt_str_c(elem[1], ',') == 2)
 	{
 		rgb = ft_split(elem[1], ',');
@@ -128,7 +34,7 @@ int		is_mapfile_elem4(t_info *info, char **elem)
 	return (1);
 }
 
-int		is_mapfile_elem3(t_info *info, char **elem)
+static int		is_mapfile_elem3(t_info *info, char **elem)
 {
 	char **rgb;
 
@@ -150,21 +56,21 @@ int		is_mapfile_elem3(t_info *info, char **elem)
 	return (1);
 }
 
-int		is_mapfile_elem2(t_info *info, char **elem)
+static int		is_mapfile_elem2(t_info *info, char **elem)
 {
 	if ((ft_strncmp(elem[0], "EA", 3) == 0 && !info->east_path &&
 	cnt_elem(elem) == 2))
 		info->east_path = ft_strdup(elem[1]);
-	else if ((ft_strncmp(elem[0], "WE", 3) == 0  && !info->west_path &&
+	else if ((ft_strncmp(elem[0], "WE", 3) == 0 && !info->west_path &&
 	cnt_elem(elem) == 2))
 		info->west_path = ft_strdup(elem[1]);
-	else if ((ft_strncmp(elem[0], "SO", 3) == 0  && !info->south_path &&
+	else if ((ft_strncmp(elem[0], "SO", 3) == 0 && !info->south_path &&
 	cnt_elem(elem) == 2))
 		info->south_path = ft_strdup(elem[1]);
-	else if ((ft_strncmp(elem[0], "NO", 3) == 0  && !info->north_path &&
+	else if ((ft_strncmp(elem[0], "NO", 3) == 0 && !info->north_path &&
 	cnt_elem(elem) == 2))
 		info->north_path = ft_strdup(elem[1]);
-	else if ((ft_strncmp(elem[0], "S", 2) == 0  && !info->sprite_path &&
+	else if ((ft_strncmp(elem[0], "S", 2) == 0 && !info->sprite_path &&
 	cnt_elem(elem) == 2))
 		info->sprite_path = ft_strdup(elem[1]);
 	else
@@ -172,7 +78,7 @@ int		is_mapfile_elem2(t_info *info, char **elem)
 	return (1);
 }
 
-int		is_mapfile_elem(t_info *info, char **elem)
+static int		is_mapfile_elem(t_info *info, char **elem)
 {
 	if (!*elem)
 		return (0);
@@ -193,7 +99,7 @@ int		is_mapfile_elem(t_info *info, char **elem)
 	return (1);
 }
 
-void	get_mapfile_info(char *path, t_info *info)
+void			get_mapfile_info(char *path, t_info *info)
 {
 	int		fd;
 	char	*line;
@@ -202,33 +108,20 @@ void	get_mapfile_info(char *path, t_info *info)
 
 	if ((fd = open(path, O_RDONLY)) == -1)
 		error_exit("can't open the file...\nplease check the path of file\n");
-printf("success open file : fd:%d\n", fd);///
-
 	while (!(is_enough_8elements(info)))
 	{
 		gnl_ret = get_next_line(fd, &line);
 		if (gnl_ret == -1)
 			error_free_exit("expect the path is not file\n", info);
-			// error_exit("expect the path is not file\n");
 		elem = ft_split(line, ' ');
 		safe_free(line);
 		is_mapfile_elem(info, elem);
-
-
-// DEBUG_print_info(info);
-
-
 		if ((gnl_ret == 0) && !(is_enough_8elements(info)))
 			error_free_elem_exit("map elements is not enough\n", info, elem);
 		free_elem(elem);
 	}
-
 	get_floor_ceiling_color(info);
-// DEBUG_print_info(info);
 	get_mappart_data(fd, &line, info);
-DEBUG_print_MAPPPPPP(info);
-
-
-printf("done for reading cub file\n");//////////////////
+DEBUG_print_MAPPPPPP(info);//////////////////
 	close(fd);
 }

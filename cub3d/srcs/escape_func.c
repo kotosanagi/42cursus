@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 11:37:12 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 11:38:34 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 19:09:16 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,22 @@ int close_window_redx(void)
 	return (0);
 }
 
+static void	exit_successful2(t_info *info)
+{
+	int i;
+
+	i = 0;
+	if (info->tex[0].w > 0)
+	{
+		while (i < 5)
+			safe_free(info->tex[i++].addr);
+	}
+	safe_free(info->sprite_order);
+	safe_free(info->sprite_distance);
+	printf("thank you for playing!\n");
+	exit(EXIT_SUCCESS);
+}
+
 void	exit_successful(t_info *info)
 {
 	int	i;
@@ -39,7 +55,6 @@ void	exit_successful(t_info *info)
 	safe_free(info->sprite_path);
 	while (info->map[i])
 		safe_free(info->map[i++]);
-
 	if (info->num_sprite > 0)
 		safe_free(info->sp);
 	if (info->buf_malloc_flg == 1)
@@ -49,19 +64,5 @@ void	exit_successful(t_info *info)
 			safe_free(info->buf[i--]);
 		safe_free(info->buf);
 	}
-	i = 0;//////////////////////////
-	if (info->tex[0].w > 0)
-	{
-		while (i < 5)
-			safe_free(info->tex[i++].addr);//////////////////////////
-	}
-
-	// safe_free(info->tex);
-	
-	safe_free(info->sprite_order);
-	safe_free(info->sprite_distance);
-
-
-	printf("thank you for playing!\n");
-	exit(EXIT_SUCCESS);
+	exit_successful2(info);
 }

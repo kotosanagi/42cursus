@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 07:22:12 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 09:06:48 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 18:35:00 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ static void	key_update_arrow_l(t_info *info)
 	double old_dir_x;
 	double old_plane_x;
 
-	if (info->key_ar_l)//rotate to the left
-	{//both camera direction and camera plane must be rotated
+	if (info->key_ar_l)
+	{
 		old_dir_x = info->dir_x;
 		info->dir_x = info->dir_x * cos(info->rot_speed) - info->dir_y
 		* sin(info->rot_speed);
@@ -37,8 +37,8 @@ static void	key_update_arrow_r(t_info *info)
 	double old_dir_x;
 	double old_plane_x;
 
-	if (info->key_ar_r)//rotate to the right
-	{//both camera direction and camera plane must be rotated
+	if (info->key_ar_r)
+	{
 		old_dir_x = info->dir_x;
 		info->dir_x = info->dir_x * cos(-info->rot_speed) - info->dir_y
 		* sin(-info->rot_speed);
@@ -55,7 +55,7 @@ static void	key_update_arrow_r(t_info *info)
 
 static void	key_update_da(t_info *info)
 {
-	if (info->key_d)////////////move right-step if no wall right of you
+	if (info->key_d)
 	{
 		if (!info->world_map[(int)(info->pos_x + info->plane_x
 		* info->move_speed)][(int)(info->pos_y)])
@@ -64,7 +64,7 @@ static void	key_update_da(t_info *info)
 		+ info->plane_y * info->move_speed)])
 			info->pos_y += info->plane_y * info->move_speed;
 	}
-	if (info->key_a)////////////move left-step if no wall left of you
+	if (info->key_a)
 	{
 		if (!info->world_map[(int)(info->pos_x - info->plane_x
 		* info->move_speed)][(int)(info->pos_y)])
@@ -78,7 +78,7 @@ static void	key_update_da(t_info *info)
 
 static void	key_update_ws(t_info *info)
 {
-	if (info->key_w)// move forwards if no wall in front of you
+	if (info->key_w)
 	{
 		if (!info->world_map[(int)(info->pos_x + info->dir_x
 		* info->move_speed)][(int)(info->pos_y)])
@@ -87,7 +87,7 @@ static void	key_update_ws(t_info *info)
 		+ info->dir_y * info->move_speed)])
 			info->pos_y += info->dir_y * info->move_speed;
 	}
-	if (info->key_s)//move backwards if no wall behind you
+	if (info->key_s)
 	{
 		if (!info->world_map[(int)(info->pos_x - info->dir_x
 		* info->move_speed)][(int)(info->pos_y)])

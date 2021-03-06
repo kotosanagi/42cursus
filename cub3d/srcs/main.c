@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 12:21:05 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 19:11:05 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,56 @@
 // gcc -Wall -Wextra -Werror srcs/*.c libft/*.o gnl/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out koto.cub
 
 // leak check //
-// gcc -Wall -Wextra -Werror -g -fsanitize=leak srcs/*.c libft/*.o gnl/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out
+// gcc -Wall -Wextra -Werror -g -fsanitize=leak srcs/*.c libft/*.o gnl/*.o -Lmlx_linux -lmlx_linux -L/usr/lib -Imlx_linux -I./includes -L./libraries -lXext -lX11 -lm -lz && ./a.out koto.cub
 // valgrind --leak-check=full --show-leak-kinds=all ./a.out maps/koto.cub
 
+#include "../includes/cub3d.h"
+
+int main_loop(t_info *info)
+{
+	key_update(info);
+	calc_func(info);
+	draw_func(info);
+	return (0);
+}
+
+int	main(int argc, char *argv[])
+{
+	t_info	info;
+
+	init_info(&info);
+	is_correct_arg(argc, argv, &info);
+	get_mapfile_info(argv[1], &info);
+	analyze_mapdata(&info);
+	get_sprite_info(&info);
+	get_window_size(&info);
+	set_buf(&info);
+
+	DEBUG_print_info(&info);
+
+	load_texture(&info);
+///////	// if (info.save_flg == 1)//0306 about save
+///////	//	create_xpm(&info);
+	info.win = mlx_new_window(info.mlx, info.r_width, info.r_height, "cub3d");
+	info.img.img = mlx_new_image(info.mlx, info.r_width, info.r_height);
+	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp,
+	&info.img.size_l, &info.img.endian);
+	mlx_hook(info.win, 2, 1L<<0, close_window, &info);
+	mlx_hook(info.win, 33, 1L<<17, close_window_redx, &info);
+	mlx_loop_hook(info.mlx, &main_loop, &info);
+	mlx_hook(info.win, X_EVENT_KEY_RELEASE, 1L << 1, &key_release, &info);
+	mlx_hook(info.win, X_EVENT_KEY_PRESS, 1L << 0, &key_press, &info);
+	mlx_loop(info.mlx);
+	return (0);
+}
+
+/*
 // #include "../mlx_linux/mlx.h"
 // #include "../includes/key_linux.h"
 // #include "../includes/libft.h"
 // #include <stdio.h>
 // #include <math.h>
 // #include <stdlib.h>
-
-#include "../includes/cub3d.h"
 
 // static int	compare(const void *first, const void *second)
 // {
@@ -170,7 +209,7 @@
 // }
 
 // 173-404 calc_func before treat norminette
-/* void calc_func(t_info *info)
+ void calc_func(t_info *info)
 {
 
 	////////////// draw ceiling and floor /////////////////
@@ -401,7 +440,7 @@
 	}
 }
 
-*/
+
 
 ////////////////////////////////////////////////////
 
@@ -487,13 +526,13 @@
 // 	return (0);
 // }
 
-int main_loop(t_info *info)
-{
-	key_update(info);
-	calc_func(info);
-	draw_func(info);
-	return (0);
-}
+// int main_loop(t_info *info)
+// {
+// 	key_update(info);
+// 	calc_func(info);
+// 	draw_func(info);
+// 	return (0);
+// }
 
 // void	exit_successful(t_info *info)
 // {
@@ -754,55 +793,55 @@ int main_loop(t_info *info)
 // 	info->buf_malloc_flg = 1;
 // }
 
-int	main(int argc, char *argv[])
-{
-	t_info	info;
+// int	main(int argc, char *argv[])
+// {
+// 	t_info	info;
 
-	// init_info_temp(&info);
-	// get_floor_ceiling_color(&info);
-	init_info(&info);
-	is_correct_arg(argc, argv, &info);
-	get_mapfile_info(argv[1], &info);
-	analyze_mapdata(&info);
-	get_sprite_info(&info);
-	get_window_size(&info);
-	// printf("STARTING GAME\n");
-	// DEBUG_print_info(&info);
-	set_buf(&info);
-	// int tex_num = 5;
-	// if (!(info.texture = (int **)malloc(sizeof(int *) * tex_num)))
-	// 	return (-1);
-	// for (int i = 0; i < tex_num; i++)
-	// {
-	// 	if (!(info.texture[i] = (int *)malloc(sizeof(int) * (TEX_HEIGHT * TEX_WIDTH))))
-	// 		return (-1);
-	// }
-	// for (int i = 0; i < tex_num; i++)
-	// {
-	// 	for (int j = 0; j < TEX_HEIGHT * TEX_WIDTH; j++)
-	// 		info.texture[i][j] = 0;
-	// }
-	// DEBUG_print_info(&info);
+// 	// init_info_temp(&info);
+// 	// get_floor_ceiling_color(&info);
+// 	init_info(&info);
+// 	is_correct_arg(argc, argv, &info);
+// 	get_mapfile_info(argv[1], &info);
+// 	analyze_mapdata(&info);
+// 	get_sprite_info(&info);
+// 	get_window_size(&info);
+// 	// printf("STARTING GAME\n");
+// 	// DEBUG_print_info(&info);
+// 	set_buf(&info);
+// 	// int tex_num = 5;
+// 	// if (!(info.texture = (int **)malloc(sizeof(int *) * tex_num)))
+// 	// 	return (-1);
+// 	// for (int i = 0; i < tex_num; i++)
+// 	// {
+// 	// 	if (!(info.texture[i] = (int *)malloc(sizeof(int) * (TEX_HEIGHT * TEX_WIDTH))))
+// 	// 		return (-1);
+// 	// }
+// 	// for (int i = 0; i < tex_num; i++)
+// 	// {
+// 	// 	for (int j = 0; j < TEX_HEIGHT * TEX_WIDTH; j++)
+// 	// 		info.texture[i][j] = 0;
+// 	// }
+// 	// DEBUG_print_info(&info);
 
-	load_texture(&info);
-///////	// if (info.save_flg == 1)//0306 about save
-///////	//	make_xpm(&info);
-	info.win = mlx_new_window(info.mlx, info.r_width, info.r_height, "cub3d");
-	info.img.img = mlx_new_image(info.mlx, info.r_width, info.r_height);
-	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);////
-	// info.img.data = mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);////0305
-	// mlx_key_hook(info.win, key_hook, &info);
-	// mlx_mouse_hook(info.win, mouse_hook, &info);
-	// mlx_hook(info.win, 7, 1L<<4, print_hello, &info);	//enter window 
-	// mlx_hook(info.win, 8, 1L<<5, print_bye, &info);		//leave window
-	mlx_hook(info.win, 2, 1L<<0, close_window, &info);	//close window when ESC pressed
-	mlx_hook(info.win, 33, 1L<<17, close_window_redx, &info);	//close window when red cross pushed // for 2nd arg, old ver is 17 , but latest ver is 33
-	mlx_loop_hook(info.mlx, &main_loop, &info);
-	mlx_hook(info.win, X_EVENT_KEY_RELEASE, 1L << 1, &key_release, &info);
-	mlx_hook(info.win, X_EVENT_KEY_PRESS, 1L << 0, &key_press, &info);
-	mlx_loop(info.mlx);
-	return (0);
-}
+// 	load_texture(&info);
+// ///////	// if (info.save_flg == 1)//0306 about save
+// ///////	//	make_xpm(&info);
+// 	info.win = mlx_new_window(info.mlx, info.r_width, info.r_height, "cub3d");
+// 	info.img.img = mlx_new_image(info.mlx, info.r_width, info.r_height);
+// 	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);////
+// 	// info.img.data = mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);////0305
+// 	// mlx_key_hook(info.win, key_hook, &info);
+// 	// mlx_mouse_hook(info.win, mouse_hook, &info);
+// 	// mlx_hook(info.win, 7, 1L<<4, print_hello, &info);	//enter window 
+// 	// mlx_hook(info.win, 8, 1L<<5, print_bye, &info);		//leave window
+// 	mlx_hook(info.win, 2, 1L<<0, close_window, &info);	//close window when ESC pressed
+// 	mlx_hook(info.win, 33, 1L<<17, close_window_redx, &info);	//close window when red cross pushed // for 2nd arg, old ver is 17 , but latest ver is 33
+// 	mlx_loop_hook(info.mlx, &main_loop, &info);
+// 	mlx_hook(info.win, X_EVENT_KEY_RELEASE, 1L << 1, &key_release, &info);
+// 	mlx_hook(info.win, X_EVENT_KEY_PRESS, 1L << 0, &key_press, &info);
+// 	mlx_loop(info.mlx);
+// 	return (0);
+// }
 
 
 
@@ -825,3 +864,6 @@ int	main(int argc, char *argv[])
 // printf("here is end of main.c\n");
 // 	return (0);
 // }
+
+
+*/
