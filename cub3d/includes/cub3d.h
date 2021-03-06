@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 07:12:38 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 12:58:38 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,23 +98,16 @@
 # define M_SCR_U 4
 # define M_SCR_D 5
 
-
-
-
-
-///////////////////////////
-
-
-
-
+/*
+** for cub3d
+*/
 
 # define R_WIDTH 512
 # define R_HEIGHT 384
 # define TEX_WIDTH 64//0306tex
 # define TEX_HEIGHT 64//0306tex
-# define MAP_WIDTH 80		// replace more large number
-# define MAP_HEIGHT 80	// replace more large number
-
+# define MAP_WIDTH 80
+# define MAP_HEIGHT 80
 # define NS 1
 # define EW 0
 # define X_EVENT_KEY_PRESS	2
@@ -125,7 +118,7 @@
 # define WEST_TEXTURE 2///////should be deleted
 # define EAST_TEXTURE 3///////should be deleted
 # define SPRITE_TEXTURE 4///////should be deleted
-# define num_sprites 5///////should be deleted
+// # define num_sprites 5///////should be deleted
 
 typedef struct	s_sprite
 {
@@ -143,8 +136,6 @@ typedef struct	s_sprite
 // 	{2.5, 5.5},//, SPRITE_TEXTURE},
 // 	{6.5, 6.5},//, SPRITE_TEXTURE},
 // };
-
-
 
 typedef struct	s_img
 {
@@ -172,75 +163,74 @@ typedef struct		s_tex
 typedef struct	s_info
 {
 // (start) need to get info from mapfile //
-	int		r_width;
-	int		r_height;
-	
-	char	*east_path;
-	char	*west_path;
-	char	*south_path;
-	char	*north_path;
-	char	*sprite_path;
+	int			r_width;
+	int			r_height;
 
-	double	pos_x;
-	double	pos_y;
-	double	dir_x;
-	double	dir_y;
-	double	plane_x;
-	double	plane_y;
+	char		*east_path;
+	char		*west_path;
+	char		*south_path;
+	char		*north_path;
+	char		*sprite_path;
 
-	int		floor_red;
-	int		floor_green;
-	int		floor_blue;
-	int		ceiling_red;
-	int		ceiling_green;
-	int		ceiling_blue;
+	double		pos_x;
+	double		pos_y;
+	double		dir_x;
+	double		dir_y;
+	double		plane_x;
+	double		plane_y;
 
-	int		floor_color;
-	int		ceiling_color;
-	int		num_sprite;
+	int			floor_red;
+	int			floor_green;
+	int			floor_blue;
+	int			ceiling_red;
+	int			ceiling_green;
+	int			ceiling_blue;
 
-	char	*map[MAP_HEIGHT];//////////need to modify of MAP_WIDTH and MAP_HEIGHT in main.c
-	int		world_map[MAP_HEIGHT][MAP_WIDTH];
+	int			floor_color;
+	int			ceiling_color;
+	int			num_sprite;
+
+	char		*map[MAP_HEIGHT];//////////need to modify of MAP_WIDTH and MAP_HEIGHT in main.c
+	int			world_map[MAP_HEIGHT][MAP_WIDTH];
 // (end) need to get info from mapfile //
 
 // (start) NOT need to get info from mapfile //
-	int save_flg;
-	int	key_w;
-	int	key_s;
-	int	key_d;
-	int	key_a;
-	int	key_ar_r;
-	int	key_ar_l;
-	int key_ar_u;
-	int key_ar_d;
-	int	key_esc;
-	double	move_speed;
-	double	rot_speed;
-	int	map_h;
-
-	void *mlx;
-	void *win;
+	int			save_flg;
+	int			key_w;
+	int			key_s;
+	int			key_d;
+	int			key_a;
+	int			key_ar_r;
+	int			key_ar_l;
+	int			key_ar_u;
+	int			key_ar_d;
+	int			key_esc;
+	double		move_speed;
+	double		rot_speed;
+	int			map_h;
+	void		*mlx;
+	void		*win;
 
 // (end) NOT need to get info from mapfile //
 
 
 // think later //
-	t_sprite *sp;
-	double	*z_buffer;
+	t_sprite	*sp;
+	double		*z_buffer;
 	// double	z_buffer[R_WIDTH];
 
 
 
-	t_img img;
-	int **buf;
+	t_img		img;
+	int			**buf;
 	// int buf[R_HEIGHT][R_WIDTH];
-	int buf_malloc_flg;
+	int			buf_malloc_flg;
 
 	// int **texture;
-	t_tex tex[5];
+	t_tex		tex[5];
 
-	int		*sprite_order;//[num_sprites];
-	double	*sprite_distance;//[num_sprites];
+	int			*sprite_order;//[num_sprites];
+	double		*sprite_distance;//[num_sprites];
 
 }				t_info;
 
@@ -253,7 +243,13 @@ typedef struct		s_pair
 	int		second;
 }					t_pair;
 
-
+//////////////// for calc_func.c ///////////////////
+typedef struct		s_raycasting
+{
+	int	color;
+	int y;
+	int x;
+}					t_raycasting;
 
 
 
@@ -273,10 +269,6 @@ typedef struct		s_pair
 
 
 
-
-// main.c //
-
-void	exit_successful(t_info *info);//
 
 
 
@@ -323,6 +315,36 @@ void	get_window_size(t_info *info);
 
 // load_texture.c
 void	load_texture(t_info *info);
+
+// key_update.c
+void	key_update(t_info *info);
+
+// key_press_release.c
+int	key_press(int key, t_info *info);
+int	key_release(int key, t_info *info);
+
+// sort_sprites.c
+void	sort_sprites(int *order, double *dist, int amount, t_info *info);
+
+// set_buf.c
+void	set_buf(t_info *info);
+
+
+
+// escape_func.c
+int close_window(int keycode, t_info *info);
+int close_window_redx(void);
+void	exit_successful(t_info *info);//
+
+// draw_func.c
+void	draw_func(t_info *info);
+
+// calc_func.c
+void calc_func(t_info *info);
+
+// store_wall.c
+void	store_wall(t_raycasting *rc, t_info *info);
+
 //--------------
 
 

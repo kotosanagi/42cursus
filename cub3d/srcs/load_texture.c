@@ -6,13 +6,13 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 07:11:14 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 07:12:09 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/06 09:10:16 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-void	load_image2(unsigned int *addr, t_img *img)
+static void	load_image2(unsigned int *addr, t_img *img)
 {
 	int	x;
 	int	y;
@@ -50,13 +50,15 @@ void	load_image2(unsigned int *addr, t_img *img)
 
 }
 
-void	load_image(t_info *info, char *path, int tex_num)
+static void	load_image(t_info *info, char *path, int tex_num)
 {
 	t_img img;
 
 	img.img = mlx_xpm_file_to_image(info->mlx, path, &img.img_width, &img.img_height);
 	if (img.img == NULL)
 		error_free_exit("can't load texture\n", info);
+	if (img.img_width != TEX_WIDTH || img.img_height != TEX_HEIGHT)
+		error_free_exit("textures are allowed 64 * 64 size\n", info);
 // printf("success load %s\n", path);
 	img.data = (int *)mlx_get_data_addr(img.img, &img.bpp, &img.size_l, &img.endian);
 	// img.data = mlx_get_data_addr(img.img, &img.bpp, &img.size_l, &img.endian);////0305
@@ -82,7 +84,7 @@ void	load_image(t_info *info, char *path, int tex_num)
 	// mlx_destroy_image(info->mlx, img.img);
 }
 
-void	load_texture(t_info *info)
+void		load_texture(t_info *info)
 {
 
 	load_image(info, info->south_path, NORTH_TEXTURE);
@@ -90,8 +92,7 @@ void	load_texture(t_info *info)
 	load_image(info, info->east_path, WEST_TEXTURE);
 	load_image(info, info->west_path, EAST_TEXTURE);
 	load_image(info, info->sprite_path , SPRITE_TEXTURE);
-	
-	
+
 // 	t_img	img;
 // //CAUSE OF DIRECTION CALC, NEED TO MODIFY WALL DEFINITION
 // 	load_image(info, info->texture[NORTH_TEXTURE], info->south_path, &img);
