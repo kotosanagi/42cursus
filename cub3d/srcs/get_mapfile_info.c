@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 17:15:14 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 19:46:59 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/07 09:49:06 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,10 @@ static int		is_mapfile_elem(t_info *info, char **elem)
 			error_free_elem_exit("R needs only positive number\n", info, elem);
 		if (elem[1][0] == '0' || elem[2][0] == '0')
 			error_free_elem_exit("R needs only positive number\n", info, elem);
-		info->r_width = (ft_strlen(elem[1]) > 5 ||
-		ft_atoi(elem[1]) > 10000) ? 10000 : ft_atoi(elem[1]);
+		info->r_width = (ft_strlen(elem[1]) > 4 ||
+		ft_atoi(elem[1]) > 2560) ? 2560 : ft_atoi(elem[1]);
 		info->r_height = (ft_strlen(elem[2]) > 4 ||
-		ft_atoi(elem[2]) > 10000) ? 10000 : ft_atoi(elem[2]);
+		ft_atoi(elem[2]) > 1440) ? 1440 : ft_atoi(elem[2]);
 	}
 	else
 		is_mapfile_elem2(info, elem);

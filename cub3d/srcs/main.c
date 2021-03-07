@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 04:57:59 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 20:59:24 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/07 09:53:02 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int			main(int argc, char *argv[])
 	get_sprite_info(&info);
 	get_window_size(&info);
 	set_buf(&info);
-	// DEBUG_print_info(&info);
+	DEBUG_print_info(&info);
 	load_texture(&info);
 ///////	// if (info.save_flg == 1)//0306 about save
 ///////	//	create_xpm(&info);
