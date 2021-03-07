@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 00:14:55 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 21:24:48 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/07 14:54:33 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,9 @@
 # define WEST_TEXTURE 2
 # define EAST_TEXTURE 3
 # define SPRITE_TEXTURE 4
+# define RED 0
+# define GREEN 1
+# define BLUE 2
 
 typedef struct	s_sprite
 {
@@ -254,6 +257,15 @@ typedef struct		s_mapdata
 	int	i;
 }					t_mapdata;
 
+typedef struct		s_header
+{
+	unsigned int	file_size;
+	unsigned int	offset;
+	unsigned int	header_size;
+	unsigned int	planes;
+	unsigned int	bpp;
+}					t_header;
+
 void	safe_free(void *p);
 void	error_exit(char *message);
 void	error_free_exit(char *msg, t_info *info);
@@ -291,6 +303,7 @@ void	choose_texture(t_raycasting *rc, t_info *info);
 void	get_wall_tex_x(t_raycasting *rc, t_info *info);
 void	store_wall_tex(t_raycasting *rc, t_info *info);
 void	store_sprite(t_raycasting *rc, t_info *info);
+void	create_bmp(t_info *info);
 
 //should be deleted//
 void DEBUG_print_info(t_info *info);///

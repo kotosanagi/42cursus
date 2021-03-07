@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/06 11:37:12 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/06 20:27:16 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/07 11:05:35 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ static void	exit_successful2(t_info *info)
 	}
 	safe_free(info->sprite_order);
 	safe_free(info->sprite_distance);
-	printf("thank you for playing!\n");
+	if (info->save_flg == 0)
+		printf("thank you for playing!\n");
+	else
+		printf("create bmp image!\n");
 	exit(EXIT_SUCCESS);
 }
 
