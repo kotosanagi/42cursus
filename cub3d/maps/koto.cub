@@ -2,10 +2,10 @@ R 999 599
 WE images/koto_west.xpm
 NO images/koto_north.xpm
 EA images/koto_east.xpm
-S images/koto_sprite.xpm
+SO images/koto_south.xpm
 C 25,151,235
 F 81,155,80
-SO images/koto_south.xpm
+S images/koto_sprite.xpm
 
 
 
