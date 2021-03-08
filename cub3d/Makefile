@@ -6,7 +6,7 @@
 #    By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/13 13:41:32 by skotoyor          #+#    #+#              #
-#    Updated: 2021/03/09 06:30:25 by skotoyor         ###   ########.fr        #
+#    Updated: 2021/03/09 06:42:46 by skotoyor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ OBJS	=	$(SRCS:%.c=%.o)
 HEAD	=	./includes/cub3d.h
 INCS	=	-I./includes
 LINK	=	-L./libraries -L/usr/lib
-LIBS	=	-lmlx_linux -lft -lgnl -lXext -lX11 -lm
+LIBS	=	-lmlx_Linux -lft -lgnl -lXext -lX11 -lm
 
 all:$(NAME)
 
