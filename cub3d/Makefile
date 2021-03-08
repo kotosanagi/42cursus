@@ -6,7 +6,7 @@
 #    By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/13 13:41:32 by skotoyor          #+#    #+#              #
-#    Updated: 2021/03/07 16:56:05 by skotoyor         ###   ########.fr        #
+#    Updated: 2021/03/08 20:58:16 by skotoyor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ OBJS	=	$(SRCS:%.c=%.o)
 HEAD	=	./includes/cub3d.h
 INCS	=	-I./includes
 LINK	=	-L./libraries -L/usr/lib
-LIBS	=	-lmlx_linux -lft -lgnl -lXext -lX11 -lm -lz
+LIBS	=	-lmlx_linux -lft -lgnl -lXext -lX11 -lm
 
 all:$(NAME)
 
@@ -65,9 +65,8 @@ clean:
 fclean:clean
 	rm -f $(NAME)
 	rm -f *.bmp
-	make clean -C libft
-	make clean -C gnl
-	make clean -C mlx_linux
+	make fclean -C libft
+	make fclean -C gnl
 	rm -f libraries/*.a
 
 re:fclean all
