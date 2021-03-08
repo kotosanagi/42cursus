@@ -6,7 +6,7 @@
 #    By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/13 13:41:32 by skotoyor          #+#    #+#              #
-#    Updated: 2021/03/08 20:58:16 by skotoyor         ###   ########.fr        #
+#    Updated: 2021/03/09 06:22:14 by skotoyor         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,22 +52,25 @@ $(NAME):$(OBJS)
 	cp libft/libft.a ./libraries/
 	make -C gnl
 	cp gnl/libgnl.a ./libraries/
-	make -C mlx_linux
-	cp mlx_linux/libmlx*.a ./libraries/
+	# make -C mlx_linux
+	# cp mlx_linux/libmlx_Linux.a ./libraries/
+	# cp mlx_linux/libmlx*.a ./libraries/
 	$(CC) -o $(NAME) $(OBJS) $(LINK) $(INCS) $(LIBS)
 
 clean:
 	rm -f $(OBJS)
 	make clean -C libft
 	make clean -C gnl
-	make clean -C mlx_linux
+	# make clean -C mlx_linux
 
 fclean:clean
 	rm -f $(NAME)
 	rm -f *.bmp
 	make fclean -C libft
 	make fclean -C gnl
-	rm -f libraries/*.a
+	rm -f libraries/libft.a
+	rm -f libraries/libgnl.a
+	# rm -f libraries/*.a
 
 re:fclean all
 
