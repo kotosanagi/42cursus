@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/25 17:15:14 by skotoyor          #+#    #+#             */
-/*   Updated: 2021/03/07 09:49:06 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/03/12 07:20:41 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,15 @@ static int		is_mapfile_elem4(t_info *info, char **elem)
 	{
 		rgb = ft_split(elem[1], ',');
 		is_correct_rgb(info, elem, rgb);
+		if (!(is_num(rgb[0])) || !(is_num(rgb[1])) || !(is_num(rgb[2])))
+			error_free_elem_exit("C only positive integer\n", info, elem);
 		info->ceiling_red = ft_atoi(rgb[0]);
 		info->ceiling_green = ft_atoi(rgb[1]);
 		info->ceiling_blue = ft_atoi(rgb[2]);
 		free_elem(rgb);
 		if (255 < info->ceiling_red || 255 < info->ceiling_green ||
 		255 < info->ceiling_blue)
-			error_free_elem_exit("C arrows 0~255\n", info, elem);
+			error_free_elem_exit("C allows 0~255\n", info, elem);
 	}
 	else
 		error_free_elem_exit("map file is invalid\n", info, elem);
@@ -43,13 +45,15 @@ static int		is_mapfile_elem3(t_info *info, char **elem)
 	{
 		rgb = ft_split(elem[1], ',');
 		is_correct_rgb(info, elem, rgb);
+		if (!(is_num(rgb[0])) || !(is_num(rgb[1])) || !(is_num(rgb[2])))
+			error_free_elem_exit("F only positive integer\n", info, elem);
 		info->floor_red = ft_atoi(rgb[0]);
 		info->floor_green = ft_atoi(rgb[1]);
 		info->floor_blue = ft_atoi(rgb[2]);
 		free_elem(rgb);
 		if (255 < info->floor_red || 255 < info->floor_green ||
 		255 < info->floor_blue)
-			error_free_elem_exit("F arrows 0~255\n", info, elem);
+			error_free_elem_exit("F allows 0~255\n", info, elem);
 	}
 	else
 		is_mapfile_elem4(info, elem);
@@ -86,9 +90,9 @@ static int		is_mapfile_elem(t_info *info, char **elem)
 	cnt_elem(elem) == 3)
 	{
 		if (!(is_num(elem[1])) || !(is_num(elem[2])))
-			error_free_elem_exit("R needs only positive number\n", info, elem);
+			error_free_elem_exit("R needs only positive integer\n", info, elem);
 		if (elem[1][0] == '0' || elem[2][0] == '0')
-			error_free_elem_exit("R needs only positive number\n", info, elem);
+			error_free_elem_exit("R needs only positive integer\n", info, elem);
 		info->r_width = (ft_strlen(elem[1]) > 4 ||
 		ft_atoi(elem[1]) > 2560) ? 2560 : ft_atoi(elem[1]);
 		info->r_height = (ft_strlen(elem[2]) > 4 ||
