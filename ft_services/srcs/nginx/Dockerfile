@@ -5,7 +5,7 @@ COPY	./srcs/nginx.conf /etc/nginx/nginx.conf
 # setup nginx
 RUN	set -ex; \
 	apk update; \
-	apk add --no-cache nginx vim openssl; \
+	apk add --no-cache nginx openssl; \
 	mkdir -p /run/nginx; \
 	mkdir -p /var/www/html; \
 	echo "hello KOTO" > /var/www/html/index.html;
@@ -17,8 +17,6 @@ RUN set -ex; \
 		openssl req -new -subj "/C=JP/ST=Tokyo/L=Minato/O=42Tokyo/OU=42cursus/CN=localhost" -key etc/nginx/ssl/nginx.key > etc/nginx/ssl/nginx.csr; \
 		openssl x509 -req -days 365 -signkey etc/nginx/ssl/nginx.key -in etc/nginx/ssl/nginx.csr > etc/nginx/ssl/nginx.crt;
 
-
-
 EXPOSE 80
 EXPOSE 443
 
@@ -27,14 +25,14 @@ CMD nginx -g "daemon off;"
 
 
 
-# docker build . -t hoge && docker run -d -p 8080:80 -p 443:443 --name fuga hoge
+# docker build . -t nginx_images_koto && docker run -d -p 8080:80 -p 443:443 --name nginx_container_koto nginx_images_koto
 
-# docker exec -ti fuga ash
+# docker exec -ti nginx_container_koto ash
 
 # http://localhost:8080
 # https://localhost:443
 
-# docker container stop fuga && docker rm fuga && docker rmi hoge
+# docker container stop nginx_container_koto && docker rm nginx_container_koto && docker rmi nginx_images_koto
 
 
 

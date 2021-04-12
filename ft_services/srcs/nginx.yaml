@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment # any name??
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx_images_koto
+        ports:
+          - containerPort: 80
+        imagePullPolicy: Never
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    component: nginx
+  ports:
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
+    nodePort: 443
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 80
+  type: NodePort

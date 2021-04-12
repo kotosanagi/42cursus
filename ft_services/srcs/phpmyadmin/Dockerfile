@@ -11,6 +11,6 @@ RUN set -ex; \
 
 
 # ========================
-# docker build . -t hoge &&  docker run -ti --name fuga hoge ash
+# docker build . -t pma_image &&  docker run -ti --name pma_container pma_image ash
 
-# docker container stop fuga && docker rm fuga
+# docker container stop pma_container && docker rm pma_container

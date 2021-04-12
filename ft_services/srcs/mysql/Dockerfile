@@ -1,8 +1,11 @@
 FROM alpine:3.6
 
-
 RUN apk update; \
-		apk add --no-cache vim mysql mysql-client
+		apk add --no-cache mysql mysql-client
+
+# RUN set -ex; \
+# 		cd /var/lib/mysql; \
+# 		mysql_install_db --bootstarp --user=mysql;
 
 COPY ./srcs/setup.sh /var/lib/mysql
 CMD sh /var/lib/mysql/setup.sh
@@ -10,21 +13,19 @@ CMD sh /var/lib/mysql/setup.sh
 # ========================
 
 # run
-# docker build . -t koto_image && docker run -d --name koto_container koto_image
+# docker build . -t mysql_images_koto && docker run -d --name mysql_container_koto mysql_images_koto
 
 # ash
-# docker build . -t koto_image &&  docker run -ti --name koto_container koto_image ash
+# docker build . -t mysql_images_koto &&  docker run -ti --name mysql_container_koto mysql_images_koto ash
 
 # remove
-# docker container stop koto_container && docker rm koto_container && docker rmi koto_image
-
+# docker container stop mysql_container_koto && docker rm mysql_container_koto && docker rmi mysql_images_koto
 
 # restart ash
-# docker container stop koto_container && docker rm koto_container && docker rmi koto_image && docker build . -t koto_image &&  docker run -ti --name koto_container koto_image ash
+# docker container stop mysql_container_koto && docker rm mysql_container_koto && docker rmi mysql_images_koto && docker build . -t mysql_images_koto &&  docker run -ti --name mysql_container_koto mysql_images_koto ash
 
 # restart run
-# docker container stop koto_container && docker rm koto_container && docker rmi koto_image && docker build . -t koto_image &&  docker run -d --name koto_container koto_image 
-
+# docker container stop mysql_container_koto && docker rm mysql_container_koto && docker rmi mysql_images_koto && docker build . -t mysql_images_koto &&  docker run -d --name mysql_container_koto mysql_images_koto 
 
 # into container
-# docker exec -ti koto_container sh
+# docker exec -ti mysql_container_koto sh

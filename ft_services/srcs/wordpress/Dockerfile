@@ -16,13 +16,9 @@ RUN	set -ex; \
 
 
 # ========================
+
 # docker build . -t hoge &&  docker run -ti --name fuga hoge ash
 
-
 # docker container stop fuga && docker rm fuga
-
-
-
-
 
 # IT MUST BE MODIFIED ABOUT wp-config.php
