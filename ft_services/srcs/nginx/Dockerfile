@@ -1,6 +1,7 @@
 FROM alpine:3.6
 
 COPY	./srcs/nginx.conf /etc/nginx/nginx.conf
+COPY	./srcs/setup.sh /
 
 # setup nginx
 RUN	set -ex; \
@@ -21,7 +22,8 @@ EXPOSE 80
 EXPOSE 443
 
 # CMD tail -f /dev/null
-CMD nginx -g "daemon off;"
+# CMD nginx -g "daemon off;"
+CMD sh /setup.sh
 
 
 

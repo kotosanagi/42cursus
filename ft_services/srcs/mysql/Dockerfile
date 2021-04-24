@@ -7,25 +7,48 @@ RUN apk update; \
 # 		cd /var/lib/mysql; \
 # 		mysql_install_db --bootstarp --user=mysql;
 
-COPY ./srcs/setup.sh /var/lib/mysql
-CMD sh /var/lib/mysql/setup.sh
+# RUN mkdir /run/mysqld/
 
+COPY ./srcs/setup.sh /setup.sh
+COPY ./srcs/init_mysql /init_mysql
+COPY ./srcs/my.cnf /etc/my.cnf
+RUN mkdir -p /run/mysqld
+
+ENTRYPOINT [ "sh", "/setup.sh" ]
+# CMD ["/setup.sh"]
 # ========================
 
 # run
 # docker build . -t mysql_images_koto && docker run -d --name mysql_container_koto mysql_images_koto
 
-# ash
-# docker build . -t mysql_images_koto &&  docker run -ti --name mysql_container_koto mysql_images_koto ash
+# sh
+# docker build . -t mysql_images_koto &&  docker run -ti --name mysql_container_koto mysql_images_koto sh
 
 # remove
 # docker container stop mysql_container_koto && docker rm mysql_container_koto && docker rmi mysql_images_koto
 
-# restart ash
-# docker container stop mysql_container_koto && docker rm mysql_container_koto && docker rmi mysql_images_koto && docker build . -t mysql_images_koto &&  docker run -ti --name mysql_container_koto mysql_images_koto ash
+# restart sh
+# docker container stop mysql_container_koto && docker rm mysql_container_koto && docker rmi mysql_images_koto && docker build . -t mysql_images_koto &&  docker run -ti --name mysql_container_koto mysql_images_koto sh
 
 # restart run
 # docker container stop mysql_container_koto && docker rm mysql_container_koto && docker rmi mysql_images_koto && docker build . -t mysql_images_koto &&  docker run -d --name mysql_container_koto mysql_images_koto 
 
 # into container
 # docker exec -ti mysql_container_koto sh
+
+
+
+
+# ------------
+
+
+
+# docker run -d --name mysql_container_koto mysql_images_koto
+# &&
+# docker exec -it mysql_container_koto sh
+
+
+
+# docker run -it --name mysql_container_koto mysql_images_koto bash
+
+
