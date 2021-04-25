@@ -41,9 +41,8 @@ RUN	set -ex; \
 		curl -L -O https://ja.wordpress.org/latest-ja.tar.gz; \
 		tar -xvf latest-ja.tar.gz -C /var/www/html/; \
 		rm latest-ja.tar.gz ;
-# COPY ./srcs/wp-config.php /var/www/html/wordpress
+COPY ./srcs/wp-config.php /var/www/html/wordpress/wp-config.php
 RUN chmod -R 775 /var/www/html/wordpress/*
-# kubectl exec -ti PODNAME -- sh
 # cat /var/log/nginx/error.log 
 
 # ssl
