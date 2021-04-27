@@ -26,6 +26,8 @@ EXPOSE 443
 CMD sh /setup.sh
 
 
+# -------------------------------------
+# -------------------------------------
 
 # docker build . -t nginx_images_koto && docker run -d -p 8080:80 -p 443:443 --name nginx_container_koto nginx_images_koto
 
@@ -38,11 +40,3 @@ CMD sh /setup.sh
 
 
 
-
-# -------------------------------------
-# -------------------------------------
-# apk add --nocache openssl
-# mkdir -p etc/nginx/ssl
-# openssl genrsa 4048 > etc/nginx/ssl/nginx.key
-# openssl req -new -subj "/C=JP/ST=Tokyo/L=Minato/O=42Tokyo/OU=42cursus/CN=localhost" -key etc/nginx/ssl/nginx.key > etc/nginx/ssl/nginx.csr
-# openssl x509 -req -days 365 -signkey etc/nginx/ssl/nginx.key -in etc/nginx/ssl/nginx.csr > etc/nginx/ssl/nginx.crt

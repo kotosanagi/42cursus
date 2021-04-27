@@ -18,8 +18,9 @@ eval $(minikube docker-env)
 # build images
 ### docker build ./srcs/XXX -t XXX_images_koto
 docker build ./srcs/nginx -t nginx_images_koto
-docker build ./srcs/wordpress -t wordpress_images_koto
 docker build ./srcs/mysql -t mysql_images_koto
+docker build ./srcs/wordpress -t wordpress_images_koto
+docker build ./srcs/phpmyadmin -t phpmyadmin_images_koto
 
 
 # create cluster
@@ -32,6 +33,7 @@ kubectl create secret generic -n metallb-system memberlist --from-literal=secret
 kubectl apply -f ./srcs/nginx.yaml
 kubectl apply -f ./srcs/mysql.yaml
 kubectl apply -f ./srcs/wordpress.yaml
+kubectl apply -f ./srcs/phpmyadmin.yaml
 
 
 ########
