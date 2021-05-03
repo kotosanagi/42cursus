@@ -4,21 +4,6 @@ FROM alpine:3.13
 COPY ./srcs/setup.sh /
 COPY ./srcs/nginx.conf /etc/nginx/nginx.conf
 
-# ///rnakai start///
-# RUN apk update \
-# 	&& apk add \
-# 		openrc \
-# 		openssl \
-# 		nginx \
-# 		curl \
-# 		wget \
-# 		mysql \
-# 		mysql-client \
-# 		libc6-compat \
-# 		php php7-fpm php7-phar php7-mcrypt php7-soap php7-openssl php7-gmp php7-pdo_odbc php7-json php7-dom php7-pdo php7-zip php7-mysqli php7-sqlite3 php7-apcu php7-pdo_pgsql php7-bcmath php7-gd php7-odbc php7-pdo_mysql php7-pdo_sqlite php7-gettext php7-xmlreader php7-xmlrpc php7-bz2 php7-iconv php7-pdo_dblib php7-curl php7-ctype
-# # ///rnakai end///
-
-# ///koto start///
 RUN	set -ex; \
 		apk update && apk add \
 		curl \
@@ -56,8 +41,10 @@ RUN	set -ex; \
 		php7-sqlite3 \
 		php7-xmlreader \
 		php7-xmlrpc \
-		php7-zip;
-# ///koto end///
+		php7-zip \
+		php7-phar \
+		fcgi ;
+
 
 ##########
 # rc_sys="lxc"	// linux containers
@@ -93,9 +80,9 @@ RUN mkdir -p /run/nginx
 
 # install wordpress
 RUN	mkdir -p /var/www/html/wordpress; \
-	curl -L -O https://ja.wordpress.org/latest-ja.tar.gz; \
-	tar -xvf latest-ja.tar.gz -C /var/www/html/; \
-	rm latest-ja.tar.gz ;
+	curl -L -O https://ja.wordpress.org/wordpress-5.1-ja.tar.gz; \
+	tar -xvf wordpress-5.1-ja.tar.gz -C /var/www/html/; \
+	rm wordpress-5.1-ja.tar.gz ;
 COPY ./srcs/wp-config.php /var/www/html/wordpress/wp-config.php
 RUN chmod -R 775 /var/www/html/wordpress/*
 
@@ -106,7 +93,7 @@ RUN adduser -D -g www www \
 
 # copy www.conf
 COPY srcs/www.conf /etc/php7/php-fpm.d/
-RUN chmod 755 /etc/php7/php-fpm.d/www.conf
+RUN chmod 775 /etc/php7/php-fpm.d/www.conf
 
 # get wp-cli
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \

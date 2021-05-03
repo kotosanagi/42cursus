@@ -4,12 +4,17 @@ COPY	./srcs/nginx.conf /etc/nginx/nginx.conf
 COPY	./srcs/setup.sh /
 
 # setup nginx
-RUN	set -ex; \
-	apk update; \
-	apk add --no-cache nginx openssl; \
-	mkdir -p /run/nginx; \
-	mkdir -p /var/www/html; \
-	echo "hello KOTO" > /var/www/html/index.html;
+# RUN	set -ex;
+RUN touch testtttttttttttt;
+RUN apk update;
+RUN touch testtttttttttttt0000;
+RUN apk add --no-cache nginx;
+RUN touch testtttttttttttt1111;
+RUN apk add --no-cache openssl;
+RUN touch testtttttttttttt2222;
+RUN mkdir -p /run/nginx;
+RUN mkdir -p /var/www/html;
+RUN echo "hello KOTO" > /var/www/html/index.html;
 
 # ssl
 RUN set -ex; \

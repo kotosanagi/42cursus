@@ -4,7 +4,35 @@ COPY ./srcs/setup.sh /
 COPY ./srcs/nginx.conf /etc/nginx/nginx.conf
 
 RUN	set -ex; \
-		apk update && apk add --no-cache curl nginx openssl php7-common php7-session php7-iconv php7-json php7-gd php7-curl php7-xml php7-mysqli php7-imap php7-cgi fcgi php7-pdo php7-pdo_mysql php7-soap php7-xmlrpc php7-posix php7-mcrypt php7-gettext php7-ldap php7-ctype php7-dom php7 php7-fpm openrc;
+		apk update && apk add --no-cache \
+		curl \
+		fcgi \
+		openssl \
+		nginx \
+		openrc \
+		php7 \
+		php7-cgi \
+		php7-common \
+		php7-ctype \
+		php7-curl \
+		php7-dom \
+		php7-fpm \
+		php7-gd \
+		php7-gettext \
+		php7-iconv \
+		php7-imap \
+		php7-json \
+		php7-ldap \
+		php7-mbstring \
+		php7-mcrypt \
+		php7-mysqli \
+		php7-pdo \
+		php7-pdo_mysql \
+		php7-posix \
+		php7-session \
+		php7-soap \
+		php7-xml \
+		php7-xmlrpc;
 
 ##########
 RUN sed -i'.bak' 's/^#rc_sys=""/rc_sys="lxc"/' /etc/rc.conf \
@@ -22,11 +50,12 @@ RUN mkdir -p /run/nginx
 RUN mkdir -p var/www/html/phpmyadmin
 
 RUN set -ex; \
-		curl -L -O https://files.phpmyadmin.net/phpMyAdmin/5.0.4/phpMyAdmin-5.0.4-all-languages.tar.gz; \
-		tar -xvf phpMyAdmin-5.0.4-all-languages.tar.gz -C var/www/html/phpmyadmin/ --strip-components=1; \
-		rm phpMyAdmin-5.0.4-all-languages.tar.gz;
+		curl -L -O https://files.phpmyadmin.net/phpMyAdmin/4.9.3/phpMyAdmin-4.9.3-all-languages.tar.gz; \
+		tar -xvf phpMyAdmin-4.9.3-all-languages.tar.gz -C var/www/html/phpmyadmin/ --strip-components=1; \
+		rm phpMyAdmin-4.9.3-all-languages.tar.gz;
 COPY ./srcs/config.inc.php /var/www/html/phpmyadmin/config.inc.php
 RUN chmod -R 775 /var/www/html/phpmyadmin/*
+RUN chown -R nginx:nginx /var/www/html/phpmyadmin/
 
 # ssl
 RUN set -ex; \

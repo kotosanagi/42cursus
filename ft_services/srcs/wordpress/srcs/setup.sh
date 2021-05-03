@@ -5,13 +5,31 @@ rc-service php-fpm7 start
 
 wp core install \
 	--url=https://192.168.49.2:5050 \
-	--title=test --admin_user=user \
-	--admin_password=pass \
-	--admin_email=admin@example.com \
+	--title=KOTOblog \
+	--admin_user=KOTO \
+	--admin_password=KOTO \
+	--admin_email=KOTO@example.com \
 	--path=/var/www/html/wordpress
 
+result=$?
 
+if [ $result != 0 ]; then
+	exit $result
+fi
 
+wp user create skotoyor skotoyor@example.com \
+--user_pass=pw \
+--role=author \
+--first_name=shota \
+--last_name=kotoyori \
+--path=/var/www/html/wordpress
+
+wp user create moco moco@example.com \
+--user_pass=pw \
+--role=subscriber \
+--first_name=moco \
+--last_name=kotoyori \
+--path=/var/www/html/wordpress
 
 nginx -g "daemon off;"
 

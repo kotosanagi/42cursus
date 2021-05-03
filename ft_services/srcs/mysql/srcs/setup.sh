@@ -18,6 +18,6 @@
 /usr/bin/mysqld --user=root --init_file=/init_mysql &
 
 
-touch /bbbbb
+# touch /bbbbb
 
 tail -f /dev/null
