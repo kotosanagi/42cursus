@@ -11,13 +11,8 @@
 
 # mysql -e "FLUSH PRIVILEGES;";
 
-# mysql -e "create database mydbbbbbbbbbbbbbbb;"
-
 /usr/bin/mysql_install_db --datadir=/var/lib/mysql
 
 /usr/bin/mysqld --user=root --init_file=/init_mysql &
-
-
-# touch /bbbbb
 
 tail -f /dev/null
