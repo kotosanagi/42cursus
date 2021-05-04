@@ -7,6 +7,9 @@ The following functions are used to create these projects.
 
 -Basic library functions such as "malloc", "va_arg" and more...
 
+## cub3D
+This project is the making a 3d game using ray tracing technology.
+![demo](https://raw.githubusercontent.com/wiki/kotosanagi/42cursus/images/cub3D_demo.gif)
 
 ## ft_mini_ls
 This program is a reproduction of Linux command "ls -1tr".
