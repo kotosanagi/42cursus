@@ -5,11 +5,8 @@ RUN apk update; \
 		apk add influxdb; \
 		rm -fr /var/cache/apk/*
 
-
 COPY ./srcs/setup.sh /setup.sh
-# COPY ./srcs/init_mysql /init_mysql
-# COPY ./srcs/my.cnf /etc/my.cnf
-# RUN mkdir -p /run/mysqld
+RUN mkdir -p /var/lib/influxdb
 
 # ENTRYPOINT [ "sh", "/setup.sh" ]
 CMD ["/setup.sh"]
@@ -41,5 +38,4 @@ CMD ["/setup.sh"]
 # docker exec -it influx_container_koto sh
 
 # docker run -it --name influx_container_koto influx_images_koto bash
-
 

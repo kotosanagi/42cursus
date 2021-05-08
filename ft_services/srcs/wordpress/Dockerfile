@@ -100,6 +100,10 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 	&& chmod 775 wp-cli.phar \
 	&& mv wp-cli.phar /usr/local/bin/wp
 
+# telegraf....
+# RUN wget https://dl.influxdata.com/telegraf/releases/telegraf-1.16.2_linux_amd64.tar.gz
+# RUN 
+
 
 EXPOSE 5050
 

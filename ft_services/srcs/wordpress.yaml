@@ -24,7 +24,7 @@ kind: Service
 metadata:
   name: wordpress-service
   annotations:
-    metallb.universe.tf/address-pool: production-public-ips
+    metallb.universe.tf/allow-shared-ip : production-public-ips
 spec:
   selector:
     app: wordpress ###

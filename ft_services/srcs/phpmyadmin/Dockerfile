@@ -34,7 +34,7 @@ RUN	set -ex; \
 		php7-xml \
 		php7-xmlrpc;
 
-##########
+#########
 RUN sed -i'.bak' 's/^#rc_sys=""/rc_sys="lxc"/' /etc/rc.conf \
     && sed -i 's/^#rc_provide="!net"/rc_provide="loopback net"/' /etc/rc.conf \
     && sed -i'.bak' '/getty/d' /etc/inittab \
