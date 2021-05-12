@@ -23,7 +23,7 @@ ft_services   : Docker,kubernetesを用いてクラスタを作成します�
 
 ***
 
-## ft_printf
+## "ft_printf"
 ![demo](https://raw.githubusercontent.com/wiki/kotosanagi/42cursus/images/ft_printf_demo.png)
 
 <details>
@@ -111,8 +111,8 @@ makeコマンドでアーカイブファイル「libftprintf.a」が生成され
 
 printf関数は、以下のように呼び出す度に引数の数が異なることがあるので、va_arg関数を用いて対応しました。
 ```c
-printf("Hello World\n");                //Hello World
-printf("%4d年%2d月%2d日\n", 2021, 5, 9);//2021年05月09日
+printf("Hello World\n");                 // Hello World
+printf("%4d年%2d月%2d日\n", 2021, 5, 9); // 2021年05月09日
 ```
 
 数値の出力を行うd,i,u,x,X,pの変換指定子の処理は、共通している部分は切り出して、各処理に進数の数と各数字の文字列を与えています。
