@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ftps-deployment
+  labels:
+    app: ftps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ftps # as deployment what manage_
+  template:
+    metadata:
+      labels:
+        app: ftps ###
+    spec:
+      containers:
+      - name: ftps
+        image: ftps_images_koto
+        imagePullPolicy: Never
+        ports:
+        # - containerPort: 20
+        #   name: ftps-data
+        - containerPort: 21
+          name: ftps
+        - containerPort: 40001
+          name: pasv-40001
+        - containerPort: 40002
+          name: pasv-40002
+        - containerPort: 40003
+          name: pasv-40003
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ftps-service
+  annotations:
+    metallb.universe.tf/allow-shared-ip : production-public-ips
+spec:
+  selector:
+    app: ftps ###
+  type: LoadBalancer
+  # loadBalancerIP: 192.168.49.2
+  ports:
+  # - protocol: TCP
+  #   name: ftps-data
+  #   port: 20
+  #   targetPort: 20
+  - protocol: TCP
+    name: ftps
+    port: 21
+    targetPort: 21
+  - protocol: TCP
+    name: ftps-40001
+    port: 40001
+    targetPort: 40001
+  - protocol: TCP
+    name: ftps-40002
+    port: 40002
+    targetPort: 40002
+  - protocol: TCP
+    name: ftps-40003
+    port: 40003
+    targetPort: 40003
