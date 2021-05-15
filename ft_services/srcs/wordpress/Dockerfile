@@ -1,5 +1,6 @@
 # FROM alpine:3.6
-FROM alpine:3.13
+# FROM alpine:3.13
+FROM alpine:3.12
 
 COPY ./srcs/setup.sh /
 COPY ./srcs/nginx.conf /etc/nginx/nginx.conf
@@ -80,9 +81,9 @@ RUN mkdir -p /run/nginx
 
 # install wordpress
 RUN	mkdir -p /var/www/html/wordpress; \
-	curl -L -O https://ja.wordpress.org/wordpress-5.1-ja.tar.gz; \
-	tar -xvf wordpress-5.1-ja.tar.gz -C /var/www/html/; \
-	rm wordpress-5.1-ja.tar.gz ;
+	curl -L -O https://wordpress.org/wordpress-5.7.1.tar.gz; \
+	tar -xvf wordpress-5.7.1.tar.gz -C /var/www/html/; \
+	rm wordpress-5.7.1.tar.gz ;
 COPY ./srcs/wp-config.php /var/www/html/wordpress/wp-config.php
 RUN chmod -R 775 /var/www/html/wordpress/*
 

@@ -4,7 +4,7 @@ rc-service php-fpm7 start
 
 
 wp core install \
-	--url=https://192.168.49.2:5050 \
+	--url=https://192.168.49.42:5050 \
 	--title=KOTOblog \
 	--admin_user=KOTO \
 	--admin_password=KOTO \

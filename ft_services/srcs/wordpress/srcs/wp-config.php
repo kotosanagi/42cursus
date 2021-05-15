@@ -43,6 +43,15 @@ define( 'DB_CHARSET', 'utf8' );
 /** データベースの照合順序 (ほとんどの場合変更する必要はありません) */
 define( 'DB_COLLATE', '' );
 
+
+
+define( 'CONCATENATE_SCRIPTS', false ); 
+define( 'SCRIPT_DEBUG', true );
+
+
+
+
+
 /**#@+
  * 認証用ユニークキー
  *
