@@ -3,7 +3,7 @@ FROM alpine:3.12
 COPY ./srcs/setup.sh /
 
 RUN apk update; \
-	apk add vsftpd openssl lftp;
+	apk add vsftpd openssl lftp libc6-compat;
 
 #adduser
 RUN mkdir -p /etc/ftps/ftp_admin && \
@@ -20,7 +20,12 @@ RUN set -ex; \
 COPY ./srcs/vsftpd.conf /etc/vsftpd/vsftpd.conf
 # RUN mkdir /var/ftp
 
-
+# telegraf
+RUN wget https://dl.influxdata.com/telegraf/releases/telegraf-1.16.2_linux_amd64.tar.gz
+RUN tar -xvf telegraf-1.16.2_linux_amd64.tar.gz
+RUN sed -i -e 's/hostname = ""/hostname = "ftps"/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
+RUN sed -i -e 's/# urls = \["http:\/\/127.0.0.1:8086"\]/urls = \["http:\/\/influxdb-service:8086"\]/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
+RUN sed -i -e 's/# database = "telegraf"/database = "ftps"/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
 
 EXPOSE 20 21 40001-40003
 

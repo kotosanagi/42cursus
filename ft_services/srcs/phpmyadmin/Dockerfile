@@ -1,4 +1,6 @@
-FROM alpine:3.6
+# FROM alpine:3.6
+FROM alpine:3.12
+# FROM alpine:3.13
 
 COPY ./srcs/setup.sh /
 COPY ./srcs/nginx.conf /etc/nginx/nginx.conf
@@ -10,6 +12,7 @@ RUN	set -ex; \
 		openssl \
 		nginx \
 		openrc \
+		libc6-compat \
 		php7 \
 		php7-cgi \
 		php7-common \
@@ -57,6 +60,7 @@ COPY ./srcs/config.inc.php /var/www/html/phpmyadmin/config.inc.php
 RUN chmod -R 775 /var/www/html/phpmyadmin/*
 RUN chown -R nginx:nginx /var/www/html/phpmyadmin/
 
+
 # ssl
 RUN set -ex; \
 		mkdir -p etc/phpmyadmin/ssl; \
@@ -64,9 +68,20 @@ RUN set -ex; \
 		openssl req -new -subj "/C=JP/ST=Tokyo/L=Minato/O=42Tokyo/OU=42cursus/CN=localhost" -key etc/phpmyadmin/ssl/phpmyadmin.key > etc/phpmyadmin/ssl/phpmyadmin.csr; \
 		openssl x509 -req -days 365 -signkey etc/phpmyadmin/ssl/phpmyadmin.key -in etc/phpmyadmin/ssl/phpmyadmin.csr > etc/phpmyadmin/ssl/phpmyadmin.crt;
 
+
+
+# telegraf
+RUN wget https://dl.influxdata.com/telegraf/releases/telegraf-1.16.2_linux_amd64.tar.gz
+RUN tar -xvf telegraf-1.16.2_linux_amd64.tar.gz
+RUN sed -i -e 's/hostname = ""/hostname = "phpmyadmin"/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
+RUN sed -i -e 's/# urls = \["http:\/\/127.0.0.1:8086"\]/urls = \["http:\/\/influxdb-service:8086"\]/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
+RUN sed -i -e 's/# database = "telegraf"/database = "phpmyadmin"/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
+
+
 EXPOSE 5000
 
 ENTRYPOINT [ "sh", "/setup.sh" ]
+# CMD sh /setup.sh
 
 # ========================
 

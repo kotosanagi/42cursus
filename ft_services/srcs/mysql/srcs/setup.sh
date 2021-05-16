@@ -10,6 +10,7 @@
 # mysql -e "GRANT ALL PRIVILEGES ON wp_ftdb.* TO 'user'@'%' IDENTIFIED BY 'pass' WITH GRANT OPTION;";
 
 # mysql -e "FLUSH PRIVILEGES;";
+/telegraf-1.16.2/usr/bin/telegraf --config /telegraf-1.16.2/etc/telegraf/telegraf.conf &
 
 /usr/bin/mysql_install_db --datadir=/var/lib/mysql
 

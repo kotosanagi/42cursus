@@ -101,9 +101,13 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 	&& chmod 775 wp-cli.phar \
 	&& mv wp-cli.phar /usr/local/bin/wp
 
-# telegraf....
-# RUN wget https://dl.influxdata.com/telegraf/releases/telegraf-1.16.2_linux_amd64.tar.gz
-# RUN 
+# telegraf
+RUN wget https://dl.influxdata.com/telegraf/releases/telegraf-1.16.2_linux_amd64.tar.gz
+RUN tar -xvf telegraf-1.16.2_linux_amd64.tar.gz
+RUN sed -i -e 's/hostname = ""/hostname = "wordpress"/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
+RUN sed -i -e 's/# urls = \["http:\/\/127.0.0.1:8086"\]/urls = \["http:\/\/influxdb-service:8086"\]/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
+RUN sed -i -e 's/# database = "telegraf"/database = "wordpress"/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
+
 
 
 EXPOSE 5050
