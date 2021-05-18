@@ -3,6 +3,7 @@ FROM alpine:3.13
 
 COPY	./srcs/nginx.conf /etc/nginx/nginx.conf
 COPY	./srcs/setup.sh /
+COPY ./srcs/livenessprobe.sh /livenessprobe.sh
 
 # setup nginx
 RUN apk update; \
@@ -26,7 +27,7 @@ RUN tar -xvf telegraf-1.16.2_linux_amd64.tar.gz
 RUN sed -i -e 's/hostname = ""/hostname = "nginx"/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
 RUN sed -i -e 's/# urls = \["http:\/\/127.0.0.1:8086"\]/urls = \["http:\/\/influxdb-service:8086"\]/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
 RUN sed -i -e 's/# database = "telegraf"/database = "nginx"/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
-
+RUN rm telegraf-1.16.2_linux_amd64.tar.gz
 
 EXPOSE 80
 EXPOSE 443

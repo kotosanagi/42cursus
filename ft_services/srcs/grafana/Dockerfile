@@ -2,6 +2,7 @@ FROM alpine:3.12
 # FROM alpine:3.6 <- doesn't work
 
 COPY ./srcs/setup.sh /
+COPY ./srcs/livenessprobe.sh /livenessprobe.sh
 
 RUN apk update; \
 	apk add libc6-compat openssl;
@@ -44,7 +45,7 @@ RUN tar -xvf telegraf-1.16.2_linux_amd64.tar.gz
 RUN sed -i -e 's/hostname = ""/hostname = "grafana"/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
 RUN sed -i -e 's/# urls = \["http:\/\/127.0.0.1:8086"\]/urls = \["http:\/\/influxdb-service:8086"\]/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
 RUN sed -i -e 's/# database = "telegraf"/database = "grafana"/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
-
+RUN rm telegraf-1.16.2_linux_amd64.tar.gz
 
 
 EXPOSE 3000

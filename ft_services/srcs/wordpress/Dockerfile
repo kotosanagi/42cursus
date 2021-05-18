@@ -4,6 +4,7 @@ FROM alpine:3.12
 
 COPY ./srcs/setup.sh /
 COPY ./srcs/nginx.conf /etc/nginx/nginx.conf
+COPY ./srcs/livenessprobe.sh /livenessprobe.sh
 
 RUN	set -ex; \
 		apk update && apk add \
@@ -67,8 +68,7 @@ RUN sed -i'.bak' 's/^#rc_sys=""/rc_sys="lxc"/' /etc/rc.conf \
     && sed -i'.bak' 's/hostname $opts/# hostname $opts/' /etc/init.d/hostname \
     && sed -i'.bak' 's/cgroup_add_service$/# cgroup_add_service/' /lib/rc/sh/openrc-run.sh \
     && mkdir /run/openrc \
-    && touch /run/openrc/softlevel \
-    && sed -i'.bak' 's/return 404;/root html;\n\t\tindex index.html;/' /etc/nginx/conf.d/default.conf
+    && touch /run/openrc/softlevel
 ##########
 
 # ssl
@@ -107,7 +107,7 @@ RUN tar -xvf telegraf-1.16.2_linux_amd64.tar.gz
 RUN sed -i -e 's/hostname = ""/hostname = "wordpress"/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
 RUN sed -i -e 's/# urls = \["http:\/\/127.0.0.1:8086"\]/urls = \["http:\/\/influxdb-service:8086"\]/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
 RUN sed -i -e 's/# database = "telegraf"/database = "wordpress"/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
-
+RUN rm telegraf-1.16.2_linux_amd64.tar.gz
 
 
 EXPOSE 5050

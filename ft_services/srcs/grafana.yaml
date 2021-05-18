@@ -18,6 +18,13 @@ spec:
       - name: grafana
         image: grafana_images_koto
         imagePullPolicy: Never
+        livenessProbe:
+          exec:
+            command: ["/livenessprobe.sh"]
+          initialDelaySeconds: 60
+          periodSeconds: 20
+          timeoutSeconds: 5
+          failureThreshold: 1
 ---
 apiVersion: v1
 kind: Service

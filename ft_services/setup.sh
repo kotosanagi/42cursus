@@ -18,7 +18,7 @@ eval $(minikube docker-env)
 ### docker build ./srcs/XXX -t XXX_images_koto
 docker build ./srcs/influxdb -t influxdb_images_koto
 docker build ./srcs/grafana -t grafana_images_koto
-docker build ./srcs/nginx -t nginx_images_koto > ./nginx_build_log
+docker build ./srcs/nginx -t nginx_images_koto
 docker build ./srcs/mysql -t mysql_images_koto
 docker build ./srcs/wordpress -t wordpress_images_koto
 docker build ./srcs/phpmyadmin -t phpmyadmin_images_koto
@@ -27,7 +27,7 @@ docker build ./srcs/ftps -t ftps_images_koto
 
 # create cluster
 # MetalLB
-kubectl apply -f ./srcs/debug-pod.yaml ##########DEBUG###########
+# kubectl apply -f ./srcs/debug-pod.yaml ##########DEBUG###########
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
 kubectl apply -f ./srcs/config.yaml
