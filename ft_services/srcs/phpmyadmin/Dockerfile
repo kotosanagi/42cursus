@@ -50,15 +50,24 @@ RUN sed -i'.bak' 's/^#rc_sys=""/rc_sys="lxc"/' /etc/rc.conf \
 ##########
 
 RUN mkdir -p /run/nginx
-RUN mkdir -p var/www/html/phpmyadmin
+RUN mkdir -p /var/www/html/phpmyadmin
+RUN mkdir -p /var/www/html/phpmyadmin/tmp
 
+# add user
+RUN adduser -D -g www www \
+	&& chown -R www:www /var/lib/nginx \
+	&& chown -R www:www /var/www/html/phpmyadmin \
+	&& chmod 777 /var/www/html/phpmyadmin
+
+# install phpmyadmin
 RUN set -ex; \
 		curl -L -O https://files.phpmyadmin.net/phpMyAdmin/4.9.3/phpMyAdmin-4.9.3-all-languages.tar.gz; \
 		tar -xvf phpMyAdmin-4.9.3-all-languages.tar.gz -C var/www/html/phpmyadmin/ --strip-components=1; \
 		rm phpMyAdmin-4.9.3-all-languages.tar.gz;
 COPY ./srcs/config.inc.php /var/www/html/phpmyadmin/config.inc.php
 RUN chmod -R 775 /var/www/html/phpmyadmin/*
-RUN chown -R nginx:nginx /var/www/html/phpmyadmin/
+RUN chmod -R 777 /var/www/html/phpmyadmin/tmp
+RUN chown -R www:www /var/www/html/phpmyadmin/
 
 
 # ssl
