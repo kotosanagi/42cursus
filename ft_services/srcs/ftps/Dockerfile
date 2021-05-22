@@ -19,7 +19,6 @@ RUN set -ex; \
 		openssl x509 -req -days 365 -signkey etc/ftps/ssl/ftps.key -in etc/ftps/ssl/ftps.csr > etc/ftps/ssl/ftps.crt;
 
 COPY ./srcs/vsftpd.conf /etc/vsftpd/vsftpd.conf
-# RUN mkdir /var/ftp
 
 # telegraf
 RUN wget https://dl.influxdata.com/telegraf/releases/telegraf-1.16.2_linux_amd64.tar.gz

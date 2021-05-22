@@ -12,7 +12,6 @@ RUN mkdir -p /run/nginx;
 RUN mkdir -p /var/www/html;
 COPY ./srcs/index.html /var/www/html/index.html
 RUN chmod 755 -R /var/www/html/
-# RUN echo "hello KOTO" > /var/www/html/index.html;
 
 # ssl
 RUN set -ex; \
@@ -32,8 +31,6 @@ RUN rm telegraf-1.16.2_linux_amd64.tar.gz
 EXPOSE 80
 EXPOSE 443
 
-# CMD tail -f /dev/null
-# CMD nginx -g "daemon off;"
 CMD sh /setup.sh
 
 

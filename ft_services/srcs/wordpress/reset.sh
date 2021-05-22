@@ -1,3 +1,5 @@
+#!/bin/sh
+
 kubectl delete deployment wordpress-deployment
 eval $(minikube docker-env)
 docker rmi wordpress_images_koto

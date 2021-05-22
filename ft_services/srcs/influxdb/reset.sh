@@ -1,3 +1,5 @@
+#!/bin/sh
+
 kubectl delete deployment influxdb-deployment
 eval $(minikube docker-env)
 docker rmi influxdb_images_koto

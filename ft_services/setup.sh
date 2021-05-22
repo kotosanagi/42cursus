@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # minikube delete && sh ./setup.sh
 
 minikube delete
@@ -26,7 +28,6 @@ docker build ./srcs/ftps -t ftps_images_koto
 
 
 # create cluster
-# MetalLB
 # kubectl apply -f ./srcs/debug-pod.yaml ##########DEBUG###########
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
@@ -43,7 +44,31 @@ kubectl apply -f ./srcs/grafana.yaml
 
 
 ########
-echo "please wait..."
+echo "                .&&                "
+echo "          &     & &&    &&         "
+echo "   &&    & &   &   &&  &&&    &&   "
+echo "  &  &  &%  & &     &% &  &   & &  "
+echo " &&  &&,&   %&       &&    & &   & "
+echo " &    &&                   (&     &"
+echo "&                                 %"
+echo "&                                 &"
+echo "&                                 &"
+echo "&                                 &"
+echo "&                                 &"
+echo "&                                 &"
+echo "&  &&&&&&&&&&&  &&&&&&&&&&&&   &&*&"
+echo "&  &         &  &          &&&&   &"
+echo "&  &         &  &          &      &"
+echo "&  &&&&&&&&&&&  &&&&&&&&&&&&      &"
+echo "&           %                     &"
+echo "&         &&                      &"
+echo "&          &&                     &"
+echo "&                                 &"
+echo "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+echo "       /\               "
+echo "-------  ---------------"
+echo "|   please wait...     |"
+echo "------------------------"
 sleep 25
 kubectl get pod -o wide
 kubectl get svc

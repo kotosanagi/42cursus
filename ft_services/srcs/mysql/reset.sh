@@ -1,3 +1,5 @@
+#!/bin/sh
+
 kubectl delete deployment mysql-deployment
 eval $(minikube docker-env)
 docker rmi mysql_images_koto

@@ -1,3 +1,5 @@
+#!/bin/sh
+
 kubectl delete deployment phpmyadmin-deployment
 eval $(minikube docker-env)
 docker rmi phpmyadmin_images_koto

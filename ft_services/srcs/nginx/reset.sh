@@ -1,3 +1,5 @@
+#!/bin/sh
+
 kubectl delete deployment nginx-deployment
 eval $(minikube docker-env)
 docker rmi nginx_images_koto

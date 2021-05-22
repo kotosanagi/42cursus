@@ -7,8 +7,3 @@ spec:
   - name: debug-pod
     image: alpine
     command: ["sleep", "infinity"]
-
-# apk update ; apk add lftp;
-# echo "set ssl:verify-certificate no" > /root/.lftprc
-
-

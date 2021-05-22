@@ -1,3 +1,5 @@
+#!/bin/sh
+
 kubectl delete deployment grafana-deployment
 eval $(minikube docker-env)
 docker rmi grafana_images_koto

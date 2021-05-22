@@ -1,3 +1,5 @@
+#!/bin/sh
+
 kubectl delete deployment ftps-deployment
 eval $(minikube docker-env)
 docker rmi ftps_images_koto

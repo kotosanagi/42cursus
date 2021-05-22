@@ -1,8 +1,9 @@
+#!/bin/sh
+
 /telegraf-1.16.2/usr/bin/telegraf --config /telegraf-1.16.2/etc/telegraf/telegraf.conf &
 
 rc-status
 rc-service php-fpm7 start
-
 
 wp core install \
 	--url=https://192.168.49.42:5050 \
@@ -33,6 +34,3 @@ wp user create moco moco@example.com \
 --path=/var/www/html/wordpress
 
 nginx -g "daemon off;"
-
-# nginx
-# sleep infinity
