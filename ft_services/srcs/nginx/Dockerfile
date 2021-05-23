@@ -1,5 +1,4 @@
 FROM alpine:3.13
-# FROM alpine:3.6
 
 COPY	./srcs/nginx.conf /etc/nginx/nginx.conf
 COPY	./srcs/setup.sh /
@@ -32,18 +31,4 @@ EXPOSE 80
 EXPOSE 443
 
 CMD sh /setup.sh
-
-
-# -------------------------------------
-# -------------------------------------
-
-# docker build . -t nginx_images_koto && docker run -d -p 8080:80 -p 443:443 --name nginx_container_koto nginx_images_koto
-
-# docker exec -ti nginx_container_koto ash
-
-# http://localhost:8080
-# https://localhost:443
-
-# docker container stop nginx_container_koto && docker rm nginx_container_koto && docker rmi nginx_images_koto
-
 

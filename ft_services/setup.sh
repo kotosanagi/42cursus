@@ -1,23 +1,11 @@
 #!/bin/sh
 
-# minikube delete && sh ./setup.sh
-
-minikube delete
-# ---------- #
-# ---------- #
-
-# before exec
-# sudo chmod -R 777 ~/.minikube
-# sudo chmod -R 777 ~/.kube
-
 minikube start --vm-driver=docker --extra-config=apiserver.service-node-port-range=1-65535
 
 # set workplace environment
 eval $(minikube docker-env) 
 
-
 # build images
-### docker build ./srcs/XXX -t XXX_images_koto
 docker build ./srcs/influxdb -t influxdb_images_koto
 docker build ./srcs/grafana -t grafana_images_koto
 docker build ./srcs/nginx -t nginx_images_koto
@@ -42,8 +30,6 @@ kubectl apply -f ./srcs/phpmyadmin.yaml
 kubectl apply -f ./srcs/ftps.yaml
 kubectl apply -f ./srcs/grafana.yaml
 
-
-########
 echo "                .&&                "
 echo "          &     & &&    &&         "
 echo "   &&    & &   &   &&  &&&    &&   "

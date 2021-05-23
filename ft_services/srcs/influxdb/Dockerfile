@@ -1,4 +1,3 @@
-# FROM alpine:3.6
 FROM alpine:3.13
 
 RUN apk update; \
@@ -18,32 +17,3 @@ RUN sed -i -e 's/# database = "telegraf"/database = "influxdb"/g' /telegraf-1.16
 RUN rm telegraf-1.16.2_linux_amd64.tar.gz
 
 CMD ["/setup.sh"]
-
-# ========================
-
-# run
-# docker build . -t influx_images_koto && docker run -d --name influx_container_koto influx_images_koto
-
-# sh
-# docker build . -t influx_images_koto &&  docker run -ti --name influx_container_koto influx_images_koto sh
-
-# remove
-# docker container stop influx_container_koto && docker rm influx_container_koto && docker rmi influx_images_koto
-
-# restart sh
-# docker container stop influx_container_koto && docker rm influx_container_koto && docker rmi influx_images_koto && docker build . -t influx_images_koto &&  docker run -ti --name influx_container_koto influx_images_koto sh
-
-# restart run
-# docker container stop influx_container_koto && docker rm influx_container_koto && docker rmi influx_images_koto && docker build . -t influx_images_koto &&  docker run -d --name influx_container_koto influx_images_koto 
-
-# into container
-# docker exec -ti influx_container_koto sh
-
-# ------------
-
-# docker run -d --name influx_container_koto influx_images_koto
-# &&
-# docker exec -it influx_container_koto sh
-
-# docker run -it --name influx_container_koto influx_images_koto bash
-

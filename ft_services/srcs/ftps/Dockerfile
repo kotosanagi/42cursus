@@ -28,31 +28,6 @@ RUN sed -i -e 's/# urls = \["http:\/\/127.0.0.1:8086"\]/urls = \["http:\/\/influ
 RUN sed -i -e 's/# database = "telegraf"/database = "ftps"/g' /telegraf-1.16.2/etc/telegraf/telegraf.conf
 RUN rm telegraf-1.16.2_linux_amd64.tar.gz
 
-EXPOSE 20 21 40001-40003
+EXPOSE 21 40001-40003
 
 CMD sh ./setup.sh
-
-# run
-# docker build . -t ftps_images_koto && docker run -d --name ftps_container_koto ftps_images_koto
-
-# sh
-# docker build . -t ftps_images_koto && docker run -d --name ftps_container_koto ftps_images_koto && docker exec -ti ftps_container_koto sh
-
-# remove
-# docker container stop ftps_container_koto && docker rm ftps_container_koto && docker rmi ftps_images_koto
-
-# restart sh
-# docker container stop ftps_container_koto && docker rm ftps_container_koto && docker rmi ftps_images_koto && docker build . -t ftps_images_koto && docker run -d --name ftps_container_koto ftps_images_koto && docker exec -ti ftps_container_koto sh
-
-
-# restart run
-# docker container stop ftps_container_koto && docker rm ftps_container_koto && docker rmi ftps_images_koto && docker build . -t ftps_images_koto &&  docker run -d --name ftps_container_koto ftps_images_koto 
-
-# into container
-# docker exec -ti ftps_container_koto sh
-
-
-
-#### CONNECT LFTP ####
-# lftp -e "set ssl:verify-certificate no" -u ftp_admin,ftp_admin 192.168.49.42 -p 21
-######################

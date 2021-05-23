@@ -1,5 +1,3 @@
-# FROM alpine:3.6
-# FROM alpine:3.13
 FROM alpine:3.12
 
 COPY ./srcs/setup.sh /
@@ -47,20 +45,6 @@ RUN	set -ex; \
 		php7-phar \
 		fcgi ;
 
-
-##########
-# rc_sys="lxc"	// linux containers
-# rc_provide=""	// 
-# getty			// 
-
-# mount -t tmpfs		// comment out
-# host name				// comment out
-# cgroup_add_service$	// comment out
-
-# mkdir /run/openrc 
-# touch /run/openrc/softlevel
-
-# edit -> /etc/nginx/conf.d/default.conf
 RUN sed -i'.bak' 's/^#rc_sys=""/rc_sys="lxc"/' /etc/rc.conf \
     && sed -i 's/^#rc_provide="!net"/rc_provide="loopback net"/' /etc/rc.conf \
     && sed -i'.bak' '/getty/d' /etc/inittab \
@@ -69,7 +53,6 @@ RUN sed -i'.bak' 's/^#rc_sys=""/rc_sys="lxc"/' /etc/rc.conf \
     && sed -i'.bak' 's/cgroup_add_service$/# cgroup_add_service/' /lib/rc/sh/openrc-run.sh \
     && mkdir /run/openrc \
     && touch /run/openrc/softlevel
-##########
 
 # ssl
 RUN mkdir -p etc/wordpress/ssl; \
@@ -112,18 +95,4 @@ RUN rm telegraf-1.16.2_linux_amd64.tar.gz
 
 EXPOSE 5050
 
-# CMD sh /setup.sh
 ENTRYPOINT [ "sh", "/setup.sh" ]
-
-
-# ========================
-
-# run and sh
-# docker build . -t wordpress_images_koto && docker run -ti -d -p 5050:5050 --name wordpress_container_koto wordpress_images_koto sh && docker exec -ti wordpress_container_koto sh
-
-# delete
-# docker container stop wordpress_container_koto && docker rm wordpress_container_koto && docker rmi wordpress_images_koto
-
-# restart
-# docker container stop wordpress_container_koto && docker rm wordpress_container_koto && docker build . -t wordpress_images_koto && docker run -ti -d -p 5050:5050 --name wordpress_container_koto wordpress_images_koto sh && docker exec -ti wordpress_container_koto sh
-

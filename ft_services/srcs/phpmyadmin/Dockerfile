@@ -1,6 +1,4 @@
-# FROM alpine:3.6
 FROM alpine:3.12
-# FROM alpine:3.13
 
 COPY ./srcs/setup.sh /
 COPY ./srcs/nginx.conf /etc/nginx/nginx.conf
@@ -38,7 +36,6 @@ RUN	set -ex; \
 		php7-xml \
 		php7-xmlrpc;
 
-#########
 RUN sed -i'.bak' 's/^#rc_sys=""/rc_sys="lxc"/' /etc/rc.conf \
     && sed -i 's/^#rc_provide="!net"/rc_provide="loopback net"/' /etc/rc.conf \
     && sed -i'.bak' '/getty/d' /etc/inittab \
@@ -47,7 +44,6 @@ RUN sed -i'.bak' 's/^#rc_sys=""/rc_sys="lxc"/' /etc/rc.conf \
     && sed -i'.bak' 's/cgroup_add_service$/# cgroup_add_service/' /lib/rc/sh/openrc-run.sh \
     && mkdir /run/openrc \
     && touch /run/openrc/softlevel
-##########
 
 RUN mkdir -p /run/nginx
 RUN mkdir -p /var/www/html/phpmyadmin
@@ -69,15 +65,12 @@ RUN chmod -R 775 /var/www/html/phpmyadmin/*
 RUN chmod -R 777 /var/www/html/phpmyadmin/tmp
 RUN chown -R www:www /var/www/html/phpmyadmin/
 
-
 # ssl
 RUN set -ex; \
 		mkdir -p etc/phpmyadmin/ssl; \
 		openssl genrsa 4048 > etc/phpmyadmin/ssl/phpmyadmin.key; \
 		openssl req -new -subj "/C=JP/ST=Tokyo/L=Minato/O=42Tokyo/OU=42cursus/CN=localhost" -key etc/phpmyadmin/ssl/phpmyadmin.key > etc/phpmyadmin/ssl/phpmyadmin.csr; \
 		openssl x509 -req -days 365 -signkey etc/phpmyadmin/ssl/phpmyadmin.key -in etc/phpmyadmin/ssl/phpmyadmin.csr > etc/phpmyadmin/ssl/phpmyadmin.crt;
-
-
 
 # telegraf
 RUN wget https://dl.influxdata.com/telegraf/releases/telegraf-1.16.2_linux_amd64.tar.gz
@@ -90,15 +83,3 @@ RUN rm telegraf-1.16.2_linux_amd64.tar.gz
 EXPOSE 5000
 
 ENTRYPOINT [ "sh", "/setup.sh" ]
-# CMD sh /setup.sh
-
-# ========================
-
-# run and sh
-# docker build . -t phpmyadmin_images_koto && docker run -d -p 5050:5050 --name phpmyadmin_container_koto phpmyadmin_images_koto && docker exec -ti phpmyadmin_container_koto sh
-
-# delete
-# docker container stop phpmyadmin_container_koto && docker rm phpmyadmin_container_koto && docker rmi phpmyadmin_images_koto
-
-# restart
-# docker container stop phpmyadmin_container_koto && docker rm phpmyadmin_container_koto && docker build . -t phpmyadmin_images_koto && docker run -d -p 5050:5050 --name phpmyadmin_container_koto phpmyadmin_images_koto && docker exec -ti phpmyadmin_container_koto sh
