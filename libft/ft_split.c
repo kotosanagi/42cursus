@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/05 13:09:32 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/10 14:40:49 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/05/26 08:57:03 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static int	count_words(char const *s, char c)
 {
-	int i;
-	int ret;
+	int	i;
+	int	ret;
 
 	if (s == NULL)
 		return (0);
@@ -34,8 +34,8 @@ static int	count_words(char const *s, char c)
 
 static int	word_len(char const *s, char c)
 {
-	int i;
-	int len;
+	int	i;
+	int	len;
 
 	i = 0;
 	len = 0;
@@ -57,7 +57,7 @@ static char	**free_all(char **ret, int i)
 	return (NULL);
 }
 
-char		**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
 	char	**ret;
 	int		words_count;
@@ -65,7 +65,8 @@ char		**ft_split(char const *s, char c)
 	int		j;
 
 	words_count = count_words(s, c);
-	if (!s || !(ret = (char **)malloc(sizeof(char *) * (words_count + 1))))
+	ret = (char **)malloc(sizeof(char *) * (words_count + 1));
+	if (!s || !ret)
 		return (NULL);
 	i = 0;
 	while (i < words_count)

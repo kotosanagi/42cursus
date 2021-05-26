@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 10:25:09 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/06 17:07:06 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/05/26 08:43:40 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ static void	ft_put_positive_nbr(unsigned int num, int fd)
 	ft_putchar_fd(num % 10 + '0', fd);
 }
 
-void		ft_putnbr_fd(int n, int fd)
+void	ft_putnbr_fd(int n, int fd)
 {
-	unsigned int positive_num;
+	unsigned int	positive_num;
 
 	if (n < 0)
 	{

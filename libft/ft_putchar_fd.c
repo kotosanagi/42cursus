@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 09:55:32 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/07 13:10:13 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/05/26 08:44:12 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	ft_putchar_fd(char c, int fd)
 {
-	char first;
-	char second;
+	char	first;
+	char	second;
 
 	if ((unsigned char)c < 0x80)
 		write(fd, &c, 1);

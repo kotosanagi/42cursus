@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:08:19 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/10 14:19:40 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/05/26 08:41:19 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 char	*ft_strchr(const char *s, int c)
 {
-	int len;
-	int i;
+	int	len;
+	int	i;
 
 	len = (int)ft_strlen(s);
 	i = 0;

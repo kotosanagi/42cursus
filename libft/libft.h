@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:07:53 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/09 12:08:31 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/05/27 08:42:44 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,12 @@ int					ft_strncmp(const char *s1, const char *s2, size_t n);
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char				*ft_strrchr(const char *s, int c);
 char				*ft_strnstr(const char *haystack,
-const char *needle, size_t len);
+						const char *needle, size_t len);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 char				*ft_strtrim(char const *s1, char const *set);
 int					ft_toupper(int c);
 int					ft_tolower(int c);
-typedef	struct		s_list
+typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
@@ -66,6 +66,6 @@ void				ft_lstdelone(t_list *lst, void (*del)(void *));
 void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
-void (*del)(void *));
+						void (*del)(void *));
 
 #endif

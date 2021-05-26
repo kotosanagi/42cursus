@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 11:34:29 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/06 15:53:55 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/05/26 08:51:38 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,27 +28,29 @@ static int	ft_isspace(int c)
 
 static int	ft_isinlong(int pn, const char *str)
 {
-	int digit;
+	int	digit;
 
 	digit = 0;
 	while (ft_isdigit(str[digit]))
 		digit++;
-	if ((pn == 1) &&
-	((digit > 19) ||
-	((digit == 19) && (ft_strncmp(str, "9223372036854775807", 19) > 0))))
+	if ((pn == 1)
+		&& ((digit > 19)
+			|| ((digit == 19)
+				&& (ft_strncmp(str, "9223372036854775807", 19) > 0))))
 		return (-1);
-	else if ((pn == -1) &&
-	((digit > 19) ||
-	((digit == 19) && (ft_strncmp(str, "9223372036854775808", 19) > 0))))
+	else if ((pn == -1)
+		&& ((digit > 19)
+			|| ((digit == 19)
+				&& (ft_strncmp(str, "9223372036854775808", 19) > 0))))
 		return (0);
 	return (1);
 }
 
-int			ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
-	int res;
-	int i;
-	int pn;
+	int	res;
+	int	i;
+	int	pn;
 
 	res = 0;
 	i = 0;

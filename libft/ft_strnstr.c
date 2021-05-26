@@ -6,7 +6,7 @@
 /*   By: skotoyor <skotoyor@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 16:08:07 by skotoyor          #+#    #+#             */
-/*   Updated: 2020/11/06 07:51:28 by skotoyor         ###   ########.fr       */
+/*   Updated: 2021/05/26 08:38:49 by skotoyor         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
-	size_t i;
-	size_t j;
+	size_t	i;
+	size_t	j;
 
 	if (needle[0] == '\0')
 		return ((char *)haystack);
