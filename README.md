@@ -16,7 +16,7 @@ exam02        : オフラインの試験対策です。先述のget_nex
 ft_server     : Dockerを用いて、nginx/wordpress/phpmyadminが動作する環境を構築しました。
 cub3d         : 一人称視点の3dゲームを作成しました。壁や敵の配置等の情報が記述されたファイルを読み込み、描画します。
 exam03        : オフラインの試験対策です。ファイルから情報を読み込み、標準出力で長方形や円を出力します。
-ft_services   : Docker,kubernetesを用いてクラスタを作成します。ft_serverの要件+各ポッド監視等を行います。(現在取組中)
+ft_services   : Docker,kubernetesを用いてクラスタを作成します。ft_serverの要件+各ポッド監視等を行います。
 ```
 
 以下は、上記課題から一部抜粋して実際の動作画面と課題の詳細を紹介します。
